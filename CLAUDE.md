@@ -1,29 +1,48 @@
 # CLAUDE.md — dimoe-landing
 
-Proyecto personal. Stack: Python 3.12+ para agentes, web stack TBD para landing.
+Landing de la marca **dimoe** (dimoe.cl). Objetivo: posicionar la marca y vender.
+Migración desde GoDaddy a código propio. Deploy en Vercel.
 
 ## Repo
 
 **GitHub:** `dimoe-restaurant/landing`  
-**Puerto local:** N/A
+**Dominio:** dimoe.cl  
+**Deploy:** Vercel (rama `main` → producción, `dev` → preview)  
+**Puerto local:** 39847 (convención Playwright del workspace)
+
+## Stack web
+
+- **Next.js 15** (App Router) — Vercel-native, SEO, RSC
+- **TypeScript** (strict)
+- **Tailwind CSS v4**
+- **Framer Motion** (animaciones de marca)
+- Tests E2E: **Playwright** (gate de `/apply`)
 
 ## Estructura
 
 ```
-agents/
-  core/
-    agent_loop.py   ← AgentLoop genérico con HITL
-    notion.py       ← Cliente Notion genérico (NotionDB + property builders)
+app/                   ← Next.js App Router
+  layout.tsx
+  page.tsx
+  (secciones)/
+components/
+  ui/                  ← primitivos (Button, Card, etc.)
+  sections/            ← Hero, Menu, Contact, etc.
+public/
+  images/
 tests/
-.env.example
-pyproject.toml
+  e2e/                 ← specs Playwright
+agents/                ← Python — agentes existentes (no tocar en tareas de landing)
+  core/
+    agent_loop.py
+    notion.py
 ```
 
 ## Setup local
 
 ```bash
-uv venv && uv pip install -e ".[dev]"
-cp .env.example .env   # completar CLAUDE_MODEL y NOTION_TOKEN
+pnpm install
+pnpm dev              # → http://localhost:39847
 ```
 
 ## Convenciones
@@ -41,12 +60,11 @@ chore(scope): descripción
 
 | Branch | Rol |
 |---|---|
-| `main` | Producción |
-| `dev` | Integración |
-| `feat/*`, `fix/*` | Trabajo efímero |
+| `main` | Producción → Vercel prod |
+| `dev` | Integración → Vercel preview |
+| `feat/*`, `fix/*`, `chore/*` | Trabajo efímero por work-item |
 
-## Agentes
+## Agentes Python (contexto separado)
 
-Ver `.claude/rules/agent-design.md` para el árbol de decisión N8N → Claude → Python.
-
-`AgentLoop` vive en `agents/core/agent_loop.py` y es la primitiva base para todo agente nuevo.
+Ver `.claude/rules/agent-design.md`. Los agentes Python en `agents/` son infraestructura
+de SENA — no están relacionados con la landing de dimoe. No modificarlos en tareas de landing.

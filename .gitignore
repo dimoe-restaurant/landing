@@ -15,3 +15,8 @@ node_modules/
 
 # Claude Code — skills y config local (no commitear en repo público)
 .claude/
+
+# Playwright
+playwright-report/
+test-results/
+.playwright-cache/
