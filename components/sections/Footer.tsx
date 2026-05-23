@@ -1,55 +1,62 @@
+const year = new Date().getFullYear();
+
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-border bg-background px-6 py-12">
-      <div className="mx-auto max-w-5xl">
-        <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
-          {/* Brand */}
-          <div>
-            <p className="font-serif text-2xl font-bold text-foreground">DiMOE</p>
-            <p className="mt-1 text-sm text-muted">Pizzería Napolitana y Restobar</p>
-            <p className="mt-0.5 text-xs text-muted/60">Paine, Chile</p>
-          </div>
-
-          {/* Links */}
-          <nav className="flex flex-col gap-2 text-sm text-muted sm:items-end">
-            <a href="#inicio" className="hover:text-foreground transition-colors">Inicio</a>
-            <a href="#nosotros" className="hover:text-foreground transition-colors">Nosotros</a>
-            <a href="#menu" className="hover:text-foreground transition-colors">Carta</a>
-            <a href="#contacto" className="hover:text-foreground transition-colors">Contacto</a>
-          </nav>
-
-          {/* Social + contact */}
-          <div className="flex flex-col gap-2 text-sm text-muted sm:items-end">
-            <a
-              href="https://instagram.com/dimoe_restobar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              Instagram @dimoe_restobar
-            </a>
-            <a
-              href="https://wa.me/56973694101"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              +56 9 7369 4101
-            </a>
-            <a
-              href="mailto:contacto@dimoe.cl"
-              className="hover:text-foreground transition-colors"
-            >
-              contacto@dimoe.cl
-            </a>
-          </div>
+    <footer style={{
+      background: '#0D0B09',
+      borderTop: '1px solid #2A2520',
+      padding: '48px 24px',
+    }}>
+      <div style={{
+        maxWidth: '1100px', margin: '0 auto',
+        display: 'flex', justifyContent: 'space-between',
+        alignItems: 'flex-start', gap: '32px', flexWrap: 'wrap',
+      }}>
+        {/* Brand */}
+        <div>
+          <p style={{
+            fontFamily: 'var(--font-serif)', fontSize: '24px', fontWeight: 700,
+            color: '#F2EDE4', margin: '0 0 4px',
+          }}>DiMOE</p>
+          <p style={{ fontSize: '13px', color: '#6B6158', margin: '0 0 2px' }}>Pizzería Napolitana y Restobar</p>
+          <p style={{ fontSize: '12px', color: 'rgba(107,97,88,0.6)', margin: 0 }}>Paine, Chile</p>
         </div>
 
-        <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted/50">
-          © {year} DiMOE. Todos los derechos reservados.
+        {/* Nav */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {['#inicio', '#nosotros', '#menu', '#contacto'].map((href, i) => (
+            <a key={href} href={href} style={{
+              fontSize: '14px', color: '#6B6158', textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}>
+              {['Inicio', 'Nosotros', 'Carta', 'Contacto'][i]}
+            </a>
+          ))}
+        </nav>
+
+        {/* Social + contact */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {[
+            { href: 'https://instagram.com/dimoe_restobar', text: '@dimoe_restobar' },
+            { href: 'https://wa.me/56973694101', text: '+56 9 7369 4101' },
+            { href: 'mailto:contacto@dimoe.cl', text: 'contacto@dimoe.cl' },
+          ].map(l => (
+            <a key={l.text} href={l.href} target="_blank" rel="noopener noreferrer" style={{
+              fontSize: '14px', color: '#6B6158', textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}>
+              {l.text}
+            </a>
+          ))}
         </div>
+      </div>
+
+      <div style={{
+        maxWidth: '1100px', margin: '32px auto 0',
+        borderTop: '1px solid #2A2520', paddingTop: '24px',
+        textAlign: 'center', fontSize: '12px', color: 'rgba(107,97,88,0.5)',
+      }}>
+        © {year} DiMOE. Todos los derechos reservados.
       </div>
     </footer>
   );

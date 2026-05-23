@@ -11,116 +11,120 @@ const hours = [
 
 export default function Contact() {
   return (
-    <section id="contacto" className="bg-card py-24 px-6">
-      <div className="mx-auto max-w-5xl">
+    <section id="contacto" style={{ background: '#181310', padding: '96px 24px' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+          style={{ textAlign: 'center', marginBottom: '64px' }}
         >
-          <span className="text-sm font-medium uppercase tracking-[0.25em] text-accent">
+          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
             Visitanos
-          </span>
-          <h2 className="mt-3 font-serif text-4xl font-bold text-foreground sm:text-5xl">
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)',
+            fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0,
+          }}>
             Te esperamos
           </h2>
         </motion.div>
 
-        <div className="grid gap-8 sm:grid-cols-3">
-          {/* Hours */}
+        {/* 3-column cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+
+          {/* Hours card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-border bg-background p-6"
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 className="font-serif text-lg font-semibold text-foreground">Horarios</h3>
-            <ul className="mt-4 space-y-3">
-              {hours.map((h) => (
-                <li key={h.days} className="flex justify-between text-sm">
-                  <span className="text-muted">{h.days}</span>
-                  <span className={h.time === 'Cerrado' ? 'text-muted/50' : 'text-foreground font-medium'}>
-                    {h.time}
-                  </span>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>
+              Horarios
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {hours.map(h => (
+                <li key={h.days} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '14px', color: '#6B6158' }}>{h.days}</span>
+                  <span style={{
+                    fontSize: '14px', fontWeight: 500,
+                    color: h.time === 'Cerrado' ? 'rgba(107,97,88,0.5)' : '#F2EDE4',
+                  }}>{h.time}</span>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Location */}
+          {/* Location card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl border border-border bg-background p-6"
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 className="font-serif text-lg font-semibold text-foreground">Ubicación</h3>
-            <div className="mt-4 space-y-2 text-sm text-muted">
-              <p>Darío Pavez 16, Champa</p>
-              <p>Paine, Región Metropolitana</p>
-              <p className="mt-3 text-foreground/60">
-                🚗 Estacionamiento propio<br />
-                🚉 5 min desde Metrotren Hospital
-              </p>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>
+              Ubicación
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: '#6B6158' }}>
+              <p style={{ margin: 0, color: '#F2EDE4', fontWeight: 500 }}>Darío Pavez 16, Champa</p>
+              <p style={{ margin: 0 }}>Paine, Región Metropolitana</p>
+              <div style={{ height: '1px', background: '#2A2520', margin: '8px 0' }} />
+              <p style={{ margin: 0 }}>🚗 Estacionamiento propio</p>
+              <p style={{ margin: 0 }}>🚉 5 min desde Metrotren Hospital</p>
             </div>
             <a
               href="https://maps.google.com/?q=DiMOE+Paine+Chile"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
+              style={{ display: 'inline-block', marginTop: '20px', fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none' }}
             >
               Abrir en Maps →
             </a>
           </motion.div>
 
-          {/* Contact */}
+          {/* Contact card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-2xl border border-border bg-background p-6"
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 className="font-serif text-lg font-semibold text-foreground">Contacto</h3>
-            <div className="mt-4 space-y-4">
-              <a
-                href="https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-muted hover:text-foreground transition-colors"
-              >
-                <span className="text-xl">📱</span>
-                <span>+56 9 7369 4101</span>
-              </a>
-              <a
-                href="mailto:contacto@dimoe.cl"
-                className="flex items-center gap-3 text-sm text-muted hover:text-foreground transition-colors"
-              >
-                <span className="text-xl">✉️</span>
-                <span>contacto@dimoe.cl</span>
-              </a>
-              <a
-                href="https://instagram.com/dimoe_restobar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 text-sm text-muted hover:text-foreground transition-colors"
-              >
-                <span className="text-xl">📸</span>
-                <span>@dimoe_restobar</span>
-              </a>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>
+              Contacto
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {[
+                { icon: '📱', text: '+56 9 7369 4101', href: 'https://wa.me/56973694101' },
+                { icon: '✉️', text: 'contacto@dimoe.cl', href: 'mailto:contacto@dimoe.cl' },
+                { icon: '📸', text: '@dimoe_restobar', href: 'https://instagram.com/dimoe_restobar' },
+              ].map(c => (
+                <a key={c.text} href={c.href} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  fontSize: '14px', color: '#6B6158', textDecoration: 'none',
+                  transition: 'color 0.2s',
+                }}>
+                  <span style={{ fontSize: '20px' }}>{c.icon}</span>
+                  {c.text}
+                </a>
+              ))}
             </div>
-
-            {/* Reserve CTA */}
             <a
               href="https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-3 text-sm font-semibold text-foreground transition-opacity hover:opacity-90"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginTop: '24px', background: '#C17A3B', color: '#F2EDE4',
+                padding: '13px', borderRadius: '100px', fontSize: '14px',
+                fontWeight: 600, textDecoration: 'none',
+              }}
             >
               Reservar por WhatsApp
             </a>
@@ -133,18 +137,21 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-8 rounded-2xl border border-border bg-background p-6 text-center"
+          style={{
+            marginTop: '16px', background: '#0D0B09',
+            border: '1px solid #2A2520', borderRadius: '16px',
+            padding: '28px 32px', textAlign: 'center',
+          }}
         >
-          <p className="font-serif text-lg font-semibold text-foreground">
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>
             ¿Cumpleaños, matrimonio o evento empresarial?
           </p>
-          <p className="mt-1.5 text-sm text-muted">
+          <p style={{ fontSize: '14px', color: '#6B6158', margin: '0 0 14px' }}>
             Tenemos espacio y experiencia para hacer que tu evento sea especial.
           </p>
-          <a
-            href="mailto:contacto@dimoe.cl?subject=Consulta%20evento"
-            className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
-          >
+          <a href="mailto:contacto@dimoe.cl?subject=Consulta%20evento" style={{
+            fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none',
+          }}>
             Consultar disponibilidad →
           </a>
         </motion.div>
