@@ -32,10 +32,6 @@ public/
   images/
 tests/
   e2e/                 ← specs Playwright
-agents/                ← Python — agentes existentes (no tocar en tareas de landing)
-  core/
-    agent_loop.py
-    notion.py
 ```
 
 ## Setup local
@@ -63,8 +59,3 @@ chore(scope): descripción
 | `main` | Producción → Vercel prod |
 | `dev` | Integración → Vercel preview |
 | `feat/*`, `fix/*`, `chore/*` | Trabajo efímero por work-item |
-
-## Agentes Python (contexto separado)
-
-Ver `.claude/rules/agent-design.md`. Los agentes Python en `agents/` son infraestructura
-de SENA — no están relacionados con la landing de dimoe. No modificarlos en tareas de landing.
