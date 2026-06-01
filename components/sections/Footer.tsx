@@ -7,9 +7,9 @@ export default function Footer() {
     <footer style={{
       background: '#0D0B09',
       borderTop: '1px solid #2A2520',
-      padding: '48px 24px',
+      padding: 'clamp(40px, 6vw, 48px) clamp(16px, 4vw, 24px)',
     }}>
-      <div style={{
+      <div className="footer-inner" style={{
         maxWidth: '1100px', margin: '0 auto',
         display: 'flex', justifyContent: 'space-between',
         alignItems: 'flex-start', gap: '32px', flexWrap: 'wrap',

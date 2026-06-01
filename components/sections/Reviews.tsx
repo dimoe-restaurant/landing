@@ -62,7 +62,7 @@ function GoogleLogo() {
 
 export default function Reviews() {
   return (
-    <section id="resenas" style={{ background: '#181310', padding: '96px 24px' }}>
+    <section id="resenas" style={{ background: '#181310', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header */}
@@ -73,7 +73,7 @@ export default function Reviews() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center', marginBottom: '20px' }}
         >
-          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
+          <p className="eyebrow" style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
             Reseñas
           </p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: '0 0 24px' }}>
@@ -110,7 +110,7 @@ export default function Reviews() {
         </motion.div>
 
         {/* Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(290px, 100%), 1fr))', gap: '16px' }}>
           {REVIEWS.map((review, i) => (
             <motion.div
               key={review.id}

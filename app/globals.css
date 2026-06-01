@@ -44,6 +44,12 @@ body {
   .nav-mobile-panel { display: none !important; }
 }
 
+/* Mobile: eyebrow letter-spacing reducido para evitar overflow */
+@media (max-width: 767px) {
+  .eyebrow { letter-spacing: 0.18em !important; font-size: 10px !important; }
+  .footer-inner { justify-content: flex-start !important; }
+}
+
 /* Scrollbar sutil */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0D0B09; }

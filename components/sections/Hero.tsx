@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 
+const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
+
 export default function Hero() {
   return (
     <section
@@ -14,27 +16,18 @@ export default function Hero() {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: '0 24px',
+        padding: '72px 20px 0',
         overflow: 'hidden',
         background: '#0D0B09',
       }}
     >
       {/* Background gradient layers */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(61,26,8,0.7) 0%, transparent 70%)',
-      }} />
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 40% 30% at 50% 100%, rgba(193,122,59,0.08) 0%, transparent 70%)',
-      }} />
-
-      {/* Decorative grain texture overlay */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(61,26,8,0.7) 0%, transparent 70%)' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 40% 30% at 50% 100%, rgba(193,122,59,0.08) 0%, transparent 70%)' }} />
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.03,
         backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E")',
-        backgroundRepeat: 'repeat',
-        backgroundSize: '200px 200px',
+        backgroundRepeat: 'repeat', backgroundSize: '200px 200px',
       }} />
 
       <motion.div
@@ -43,24 +36,26 @@ export default function Hero() {
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         style={{ position: 'relative', zIndex: 10, maxWidth: '900px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}
       >
-        {/* Top rule + eyebrow */}
+        {/* Top rule */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 0.2, duration: 0.6, ease: 'easeOut' }}
           style={{ width: '48px', height: '1px', background: '#C17A3B' }}
         />
-        <p style={{
+
+        {/* Eyebrow — className para media query de letter-spacing */}
+        <p className="eyebrow" style={{
           fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em',
           color: '#C17A3B', textTransform: 'uppercase', margin: 0,
         }}>
           Paine · Chile &nbsp;·&nbsp; Pizzería Napolitana &nbsp;·&nbsp; 2° Top Chile 2025
         </p>
 
-        {/* Main headline */}
+        {/* Headline — clamp más agresivo en mobile */}
         <h1 style={{
           fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(48px, 7vw, 84px)',
+          fontSize: 'clamp(36px, 10vw, 84px)',
           fontWeight: 700,
           lineHeight: 1.1,
           color: '#F2EDE4',
@@ -75,7 +70,7 @@ export default function Hero() {
 
         {/* Subline */}
         <p style={{
-          fontSize: 'clamp(15px, 1.6vw, 18px)',
+          fontSize: 'clamp(14px, 1.6vw, 18px)',
           lineHeight: 1.65,
           color: 'rgba(242,237,228,0.62)',
           maxWidth: '560px',
@@ -86,9 +81,9 @@ export default function Hero() {
         </p>
 
         {/* CTAs */}
-        <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
           <a
-            href="https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -96,7 +91,7 @@ export default function Hero() {
               background: '#C17A3B', color: '#F2EDE4',
               padding: '14px 32px', borderRadius: '100px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-              transition: 'opacity 0.2s',
+              transition: 'opacity 0.2s', flex: '1 1 auto', maxWidth: '260px',
             }}
           >
             Reservar mesa
@@ -109,7 +104,7 @@ export default function Hero() {
               border: '1px solid rgba(242,237,228,0.2)',
               padding: '14px 32px', borderRadius: '100px',
               fontSize: '14px', fontWeight: 600, textDecoration: 'none',
-              transition: 'border-color 0.2s, color 0.2s',
+              transition: 'border-color 0.2s', flex: '1 1 auto', maxWidth: '260px',
             }}
           >
             Ver la carta

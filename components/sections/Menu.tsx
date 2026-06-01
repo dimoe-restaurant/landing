@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 
-// Actualizar con URL del PDF de carta cuando esté disponible
 const MENU_PDF_URL = process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe';
 
 const categories = [
@@ -14,21 +13,21 @@ const categories = [
 
 export default function Menu() {
   return (
-    <section id="menu" style={{ background: '#0D0B09', padding: '96px 24px' }}>
+    <section id="menu" style={{ background: '#0D0B09', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header row */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap', marginBottom: '48px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap', marginBottom: '40px' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>
+            <p className="eyebrow" style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>
               La carta
             </p>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0, letterSpacing: '-0.01em' }}>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0, letterSpacing: '-0.01em' }}>
               Para todos los gustos
             </h2>
           </motion.div>
@@ -41,7 +40,7 @@ export default function Menu() {
             href={MENU_PDF_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ flexShrink: 0, background: '#C17A3B', color: '#F2EDE4', padding: '12px 28px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
+            style={{ flexShrink: 0, background: '#C17A3B', color: '#F2EDE4', padding: '12px 24px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
@@ -49,10 +48,10 @@ export default function Menu() {
           </motion.a>
         </div>
 
-        <div style={{ height: '1px', background: '#2A2520', marginBottom: '40px' }} />
+        <div style={{ height: '1px', background: '#2A2520', marginBottom: '32px' }} />
 
-        {/* Category cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+        {/* Category cards — min(480px, 100%) evita overflow en mobile */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(480px, 100%), 1fr))', gap: '12px' }}>
           {categories.map((cat, i) => (
             <motion.div
               key={cat.name}
@@ -60,11 +59,11 @@ export default function Menu() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '14px', padding: '24px', display: 'flex', gap: '20px', alignItems: 'flex-start' }}
+              style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '14px', padding: '20px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}
             >
-              <span style={{ fontSize: '36px', lineHeight: 1, flexShrink: 0, marginTop: '2px' }}>{cat.emoji}</span>
+              <span style={{ fontSize: '32px', lineHeight: 1, flexShrink: 0, marginTop: '2px' }}>{cat.emoji}</span>
               <div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 8px' }}>{cat.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{cat.name}</h3>
                 <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#9B8B7E', margin: 0 }}>{cat.desc}</p>
               </div>
             </motion.div>
@@ -77,10 +76,10 @@ export default function Menu() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          style={{ marginTop: '24px', background: '#181310', border: '1px solid rgba(193,122,59,0.25)', borderRadius: '14px', padding: '24px 32px', textAlign: 'center' }}
+          style={{ marginTop: '16px', background: '#181310', border: '1px solid rgba(193,122,59,0.25)', borderRadius: '14px', padding: 'clamp(20px, 3vw, 24px) clamp(20px, 3vw, 32px)', textAlign: 'center' }}
         >
           <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 4px' }}>¿No podés venir hoy?</p>
-          <p style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 12px' }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 2vw, 18px)', fontWeight: 700, color: '#F2EDE4', margin: '0 0 12px' }}>
             Pedí online y retirá en local
           </p>
           <a
@@ -88,8 +87,6 @@ export default function Menu() {
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none' }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
             Ver la carta →
           </a>
