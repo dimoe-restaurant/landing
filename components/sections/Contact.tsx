@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import ContactForm from './ContactForm';
 
 const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
 const MAPS_LINK = 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z';
@@ -184,6 +185,17 @@ export default function Contact() {
           >
             Consultar disponibilidad →
           </a>
+        </motion.div>
+
+        {/* Contact form */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ marginTop: '16px' }}
+        >
+          <ContactForm />
         </motion.div>
       </div>
     </section>
