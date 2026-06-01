@@ -1,3 +1,5 @@
+'use client';
+
 const year = new Date().getFullYear();
 
 export default function Footer() {
@@ -54,9 +56,18 @@ export default function Footer() {
       <div style={{
         maxWidth: '1100px', margin: '32px auto 0',
         borderTop: '1px solid #2A2520', paddingTop: '24px',
-        textAlign: 'center', fontSize: '12px', color: 'rgba(107,97,88,0.5)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        gap: '16px', flexWrap: 'wrap',
+        fontSize: '12px', color: 'rgba(155,139,126,0.6)',
       }}>
-        © {year} DiMOE. Todos los derechos reservados.
+        <span>© {year} DiMOE. Todos los derechos reservados.</span>
+        <span style={{ opacity: 0.4 }}>·</span>
+        <a href="/privacidad" style={{ color: 'rgba(155,139,126,0.6)', textDecoration: 'none', transition: 'color 0.2s' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#C17A3B')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(155,139,126,0.6)')}
+        >
+          Privacidad
+        </a>
       </div>
     </footer>
   );
