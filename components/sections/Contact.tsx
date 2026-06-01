@@ -7,12 +7,13 @@ const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20un
 const MAPS_LINK = 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z';
 const MAPS_EVENTS_LINK = 'mailto:contacto@dimoe.cl?subject=Consulta%20evento';
 
-// URL con coordenadas reales de DiMOE + scene diameter correcto para render.
-// Override con NEXT_PUBLIC_MAPS_EMBED_SRC pegando el src del iframe de:
-// Google Maps → DiMOE → Compartir → Insertar un mapa
-const MAPS_EMBED_SRC =
-  process.env.NEXT_PUBLIC_MAPS_EMBED_SRC ??
-  'https://www.google.com/maps/embed?origin=mfe&pb=!1m12!1m8!1m3!1d3313.3252670722377!2d-70.7650772!3d-33.8555048!3m2!1i1024!2i768!4f13.1!2m1!1sDiMOE+Paine+Chile!6i17!3m1!1ses!5m1!1ses';
+// OpenStreetMap embed: libre, sin API key, siempre funciona.
+// Para usar Google Maps: Compartir → Insertar un mapa → copiar src y agregar
+// como NEXT_PUBLIC_MAPS_EMBED_SRC en Vercel → Settings → Environment Variables.
+const OSM_EMBED =
+  'https://www.openstreetmap.org/export/embed.html?bbox=-70.7750772%2C-33.8655048%2C-70.7550772%2C-33.8455048&layer=mapnik&marker=-33.8555048%2C-70.7650772';
+
+const MAPS_EMBED_SRC = process.env.NEXT_PUBLIC_MAPS_EMBED_SRC ?? OSM_EMBED;
 
 const hours = [
   { days: 'Martes – Jueves', time: '12:30 – 22:30' },
@@ -155,14 +156,32 @@ export default function Contact() {
           <iframe
             src={MAPS_EMBED_SRC}
             width="100%"
-            height="380"
+            height="360"
             style={{ border: 0, display: 'block' }}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            title="DiMOE en Google Maps"
+            title="Ubicación DiMOE — Paine, Chile"
             allow="fullscreen"
           />
+          <a
+            href={MAPS_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+              padding: '13px', background: '#181310', borderTop: '1px solid #2A2520',
+              fontSize: '13px', fontWeight: 500, color: '#9B8B7E', textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#C17A3B')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#9B8B7E')}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            Ver DiMOE en Google Maps →
+          </a>
         </motion.div>
 
         {/* Events callout */}
