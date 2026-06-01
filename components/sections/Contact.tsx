@@ -64,7 +64,7 @@ export default function Contact() {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {hours.map(h => (
                 <li key={h.days} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '14px', color: '#6B6158' }}>{h.days}</span>
+                  <span style={{ fontSize: '14px', color: '#9B8B7E' }}>{h.days}</span>
                   <span style={{ fontSize: '14px', fontWeight: 500, color: h.time === 'Cerrado' ? 'rgba(107,97,88,0.5)' : '#F2EDE4' }}>
                     {h.time}
                   </span>
@@ -86,10 +86,10 @@ export default function Contact() {
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
               <p style={{ margin: 0, color: '#F2EDE4', fontWeight: 500 }}>Darío Pavez 16, Champa</p>
-              <p style={{ margin: 0, color: '#6B6158' }}>Paine, Región Metropolitana</p>
+              <p style={{ margin: 0, color: '#9B8B7E' }}>Paine, Región Metropolitana</p>
               <div style={{ height: '1px', background: '#2A2520', margin: '8px 0' }} />
-              <p style={{ margin: 0, color: '#6B6158' }}>🚗 Estacionamiento propio</p>
-              <p style={{ margin: 0, color: '#6B6158' }}>🚉 5 min desde Metrotren Hospital</p>
+              <p style={{ margin: 0, color: '#9B8B7E' }}>🚗 Estacionamiento propio</p>
+              <p style={{ margin: 0, color: '#9B8B7E' }}>🚉 5 min desde Metrotren Hospital</p>
             </div>
             <a
               href={MAPS_LINK}
@@ -121,9 +121,9 @@ export default function Contact() {
                   href={c.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#6B6158', textDecoration: 'none', transition: 'color 0.2s' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#9B8B7E', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#F2EDE4')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#6B6158')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#9B8B7E')}
                 >
                   <span style={{ fontSize: '18px', flexShrink: 0 }}>{c.icon}</span>
                   {c.text}
@@ -174,7 +174,7 @@ export default function Contact() {
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>
             ¿Cumpleaños, matrimonio o evento empresarial?
           </p>
-          <p style={{ fontSize: '14px', color: '#6B6158', margin: '0 0 14px' }}>
+          <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 14px' }}>
             Tenemos espacio y experiencia para hacer que tu evento sea especial.
           </p>
           <a

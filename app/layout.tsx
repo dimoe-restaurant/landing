@@ -58,10 +58,17 @@ const restaurantSchema = {
     addressRegion: 'Región Metropolitana',
     addressCountry: 'CL',
   },
-  geo: { '@type': 'GeoCoordinates', latitude: -33.8555048, longitude: -70.7650772 },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -33.8555048,
+    longitude: -70.7650772,
+  },
   hasMap: 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z',
   menu: 'https://linktr.ee/di_moe',
-  sameAs: ['https://instagram.com/dimoe_restobar', 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z'],
+  sameAs: [
+    'https://instagram.com/dimoe_restobar',
+    'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z',
+  ],
   openingHoursSpecification: [
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday'], opens: '12:30', closes: '22:30' },
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Friday', 'Saturday'], opens: '13:00', closes: '00:00' },

@@ -77,7 +77,7 @@ export default function About() {
                 fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 700,
                 color: '#F2EDE4', margin: '16px 0 8px',
               }}>{h.title}</h3>
-              <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#6B6158', margin: 0 }}>{h.desc}</p>
+              <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#9B8B7E', margin: 0 }}>{h.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -107,7 +107,7 @@ export default function About() {
             }}>
               A 35 minutos de Santiago
             </p>
-            <p style={{ fontSize: '14px', color: '#6B6158', margin: 0 }}>
+            <p style={{ fontSize: '14px', color: '#9B8B7E', margin: 0 }}>
               Darío Pavez 16, Champa, Paine &nbsp;·&nbsp; 🚗 Estacionamiento propio &nbsp;·&nbsp; 🚉 5 min del Metrotren
             </p>
           </div>
