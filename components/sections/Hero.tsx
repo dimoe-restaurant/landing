@@ -118,7 +118,7 @@ export default function Hero() {
 
         {/* Hours */}
         <p style={{
-          fontSize: '12px', color: '#6B6158', marginTop: '8px',
+          fontSize: '12px', color: '#9B8B7E', marginTop: '8px',
           letterSpacing: '0.02em',
         }}>
           Mar–Jue 12:30–22:30 &nbsp;·&nbsp; Vie–Sáb 13:00–00:00 &nbsp;·&nbsp; Dom 13:00–17:30
@@ -135,7 +135,7 @@ export default function Hero() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
         }}
       >
-        <span style={{ fontSize: '10px', letterSpacing: '0.2em', color: '#6B6158', textTransform: 'uppercase' }}>Scroll</span>
+        <span style={{ fontSize: '10px', letterSpacing: '0.2em', color: '#9B8B7E', textTransform: 'uppercase' }}>Scroll</span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}

@@ -65,7 +65,7 @@ export default function Menu() {
               <span style={{ fontSize: '36px', lineHeight: 1, flexShrink: 0, marginTop: '2px' }}>{cat.emoji}</span>
               <div>
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 8px' }}>{cat.name}</h3>
-                <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#6B6158', margin: 0 }}>{cat.desc}</p>
+                <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#9B8B7E', margin: 0 }}>{cat.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -79,7 +79,7 @@ export default function Menu() {
           transition={{ duration: 0.5, delay: 0.3 }}
           style={{ marginTop: '24px', background: '#181310', border: '1px solid rgba(193,122,59,0.25)', borderRadius: '14px', padding: '24px 32px', textAlign: 'center' }}
         >
-          <p style={{ fontSize: '14px', color: '#6B6158', margin: '0 0 4px' }}>¿No podés venir hoy?</p>
+          <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 4px' }}>¿No podés venir hoy?</p>
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 12px' }}>
             Pedí online y retirá en local
           </p>
