@@ -10,8 +10,16 @@ export default function WhatsAppFloat() {
           0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.45); }
           60%       { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
         }
-        .wa-float { animation: wa-pulse 2.4s ease-in-out infinite; }
+        .wa-float {
+          animation: wa-pulse 2.4s ease-in-out infinite;
+          transition: transform 0.2s, opacity 0.2s;
+          bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+        }
         .wa-float:hover { transform: scale(1.08); opacity: 0.93; }
+        @media (max-width: 767px) {
+          .wa-float { width: 50px !important; height: 50px !important; right: 16px !important; }
+          .wa-float svg { width: 24px; height: 24px; }
+        }
       `}</style>
 
       <a
@@ -33,7 +41,6 @@ export default function WhatsAppFloat() {
           alignItems: 'center',
           justifyContent: 'center',
           textDecoration: 'none',
-          transition: 'transform 0.2s, opacity 0.2s',
         }}
       >
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white" aria-hidden>

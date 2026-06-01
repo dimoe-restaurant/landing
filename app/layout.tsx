@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, DM_Sans } from 'next/font/google';
 import Navbar from '@/components/ui/Navbar';
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
@@ -40,6 +40,12 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: 'https://dimoe.cl' },
   robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 const restaurantSchema = {

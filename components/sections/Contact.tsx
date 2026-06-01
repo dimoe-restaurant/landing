@@ -28,7 +28,7 @@ const contacts = [
 
 export default function Contact() {
   return (
-    <section id="contacto" style={{ background: '#0D0B09', padding: '96px 24px' }}>
+    <section id="contacto" style={{ background: '#0D0B09', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header */}
@@ -39,7 +39,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center', marginBottom: '64px' }}
         >
-          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
+          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }} className="eyebrow">
             Visítanos
           </p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>
@@ -48,7 +48,7 @@ export default function Contact() {
         </motion.div>
 
         {/* Cards grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '16px' }}>
 
           {/* Hours */}
           <motion.div
