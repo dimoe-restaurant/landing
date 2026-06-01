@@ -7,11 +7,12 @@ const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20un
 const MAPS_LINK = 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z';
 const MAPS_EVENTS_LINK = 'mailto:contacto@dimoe.cl?subject=Consulta%20evento';
 
-// URL generada por Google Maps al hacer Share → Embed para DiMOE Paine.
-// Override con NEXT_PUBLIC_MAPS_EMBED_SRC si Google actualiza el place.
+// URL con coordenadas reales de DiMOE + scene diameter correcto para render.
+// Override con NEXT_PUBLIC_MAPS_EMBED_SRC pegando el src del iframe de:
+// Google Maps → DiMOE → Compartir → Insertar un mapa
 const MAPS_EMBED_SRC =
   process.env.NEXT_PUBLIC_MAPS_EMBED_SRC ??
-  'https://www.google.com/maps/embed?origin=mfe&pb=!1m3!2m1!1sDiMOE+Pizzer%C3%ADa+y+Restobar+Paine+Chile!6i17!3m1!1ses!5m1!1ses';
+  'https://www.google.com/maps/embed?origin=mfe&pb=!1m12!1m8!1m3!1d3313.3252670722377!2d-70.7650772!3d-33.8555048!3m2!1i1024!2i768!4f13.1!2m1!1sDiMOE+Paine+Chile!6i17!3m1!1ses!5m1!1ses';
 
 const hours = [
   { days: 'Martes – Jueves', time: '12:30 – 22:30' },
@@ -160,6 +161,7 @@ export default function Contact() {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             title="DiMOE en Google Maps"
+            allow="fullscreen"
           />
         </motion.div>
 
