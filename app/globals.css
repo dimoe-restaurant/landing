@@ -8,9 +8,12 @@
   --color-muted: #6B6158;
   --color-border: #2A2520;
   --color-card: #181310;
+}
 
-  --font-serif: "Playfair Display", Georgia, serif;
-  --font-sans: "DM Sans", system-ui, sans-serif;
+/* Font vars resueltos desde el loader de Next.js */
+:root {
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -29,3 +32,20 @@ body {
   background-color: #C17A3B;
   color: #F2EDE4;
 }
+
+/* Navbar responsive */
+@media (max-width: 767px) {
+  .nav-desktop { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+}
+
+@media (min-width: 768px) {
+  .nav-hamburger { display: none !important; }
+  .nav-mobile-panel { display: none !important; }
+}
+
+/* Scrollbar sutil */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0D0B09; }
+::-webkit-scrollbar-thumb { background: #2A2520; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3A3530; }
