@@ -92,7 +92,7 @@ export default function Reviews() {
             <GoogleLogo />
             <Stars count={5} />
             <span style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4' }}>5.0</span>
-            <span style={{ fontSize: '13px', color: '#6B6158' }}>· Google Business</span>
+            <span style={{ fontSize: '13px', color: '#9B8B7E' }}>· Google Business</span>
           </a>
         </motion.div>
 
@@ -126,7 +126,7 @@ export default function Reviews() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4', margin: '0 0 2px' }}>{review.name}</p>
-                  <p style={{ fontSize: '12px', color: '#6B6158', margin: 0 }}>{review.date}</p>
+                  <p style={{ fontSize: '12px', color: '#9B8B7E', margin: 0 }}>{review.date}</p>
                 </div>
                 <GoogleLogo />
               </div>

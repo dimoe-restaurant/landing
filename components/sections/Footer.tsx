@@ -18,7 +18,7 @@ export default function Footer() {
             fontFamily: 'var(--font-serif)', fontSize: '24px', fontWeight: 700,
             color: '#F2EDE4', margin: '0 0 4px',
           }}>DiMOE</p>
-          <p style={{ fontSize: '13px', color: '#6B6158', margin: '0 0 2px' }}>Pizzería Napolitana y Restobar</p>
+          <p style={{ fontSize: '13px', color: '#9B8B7E', margin: '0 0 2px' }}>Pizzería Napolitana y Restobar</p>
           <p style={{ fontSize: '12px', color: 'rgba(107,97,88,0.6)', margin: 0 }}>Paine, Chile</p>
         </div>
 
@@ -26,7 +26,7 @@ export default function Footer() {
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {['#inicio', '#nosotros', '#menu', '#contacto'].map((href, i) => (
             <a key={href} href={href} style={{
-              fontSize: '14px', color: '#6B6158', textDecoration: 'none',
+              fontSize: '14px', color: '#9B8B7E', textDecoration: 'none',
               transition: 'color 0.2s',
             }}>
               {['Inicio', 'Nosotros', 'Carta', 'Contacto'][i]}
@@ -42,7 +42,7 @@ export default function Footer() {
             { href: 'mailto:contacto@dimoe.cl', text: 'contacto@dimoe.cl' },
           ].map(l => (
             <a key={l.text} href={l.href} target="_blank" rel="noopener noreferrer" style={{
-              fontSize: '14px', color: '#6B6158', textDecoration: 'none',
+              fontSize: '14px', color: '#9B8B7E', textDecoration: 'none',
               transition: 'color 0.2s',
             }}>
               {l.text}
