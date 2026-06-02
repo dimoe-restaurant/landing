@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const GOOGLE_MAPS_URL =
   process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL
-  ?? 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z';
+  ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 
 // Reemplazar con reseñas reales copiadas desde Google Business Profile
 const REVIEWS = [

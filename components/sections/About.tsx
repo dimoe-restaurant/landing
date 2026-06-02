@@ -69,7 +69,7 @@ export default function About() {
             </p>
           </div>
           <a
-            href="https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z"
+            href="https://maps.app.goo.gl/cSgXSzJW9VvLttSS7"
             target="_blank"
             rel="noopener noreferrer"
             style={{ flexShrink: 0, border: '1px solid #C17A3B', color: '#C17A3B', padding: '10px 24px', borderRadius: '100px', fontSize: '14px', fontWeight: 500, textDecoration: 'none', whiteSpace: 'nowrap', transition: 'background 0.2s, color 0.2s' }}

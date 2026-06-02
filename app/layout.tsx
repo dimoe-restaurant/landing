@@ -70,11 +70,11 @@ const restaurantSchema = {
     latitude: -33.8555048,
     longitude: -70.7650772,
   },
-  hasMap: 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z',
+  hasMap: 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7',
   menu: 'https://linktr.ee/di_moe',
   sameAs: [
     'https://instagram.com/dimoe_restobar',
-    'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z',
+    'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7',
   ],
   openingHoursSpecification: [
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday'], opens: '12:30', closes: '22:30' },

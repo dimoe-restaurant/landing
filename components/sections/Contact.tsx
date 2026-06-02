@@ -4,16 +4,14 @@ import { motion } from 'framer-motion';
 import ContactForm from './ContactForm';
 
 const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
-const MAPS_LINK = 'https://www.google.com/maps/place/DiMOE+Pizzer%C3%ADa+y+Restobar/@-33.8555048,-70.7650772,18z';
+const MAPS_LINK = 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 const MAPS_EVENTS_LINK = 'mailto:contacto@dimoe.cl?subject=Consulta%20evento';
 
-// OpenStreetMap embed: libre, sin API key, siempre funciona.
-// Para usar Google Maps: Compartir → Insertar un mapa → copiar src y agregar
-// como NEXT_PUBLIC_MAPS_EMBED_SRC en Vercel → Settings → Environment Variables.
-const OSM_EMBED =
-  'https://www.openstreetmap.org/export/embed.html?bbox=-70.7750772%2C-33.8655048%2C-70.7550772%2C-33.8455048&layer=mapnik&marker=-33.8555048%2C-70.7650772';
-
-const MAPS_EMBED_SRC = process.env.NEXT_PUBLIC_MAPS_EMBED_SRC ?? OSM_EMBED;
+// Embed oficial de Google Maps con Place ID real de DiMOE.
+// Override vía NEXT_PUBLIC_MAPS_EMBED_SRC si Google actualiza el place.
+const MAPS_EMBED_SRC =
+  process.env.NEXT_PUBLIC_MAPS_EMBED_SRC ??
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3313.3253644014685!2d-70.7650772!3d-33.8555048!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9663239102a9c7b3%3A0xaa780e0ebd0b1ca6!2sDiMOE%20Pizzer%C3%ADa%20y%20Restobar!5e0!3m2!1ses!2scl!4v1780368939737!5m2!1ses!2scl';
 
 const hours = [
   { days: 'Martes – Jueves', time: '12:30 – 22:30' },
