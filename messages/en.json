@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "about": "About",
+    "menu": "Menu",
+    "reviews": "Reviews",
+    "contact": "Visit Us",
+    "reserve": "Reserve"
+  },
+  "hero": {
+    "eyebrow": "Paine, Chile · Neapolitan Pizzeria · 2nd Best in Chile 2025",
+    "line1": "The authentic Neapolitan pizza",
+    "accent": "experience",
+    "line2": "near Santiago",
+    "subline": "Slow-fermented dough, fresh ingredients and craft cocktails. Just 35 minutes from Santiago — a day trip that's worth every kilometer.",
+    "cta_reserve": "Book a table",
+    "cta_menu": "View the menu",
+    "hours": "Tue–Thu 12:30–22:30 · Fri–Sat 13:00–00:00 · Sun 13:00–17:30",
+    "scroll": "Scroll",
+    "wa_message": "Hello! I'd like to make a reservation"
+  },
+  "about": {
+    "label": "Our story",
+    "headline1": "Neapolitan at heart,",
+    "headline2": "Chilean at soul",
+    "body": "DiMOE was born from a simple idea: bring real Neapolitan pizza to southern Santiago. No shortcuts. Slow-fermented dough that earns its time, and ingredients that make all the difference.",
+    "h1_title": "Premium ingredients",
+    "h1_desc": "Fresh mozzarella, San Marzano tomatoes and slow-fermented dough. Zero compromises.",
+    "h2_title": "2nd Best in Chile 2025",
+    "h2_desc": "Recognized by @thetopchile among the best restaurants in the country.",
+    "h3_title": "Pet-friendly",
+    "h3_desc": "Your pet is welcome on our outdoor terrace. More space, better atmosphere.",
+    "h4_title": "For everyone",
+    "h4_desc": "Vegetarian and vegan options on the menu so no one is left out.",
+    "banner_title": "A day trip from Santiago",
+    "banner_desc": "Darío Pavez 16, Champa, Paine · 🚗 Free parking · 🚉 5 min from Metrotren",
+    "directions": "Get directions →"
+  },
+  "menu": {
+    "label": "The menu",
+    "headline": "Something for everyone",
+    "cta": "View full menu →",
+    "c1_name": "Pizzas",
+    "c1_desc": "Slow-fermented dough, stone oven. Neapolitan and pan-style.",
+    "c2_name": "Pasta",
+    "c2_desc": "Artisan recipes with freshly prepared sauces.",
+    "c3_name": "Cocktails",
+    "c3_desc": "Craft and Italian classics. The Negroni you've been waiting for.",
+    "c4_name": "More",
+    "c4_desc": "Starters, salads, desserts and vegetarian and vegan options.",
+    "order_q": "Can't make it today?",
+    "order_title": "Order online and pick up at the restaurant",
+    "order_cta": "View the menu →"
+  },
+  "reviews": {
+    "label": "Reviews",
+    "headline": "What our guests say",
+    "google_label": "· Google Business",
+    "award": "🏆 2nd place Top Chile 2025 · @thetopchile",
+    "cta": "See all reviews on Google →"
+  },
+  "contact": {
+    "label": "Visit us",
+    "headline": "We're waiting for you",
+    "hours_title": "Opening hours",
+    "day1": "Tuesday – Thursday",
+    "day2": "Friday – Saturday",
+    "day3": "Sunday",
+    "day4": "Monday",
+    "closed": "Closed",
+    "location_title": "Getting here",
+    "address": "Darío Pavez 16, Champa",
+    "region": "Paine, Metropolitan Region, Chile",
+    "parking": "🚗 Free on-site parking",
+    "metro": "🚉 5 min from Metrotren Hospital station",
+    "directions": "Get directions →",
+    "contact_title": "Contact",
+    "wa_reserve": "Book via WhatsApp",
+    "maps_link": "See DiMOE on Google Maps →",
+    "event_title": "Birthday, wedding or corporate event?",
+    "event_desc": "We have the space and experience to make your event unforgettable.",
+    "event_cta": "Check availability →",
+    "wa_message": "Hello! I'd like to make a reservation"
+  },
+  "form": {
+    "title": "Send us a message",
+    "subtitle": "Reservations, events or any question — we respond quickly.",
+    "name": "Your name",
+    "email": "your@email.com",
+    "message": "How can we help you?",
+    "submit": "Send message",
+    "sending": "Sending...",
+    "success_title": "Message sent!",
+    "success_body": "We'll get back to you shortly.",
+    "error": "There was a problem sending. Try again or write to us at",
+    "err_name": "Name is required",
+    "err_email_req": "Email is required",
+    "err_email_inv": "Invalid email",
+    "err_msg": "Message is required"
+  },
+  "footer": {
+    "tagline": "Neapolitan Pizzeria & Restobar",
+    "location": "Paine, Chile",
+    "home": "Home",
+    "about": "About",
+    "menu": "Menu",
+    "reviews": "Reviews",
+    "contact": "Visit Us",
+    "privacy": "Privacy",
+    "copyright": "All rights reserved."
+  },
+  "cookie": {
+    "text": "We use cookies to improve your experience and analyze site traffic.",
+    "policy": "privacy policy",
+    "accept": "Accept all",
+    "essential": "Essential only"
+  },
+  "privacy": {
+    "back": "← Back to home",
+    "title": "Privacy Policy",
+    "updated": "Last updated"
+  }
+}

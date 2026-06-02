@@ -1,49 +1,21 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
-const GOOGLE_MAPS_URL =
-  process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL
-  ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
+const GOOGLE_MAPS_URL = process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 
-// Reemplazar con reseñas reales copiadas desde Google Business Profile
 const REVIEWS = [
-  {
-    id: 1,
-    name: 'María J.',
-    avatar: 'M',
-    color: '#5B7FA6',
-    rating: 5,
-    text: 'La mejor pizza napolitana que he probado fuera de Italia. La masa de fermentación lenta marca una diferencia enorme. El ambiente es precioso y el servicio muy atento.',
-    date: 'hace 2 semanas',
-  },
-  {
-    id: 2,
-    name: 'Felipe R.',
-    avatar: 'F',
-    color: '#6B9E78',
-    rating: 5,
-    text: 'Impresionante. Los cócteles de autor están muy bien ejecutados y las pastas son de un nivel que no esperaba encontrar en Paine. Vale mucho la pena el viaje desde Santiago.',
-    date: 'hace 1 mes',
-  },
-  {
-    id: 3,
-    name: 'Carolina M.',
-    avatar: 'C',
-    color: '#A67B5B',
-    rating: 5,
-    text: 'Fuimos con nuestro perro y nos trataron increíble. La terraza es acogedora, la pizza de tomate San Marzano es sublime. Ya tenemos reserva para el próximo fin de semana.',
-    date: 'hace 3 semanas',
-  },
+  { id: 1, name: 'María J.', avatar: 'M', color: '#5B7FA6', rating: 5, text: 'La mejor pizza napolitana que he probado fuera de Italia. La masa de fermentación lenta marca una diferencia enorme. El ambiente es precioso y el servicio muy atento.', date: 'hace 2 semanas' },
+  { id: 2, name: 'Felipe R.', avatar: 'F', color: '#6B9E78', rating: 5, text: 'Impresionante. Los cócteles de autor están muy bien ejecutados y las pastas son de un nivel que no esperaba encontrar en Paine. Vale mucho la pena el viaje desde Santiago.', date: 'hace 1 mes' },
+  { id: 3, name: 'Carolina M.', avatar: 'C', color: '#A67B5B', rating: 5, text: 'Fuimos con nuestro perro y nos trataron increíble. La terraza es acogedora, la pizza de tomate San Marzano es sublime. Ya tenemos reserva para el próximo fin de semana.', date: 'hace 3 semanas' },
 ];
 
 function Stars({ count }: { count: number }) {
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
       {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#C17A3B" aria-hidden>
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
+        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#C17A3B" aria-hidden><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
       ))}
     </div>
   );
@@ -61,103 +33,54 @@ function GoogleLogo() {
 }
 
 export default function Reviews() {
+  const t = useTranslations('reviews');
+
   return (
     <section id="resenas" style={{ background: '#181310', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '20px' }}
-        >
-          <p className="eyebrow" style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
-            Reseñas
-          </p>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: '0 0 24px' }}>
-            Lo que dicen nuestros clientes
-          </h2>
-
-          {/* Google rating pill */}
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <p className="eyebrow" style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>{t('label')}</p>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: '0 0 24px' }}>{t('headline')}</h2>
+          <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '100px', padding: '10px 20px', textDecoration: 'none', transition: 'border-color 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = '#C17A3B')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A2520')}
           >
-            <GoogleLogo />
-            <Stars count={5} />
+            <GoogleLogo /><Stars count={5} />
             <span style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4' }}>5.0</span>
-            <span style={{ fontSize: '13px', color: '#9B8B7E' }}>· Google Business</span>
+            <span style={{ fontSize: '13px', color: '#9B8B7E' }}>{t('google_label')}</span>
           </a>
         </motion.div>
 
-        {/* Award */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          style={{ textAlign: 'center', marginBottom: '56px' }}
-        >
-          <span style={{ display: 'inline-block', fontSize: '12px', fontWeight: 600, letterSpacing: '0.12em', color: '#C17A3B', textTransform: 'uppercase', border: '1px solid rgba(193,122,59,0.35)', borderRadius: '100px', padding: '7px 20px' }}>
-            🏆 2° lugar Top Chile 2025 · @thetopchile
-          </span>
+        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <span style={{ display: 'inline-block', fontSize: '12px', fontWeight: 600, letterSpacing: '0.12em', color: '#C17A3B', textTransform: 'uppercase', border: '1px solid rgba(193,122,59,0.35)', borderRadius: '100px', padding: '7px 20px' }}>{t('award')}</span>
         </motion.div>
 
-        {/* Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(290px, 100%), 1fr))', gap: '16px' }}>
           {REVIEWS.map((review, i) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+            <motion.div key={review.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
               style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: review.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>
-                  {review.avatar}
-                </div>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: review.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>{review.avatar}</div>
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4', margin: '0 0 2px' }}>{review.name}</p>
                   <p style={{ fontSize: '12px', color: '#9B8B7E', margin: 0 }}>{review.date}</p>
                 </div>
                 <GoogleLogo />
               </div>
-
               <Stars count={review.rating} />
-
-              <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(242,237,228,0.65)', margin: 0 }}>
-                &ldquo;{review.text}&rdquo;
-              </p>
+              <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(242,237,228,0.65)', margin: 0 }}>&ldquo;{review.text}&rdquo;</p>
             </motion.div>
           ))}
         </div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          style={{ textAlign: 'center', marginTop: '40px' }}
-        >
-          <a
-            href={GOOGLE_MAPS_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} style={{ textAlign: 'center', marginTop: '40px' }}>
+          <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-          >
-            Ver todas las reseñas en Google →
-          </a>
+          >{t('cta')}</a>
         </motion.div>
       </div>
     </section>
