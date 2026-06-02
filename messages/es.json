@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "about": "Nosotros",
+    "menu": "Carta",
+    "reviews": "Reseñas",
+    "contact": "Contacto",
+    "reserve": "Reservar"
+  },
+  "hero": {
+    "eyebrow": "Paine · Chile · Pizzería Napolitana · 2° Top Chile 2025",
+    "line1": "La auténtica pizza",
+    "accent": "napolitana,",
+    "line2": "a minutos de Santiago",
+    "subline": "Masa de fermentación lenta, ingredientes frescos y cócteles de autor. Para reunirte con quien más querés, en un lugar que lo vale.",
+    "cta_reserve": "Reservar mesa",
+    "cta_menu": "Ver la carta",
+    "hours": "Mar–Jue 12:30–22:30 · Vie–Sáb 13:00–00:00 · Dom 13:00–17:30",
+    "scroll": "Scroll",
+    "wa_message": "Hola! Quiero hacer una reserva"
+  },
+  "about": {
+    "label": "Nuestra historia",
+    "headline1": "Napolitano de corazón,",
+    "headline2": "chileno de alma",
+    "body": "DiMOE nació con una idea simple: traer la pizza de verdad al sur de Santiago. Sin shortcuts. Con la masa que merece tiempo y los ingredientes que hacen la diferencia.",
+    "h1_title": "Ingredientes de primera",
+    "h1_desc": "Mozzarella fresca, tomates San Marzano y masa de fermentación lenta. Cero atajos.",
+    "h2_title": "2° Top Chile 2025",
+    "h2_desc": "Reconocidos por @thetopchile entre los mejores restaurantes del país.",
+    "h3_title": "Pet-friendly",
+    "h3_desc": "Tu mascota es bienvenida en nuestra terraza exterior. Más espacio, mejor ambiente.",
+    "h4_title": "Para todos",
+    "h4_desc": "Opciones vegetarianas y veganas en carta para que nadie quede fuera.",
+    "banner_title": "A 35 minutos de Santiago",
+    "banner_desc": "Darío Pavez 16, Champa, Paine · 🚗 Estacionamiento · 🚉 5 min Metrotren",
+    "directions": "Cómo llegar →"
+  },
+  "menu": {
+    "label": "La carta",
+    "headline": "Para todos los gustos",
+    "cta": "Ver carta completa →",
+    "c1_name": "Pizzas",
+    "c1_desc": "Masa de fermentación lenta, horno de piedra. Napolitanas y al molde.",
+    "c2_name": "Pastas",
+    "c2_desc": "Recetas artesanales con salsas preparadas al momento.",
+    "c3_name": "Cócteles",
+    "c3_desc": "De autor y clásicos italianos. El Negroni que esperabas.",
+    "c4_name": "Más",
+    "c4_desc": "Entradas, ensaladas, postres y opciones vegetarianas y veganas.",
+    "order_q": "¿No podés venir hoy?",
+    "order_title": "Pedí online y retirá en local",
+    "order_cta": "Ver la carta →"
+  },
+  "reviews": {
+    "label": "Reseñas",
+    "headline": "Lo que dicen nuestros clientes",
+    "google_label": "· Google Business",
+    "award": "🏆 2° lugar Top Chile 2025 · @thetopchile",
+    "cta": "Ver todas las reseñas en Google →"
+  },
+  "contact": {
+    "label": "Visítanos",
+    "headline": "Te esperamos",
+    "hours_title": "Horarios",
+    "day1": "Martes – Jueves",
+    "day2": "Viernes – Sábado",
+    "day3": "Domingo",
+    "day4": "Lunes",
+    "closed": "Cerrado",
+    "location_title": "Ubicación",
+    "address": "Darío Pavez 16, Champa",
+    "region": "Paine, Región Metropolitana",
+    "parking": "🚗 Estacionamiento propio",
+    "metro": "🚉 5 min desde Metrotren Hospital",
+    "directions": "Cómo llegar →",
+    "contact_title": "Contacto",
+    "wa_reserve": "Reservar por WhatsApp",
+    "maps_link": "Ver DiMOE en Google Maps →",
+    "event_title": "¿Cumpleaños, matrimonio o evento empresarial?",
+    "event_desc": "Tenemos espacio y experiencia para hacer que tu evento sea especial.",
+    "event_cta": "Consultar disponibilidad →",
+    "wa_message": "Hola! Quiero hacer una reserva"
+  },
+  "form": {
+    "title": "Envianos un mensaje",
+    "subtitle": "Reservas, eventos o cualquier consulta — respondemos rápido.",
+    "name": "Tu nombre",
+    "email": "tu@email.com",
+    "message": "¿En qué te podemos ayudar?",
+    "submit": "Enviar mensaje",
+    "sending": "Enviando...",
+    "success_title": "¡Mensaje enviado!",
+    "success_body": "Te responderemos a la brevedad.",
+    "error": "Hubo un problema al enviar. Intentá de nuevo o escribinos a",
+    "err_name": "El nombre es obligatorio",
+    "err_email_req": "El email es obligatorio",
+    "err_email_inv": "Email inválido",
+    "err_msg": "El mensaje es obligatorio"
+  },
+  "footer": {
+    "tagline": "Pizzería Napolitana y Restobar",
+    "location": "Paine, Chile",
+    "home": "Inicio",
+    "about": "Nosotros",
+    "menu": "Carta",
+    "reviews": "Reseñas",
+    "contact": "Contacto",
+    "privacy": "Privacidad",
+    "copyright": "Todos los derechos reservados."
+  },
+  "cookie": {
+    "text": "Usamos cookies para mejorar tu experiencia y analizar el tráfico.",
+    "policy": "política de privacidad",
+    "accept": "Aceptar todo",
+    "essential": "Solo esenciales"
+  },
+  "privacy": {
+    "back": "← Volver al inicio",
+    "title": "Política de Privacidad",
+    "updated": "Última actualización"
+  }
+}
