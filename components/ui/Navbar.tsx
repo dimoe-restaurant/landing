@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/navigation';
+import { IconGlobe } from '@/components/ui/icons';
 
 export default function Navbar() {
   const t = useTranslations('nav');
@@ -69,13 +70,14 @@ export default function Navbar() {
             aria-label={locale === 'es' ? 'Switch to English' : 'Cambiar a Español'}
             style={{
               background: 'none', border: '1px solid rgba(242,237,228,0.2)', color: 'rgba(242,237,228,0.6)',
-              padding: '5px 12px', borderRadius: '100px', fontSize: '12px', fontWeight: 600,
+              padding: '5px 12px 5px 10px', borderRadius: '100px', fontSize: '12px', fontWeight: 600,
               cursor: 'pointer', letterSpacing: '0.05em', transition: 'border-color 0.2s, color 0.2s',
-              fontFamily: 'var(--font-sans)',
+              fontFamily: 'var(--font-sans)', display: 'inline-flex', alignItems: 'center', gap: '5px',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#C17A3B'; e.currentTarget.style.color = '#C17A3B'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.2)'; e.currentTarget.style.color = 'rgba(242,237,228,0.6)'; }}
           >
+            <IconGlobe size={13} />
             {locale === 'es' ? 'EN' : 'ES'}
           </button>
 

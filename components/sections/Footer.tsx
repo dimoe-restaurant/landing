@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { IconInstagram, IconWhatsApp, IconEmail } from '@/components/ui/icons';
 
 const year = new Date().getFullYear();
 
@@ -16,9 +17,9 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { href: 'https://instagram.com/dimoe_restobar', text: '@dimoe_restobar' },
-    { href: 'https://wa.me/56973694101', text: '+56 9 7369 4101' },
-    { href: 'mailto:contacto@dimoe.cl', text: 'contacto@dimoe.cl' },
+    { href: 'https://instagram.com/dimoe_restobar', text: '@dimoe_restobar', Icon: IconInstagram, color: '#E1306C' },
+    { href: 'https://wa.me/56973694101', text: '+56 9 7369 4101', Icon: IconWhatsApp, color: '#25D366' },
+    { href: 'mailto:contacto@dimoe.cl', text: 'contacto@dimoe.cl', Icon: IconEmail, color: '#C17A3B' },
   ];
 
   return (
@@ -42,10 +43,11 @@ export default function Footer() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {socialLinks.map(l => (
             <a key={l.text} href={l.href} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '14px', color: '#9B8B7E', textDecoration: 'none', transition: 'color 0.2s' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#9B8B7E', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={e => (e.currentTarget.style.color = '#F2EDE4')}
               onMouseLeave={e => (e.currentTarget.style.color = '#9B8B7E')}
             >
+              <span style={{ color: l.color, flexShrink: 0, display: 'flex' }}><l.Icon size={16} /></span>
               {l.text}
             </a>
           ))}

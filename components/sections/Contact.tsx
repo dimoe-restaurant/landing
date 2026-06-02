@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import ContactForm from './ContactForm';
+import { IconInstagram, IconWhatsApp, IconEmail, IconCar, IconTrain } from '@/components/ui/icons';
 
 const MAPS_LINK = 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 const MAPS_EVENTS_LINK = 'mailto:contacto@dimoe.cl?subject=Consulta%20evento';
@@ -23,9 +24,9 @@ export default function Contact() {
   ];
 
   const contacts = [
-    { icon: '📱', text: '+56 9 7369 4101', href: waUrl },
-    { icon: '✉️', text: 'contacto@dimoe.cl', href: 'mailto:contacto@dimoe.cl' },
-    { icon: '📸', text: '@dimoe_restobar', href: 'https://instagram.com/dimoe_restobar' },
+    { Icon: IconWhatsApp, color: '#25D366', text: '+56 9 7369 4101', href: waUrl },
+    { Icon: IconEmail, color: '#C17A3B', text: 'contacto@dimoe.cl', href: 'mailto:contacto@dimoe.cl' },
+    { Icon: IconInstagram, color: '#E1306C', text: '@dimoe_restobar', href: 'https://instagram.com/dimoe_restobar' },
   ];
 
   return (
@@ -63,8 +64,8 @@ export default function Contact() {
               <p style={{ margin: 0, color: '#F2EDE4', fontWeight: 500 }}>{t('address')}</p>
               <p style={{ margin: 0, color: '#9B8B7E' }}>{t('region')}</p>
               <div style={{ height: '1px', background: '#2A2520', margin: '8px 0' }} />
-              <p style={{ margin: 0, color: '#9B8B7E' }}>{t('parking')}</p>
-              <p style={{ margin: 0, color: '#9B8B7E' }}>{t('metro')}</p>
+              <p style={{ margin: 0, color: '#9B8B7E', display: 'flex', alignItems: 'center', gap: '8px' }}><IconCar size={15} />{t('parking')}</p>
+              <p style={{ margin: 0, color: '#9B8B7E', display: 'flex', alignItems: 'center', gap: '8px' }}><IconTrain size={15} />{t('metro')}</p>
             </div>
             <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', marginTop: '20px', fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none' }}
@@ -87,7 +88,8 @@ export default function Contact() {
                   onMouseEnter={e => (e.currentTarget.style.color = '#F2EDE4')}
                   onMouseLeave={e => (e.currentTarget.style.color = '#9B8B7E')}
                 >
-                  <span style={{ fontSize: '18px', flexShrink: 0 }}>{c.icon}</span>{c.text}
+                  <span style={{ color: c.color, flexShrink: 0, display: 'flex' }}><c.Icon size={18} /></span>
+                  {c.text}
                 </a>
               ))}
             </div>
