@@ -213,8 +213,8 @@ export default function Menu() {
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
         </motion.div>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', marginBottom: '48px', flexWrap: 'wrap' }}>
+        {/* Tabs — sticky debajo del navbar */}
+        <div style={{ position: 'sticky', top: '72px', zIndex: 10, background: '#0D0B09', paddingTop: '16px', paddingBottom: '16px', marginBottom: '32px', display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap' }}>
           {TABS.map(tab => (
             <button key={tab} onClick={() => setActive(tab)}
               style={{

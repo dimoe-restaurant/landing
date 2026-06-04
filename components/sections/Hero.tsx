@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
 
 export default function Hero() {
   const t = useTranslations('hero');
@@ -12,7 +14,7 @@ export default function Hero() {
     <section id="inicio" style={{ position: 'relative', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '72px 20px 0', overflow: 'hidden', background: '#0D0B09' }}>
       {/* Real photo background */}
       <div style={{ position: 'absolute', inset: 0 }}>
-        <img src="/images/foto-2.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }} />
+        <Image src="/images/foto-2.jpg" alt="" fill priority style={{ objectFit: 'cover', objectPosition: 'center 40%' }} />
       </div>
       {/* Overlays */}
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)' }} />
@@ -48,11 +50,11 @@ export default function Hero() {
           >
             {t('cta_reserve')}
           </a>
-          <a href="#menu"
+          <Link href="/carta"
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', color: '#F2EDE4', border: '1px solid rgba(242,237,228,0.2)', padding: '14px 32px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'border-color 0.2s', flex: '1 1 auto', maxWidth: '260px' }}
           >
             {t('cta_menu')}
-          </a>
+          </Link>
         </div>
 
         <p style={{ fontSize: '12px', color: '#9B8B7E', marginTop: '8px', letterSpacing: '0.02em' }}>
