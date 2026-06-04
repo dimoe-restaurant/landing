@@ -13,21 +13,17 @@ export default function AppleIcon() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 36,
+        borderRadius: 40,
       }}
     >
-      <span
-        style={{
-          color: '#C17A3B',
-          fontSize: 110,
-          fontWeight: 700,
-          fontFamily: 'Georgia, serif',
-          letterSpacing: '-4px',
-          lineHeight: 1,
-        }}
-      >
-        D
-      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://landing-sagajardos-projects.vercel.app/images/logo-transparent.png"
+        width={148}
+        height={56}
+        alt="DiMOE"
+        style={{ objectFit: 'contain', filter: 'brightness(1.2)' }}
+      />
     </div>,
     { ...size },
   );

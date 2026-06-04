@@ -57,9 +57,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <a href={a('inicio')} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', lineHeight: 0 }}>
-          <div style={{ background: '#F2EDE4', borderRadius: '8px', padding: '5px 11px', lineHeight: 0 }}>
-            <img src="/images/logo.png" alt="DiMOE Pizzería y Restobar" style={{ height: '34px', width: 'auto', display: 'block' }} />
-          </div>
+          <img src="/images/logo-transparent.png" alt="DiMOE Pizzería y Restobar" style={{ height: '38px', width: 'auto', display: 'block', filter: 'brightness(1.15)' }} />
         </a>
 
         {/* Desktop nav */}
