@@ -10,7 +10,7 @@ export type GoogleReview = {
   profile_photo_url?: string;
 };
 
-const FALLBACK_REVIEWS = [
+const FALLBACK_REVIEWS: GoogleReview[] = [
   { author_name: 'María J.', rating: 5, text: 'La pizza napolitana más auténtica que he probado en Chile. El nuevo local es espectacular — amplio, con terraza y patio. La atmósfera de noche, con las lucecitas, es realmente especial. Ya somos habitués.', relative_time_description: 'hace 2 semanas' },
   { author_name: 'Felipe R.', rating: 5, text: 'El nivel es constante y alto. Los cócteles están perfectamente ejecutados y la carta de vinos sorprende para un lugar en Paine. Vale mucho la pena el viaje desde Santiago, más aún con estacionamiento propio.', relative_time_description: 'hace 1 mes' },
   { author_name: 'Carolina M.', rating: 5, text: 'Fuimos con nuestra perra y la bienvenida fue increíble — el patio es perfecto para mascotas. La pizza San Marzano es sublime. El nuevo local tiene mucho más espacio y las mesas están bien distribuidas.', relative_time_description: 'hace 3 semanas' },
