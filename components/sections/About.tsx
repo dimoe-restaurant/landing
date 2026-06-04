@@ -26,6 +26,14 @@ export default function About() {
           <p style={{ fontSize: 'clamp(14px, 1.8vw, 16px)', lineHeight: 1.7, color: 'rgba(242,237,228,0.55)', maxWidth: '600px', margin: '0 auto' }}>{t('body')}</p>
         </motion.div>
 
+        {/* Chef photo */}
+        <motion.div initial={{ opacity: 0, scale: 1.03 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', height: 'clamp(320px, 40vw, 500px)', position: 'relative' }}
+        >
+          <img src="/images/foto-3.jpg" alt="Chef DiMOE preparando la masa" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 62%' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,11,9,0.5) 0%, transparent 50%)' }} />
+        </motion.div>
+
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px', marginBottom: '12px' }}>
           {highlights.map((h, i) => (
             <motion.div key={h.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: i * 0.1 }}

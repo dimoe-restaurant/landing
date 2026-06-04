@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter, usePathname } from '@/i18n/navigation';
+import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { IconGlobe } from '@/components/ui/icons';
 
 export default function Navbar() {
@@ -29,10 +29,10 @@ export default function Navbar() {
   )}`;
 
   const links = [
-    { label: t('about'), href: '#nosotros' },
-    { label: t('menu'), href: '#menu' },
-    { label: t('reviews'), href: '#resenas' },
-    { label: t('contact'), href: '#contacto' },
+    { label: t('about'), href: '#nosotros', external: false },
+    { label: t('menu'), href: '/carta', external: false },
+    { label: t('reviews'), href: '#resenas', external: false },
+    { label: t('contact'), href: '#contacto', external: false },
   ];
 
   const solid = scrolled || mobileOpen;
@@ -48,13 +48,23 @@ export default function Navbar() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
         {/* Logo */}
-        <a href="#inicio" style={{ fontFamily: 'var(--font-serif)', fontSize: '24px', fontWeight: 700, color: '#F2EDE4', textDecoration: 'none', letterSpacing: '0.02em' }}>
-          DiMOE
+        <a href="#inicio" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', lineHeight: 0 }}>
+          <div style={{ background: '#F2EDE4', borderRadius: '8px', padding: '5px 11px', lineHeight: 0 }}>
+            <img src="/images/logo.png" alt="DiMOE Pizzería y Restobar" style={{ height: '34px', width: 'auto', display: 'block' }} />
+          </div>
         </a>
 
         {/* Desktop nav */}
         <nav className="nav-desktop" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
-          {links.map(l => (
+          {links.map(l => l.href.startsWith('/') ? (
+            <Link key={l.href} href={l.href as '/carta'}
+              style={{ fontSize: '14px', color: 'rgba(242,237,228,0.7)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
+              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = '#F2EDE4')}
+              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = 'rgba(242,237,228,0.7)')}
+            >
+              {l.label}
+            </Link>
+          ) : (
             <a key={l.href} href={l.href}
               style={{ fontSize: '14px', color: 'rgba(242,237,228,0.7)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
               onMouseEnter={e => (e.currentTarget.style.color = '#F2EDE4')}
@@ -115,7 +125,13 @@ export default function Navbar() {
       {/* Mobile panel */}
       {mobileOpen && (
         <div className="nav-mobile-panel" style={{ background: 'rgba(13,11,9,0.97)', borderTop: '1px solid #2A2520', padding: '16px 24px 24px' }}>
-          {links.map(l => (
+          {links.map(l => l.href.startsWith('/') ? (
+            <Link key={l.href} href={l.href as '/carta'} onClick={() => setMobileOpen(false)}
+              style={{ display: 'block', padding: '14px 0', fontSize: '18px', color: 'rgba(242,237,228,0.75)', textDecoration: 'none', fontWeight: 500, borderBottom: '1px solid #2A2520' }}
+            >
+              {l.label}
+            </Link>
+          ) : (
             <a key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
               style={{ display: 'block', padding: '14px 0', fontSize: '18px', color: 'rgba(242,237,228,0.75)', textDecoration: 'none', fontWeight: 500, borderBottom: '1px solid #2A2520' }}
             >

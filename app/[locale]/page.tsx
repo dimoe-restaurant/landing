@@ -1,6 +1,6 @@
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
-import Menu from '@/components/sections/Menu';
+import MenuTeaser from '@/components/sections/MenuTeaser';
 import Reviews from '@/components/sections/Reviews';
 import InstagramFeed from '@/components/sections/InstagramFeed';
 import Contact from '@/components/sections/Contact';
@@ -11,7 +11,7 @@ export default function Home() {
     <main>
       <Hero />
       <About />
-      <Menu />
+      <MenuTeaser />
       <Reviews />
       <InstagramFeed />
       <Contact />

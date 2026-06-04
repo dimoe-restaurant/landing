@@ -10,9 +10,14 @@ export default function Hero() {
 
   return (
     <section id="inicio" style={{ position: 'relative', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '72px 20px 0', overflow: 'hidden', background: '#0D0B09' }}>
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(61,26,8,0.7) 0%, transparent 70%)' }} />
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 40% 30% at 50% 100%, rgba(193,122,59,0.08) 0%, transparent 70%)' }} />
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '200px 200px' }} />
+      {/* Real photo background */}
+      <div style={{ position: 'absolute', inset: 0 }}>
+        <img src="/images/foto-2.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%' }} />
+      </div>
+      {/* Overlays */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(61,26,8,0.5) 0%, transparent 70%)' }} />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 40% 30% at 50% 100%, rgba(193,122,59,0.06) 0%, transparent 70%)' }} />
 
       <motion.div
         initial={{ opacity: 0, y: 28 }}
@@ -56,10 +61,9 @@ export default function Hero() {
       </motion.div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 0.6 }}
-        style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}
+        style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)' }}
       >
-        <span style={{ fontSize: '10px', letterSpacing: '0.2em', color: '#9B8B7E', textTransform: 'uppercase' }}>{t('scroll')}</span>
-        <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }} style={{ width: '1px', height: '40px', background: 'linear-gradient(to bottom, #C17A3B, transparent)' }} />
+        <motion.div animate={{ y: [0, 7, 0] }} transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }} style={{ width: '1px', height: '48px', background: 'linear-gradient(to bottom, rgba(193,122,59,0.8), transparent)' }} />
       </motion.div>
     </section>
   );
