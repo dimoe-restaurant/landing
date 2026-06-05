@@ -6,14 +6,46 @@ import Image from 'next/image';
 
 const MAPS_LINK = 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 
+const IconLeaf = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 22C7 22 3 17 3 11c0-5 4-9 9-9 5 0 9 4 9 9-2-1-4-1-6 0 2-2 2-5 0-7-3 4-4 8-3 12" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 22V14" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconAward = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <circle cx="12" cy="9" r="6" stroke="#C17A3B" strokeWidth="1.4"/>
+    <path d="M9 21l3-3 3 3M8.5 15.5l-2 5.5M15.5 15.5l2 5.5" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round"/>
+    <path d="M10 9l1.5 1.5L14 7" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const IconPaw = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <ellipse cx="9" cy="6" rx="2" ry="2.5" stroke="#C17A3B" strokeWidth="1.4"/>
+    <ellipse cx="15" cy="6" rx="2" ry="2.5" stroke="#C17A3B" strokeWidth="1.4"/>
+    <ellipse cx="6" cy="11" rx="1.5" ry="2" stroke="#C17A3B" strokeWidth="1.4"/>
+    <ellipse cx="18" cy="11" rx="1.5" ry="2" stroke="#C17A3B" strokeWidth="1.4"/>
+    <path d="M12 10c-4 0-6 2-5 5.5 0.5 2 2 3.5 5 3.5s4.5-1.5 5-3.5C18 12 16 10 12 10z" stroke="#C17A3B" strokeWidth="1.4"/>
+  </svg>
+);
+
+const IconFork = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M8 2v5c0 1.5 1 2.5 2.5 3V22M11 2v4M14 2v4" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round"/>
+    <path d="M16 2c0 0 2 1.5 2 4s-2 4-2 4V22" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 export default function About() {
   const t = useTranslations('about');
 
   const highlights = [
-    { icon: '🌿', title: t('h1_title'), desc: t('h1_desc') },
-    { icon: '🏆', title: t('h2_title'), desc: t('h2_desc') },
-    { icon: '🐶', title: t('h3_title'), desc: t('h3_desc') },
-    { icon: '🥗', title: t('h4_title'), desc: t('h4_desc') },
+    { Icon: IconLeaf, title: t('h1_title'), desc: t('h1_desc') },
+    { Icon: IconAward, title: t('h2_title'), desc: t('h2_desc') },
+    { Icon: IconPaw, title: t('h3_title'), desc: t('h3_desc') },
+    { Icon: IconFork, title: t('h4_title'), desc: t('h4_desc') },
   ];
 
   return (
@@ -40,8 +72,10 @@ export default function About() {
             <motion.div key={h.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: i * 0.1 }}
               style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px' }}
             >
-              <span style={{ fontSize: '28px', lineHeight: 1 }}>{h.icon}</span>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 700, color: '#F2EDE4', margin: '16px 0 8px' }}>{h.title}</h3>
+              <div style={{ width: '40px', height: '40px', background: 'rgba(193,122,59,0.08)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <h.Icon />
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 700, color: '#F2EDE4', margin: '14px 0 8px' }}>{h.title}</h3>
               <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#9B8B7E', margin: 0 }}>{h.desc}</p>
             </motion.div>
           ))}

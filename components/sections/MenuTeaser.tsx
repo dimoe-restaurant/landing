@@ -4,33 +4,61 @@ import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
+// SVG icons — thin-stroke gold, conectados a la identidad del local
+const IconFlame = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 2c-1 2.5-3 4-3 7 0 1.5.5 2.5 1 3-.5-1.5 0-3 1-4 0 2.5 2 4.5 2 7a4 4 0 01-8 0c0-5 4-8 4-12 1 2 3 3 3 4 1-2 0-5 0-5z" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const IconBowl = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M5 9h14l-1.5 7a2 2 0 01-2 1.7H8.5a2 2 0 01-2-1.7L5 9z" stroke="#C17A3B" strokeWidth="1.4" strokeLinejoin="round"/>
+    <path d="M3 9h18" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round"/>
+    <path d="M9 6c0-1.5.8-2.5 0-4M12 6c0-1.5.8-2.5 0-4M15 6c0-1.5.8-2.5 0-4" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconDrop = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 3L17.5 12.5a6 6 0 11-11 0L12 3z" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15 14.5a3 3 0 01-2 2.5" stroke="#C17A3B" strokeWidth="1.4" strokeLinecap="round" opacity="0.6"/>
+  </svg>
+);
+
+const IconStar = () => (
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17.2l-6.2 4.1 2.4-7.4L2 9.4h7.6z" stroke="#C17A3B" strokeWidth="1.4" strokeLinejoin="round"/>
+  </svg>
+);
+
 const HIGHLIGHTS = [
   {
     key: 'pizzas',
-    icon: '🍕',
+    Icon: IconFlame,
     label: 'Pizzas',
-    headline: 'Queen Margherita, Mortadella e Pistacchio, Catalina...',
+    headline: 'Queen Margherita · Catalina · Veracruz',
     body: 'Masa fermentada 48 horas. Horno de piedra a 450°C. Italianas, biancas y clásicas. La diferencia está en la base.',
   },
   {
     key: 'fondos',
-    icon: '🍝',
+    Icon: IconBowl,
     label: 'Fondos',
-    headline: 'Risotto, Lasagna, Pappardelle...',
+    headline: 'Risotto · Lasagna · Pappardelle',
     body: 'Especialidades de la casa que la gente vuelve a pedir. Cada plato cocinado al momento, sin atajos.',
   },
   {
     key: 'bar',
-    icon: '🍹',
+    Icon: IconDrop,
     label: 'Bar',
-    headline: 'Spritz, Sours, Coctelería clásica...',
+    headline: 'Spritz · Sours · Coctelería clásica',
     body: 'Cócteles de autor y clásicos italianos ejecutados con cuidado. El Negroni que merecías. Happy Hour Mar–Vie.',
   },
   {
     key: 'postres',
-    icon: '🍮',
+    Icon: IconStar,
     label: 'Postres',
-    headline: 'Tiramisú, Panna Cotta, Pizza Dolce...',
+    headline: 'Tiramisú · Panna Cotta · Pizza Dolce',
     body: 'El Tiramisú Pistacchio es el que se roba la noche. Siempre hay algo dulce para cerrar bien.',
   },
 ];
@@ -60,18 +88,25 @@ export default function MenuTeaser() {
           </Link>
         </motion.div>
 
-        {/* 4 cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px', marginBottom: '32px' }}>
+        {/* 4 cards — altura uniforme via grid stretch + flex column */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px', marginBottom: '32px', alignItems: 'stretch' }}>
           {HIGHLIGHTS.map((h, i) => (
-            <motion.div key={h.key} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: i * 0.08 }}>
-              <Link href="/carta" style={{ display: 'block', textDecoration: 'none', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px', height: '100%', transition: 'border-color 0.2s' }}
+            <motion.div key={h.key}
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: i * 0.08 }}
+              style={{ height: '100%' }}
+            >
+              <Link href="/carta" style={{
+                display: 'flex', flexDirection: 'column', textDecoration: 'none',
+                background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px',
+                padding: '24px', height: '100%', transition: 'border-color 0.2s',
+              }}
                 onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.borderColor = 'rgba(193,122,59,0.4)')}
                 onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.borderColor = '#2A2520')}
               >
-                <span style={{ fontSize: '28px', lineHeight: 1 }}>{h.icon}</span>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: '16px 0 6px' }}>{h.label}</h3>
-                <p style={{ fontSize: '12px', fontWeight: 500, color: '#C17A3B', margin: '0 0 8px', lineHeight: 1.5 }}>{h.headline}</p>
-                <p style={{ fontSize: '13px', lineHeight: 1.65, color: '#9B8B7E', margin: 0 }}>{h.body}</p>
+                <div style={{ marginBottom: '16px' }}><h.Icon /></div>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{h.label}</h3>
+                <p style={{ fontSize: '12px', fontWeight: 500, color: '#C17A3B', margin: '0 0 10px', lineHeight: 1.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.headline}</p>
+                <p style={{ fontSize: '13px', lineHeight: 1.65, color: '#9B8B7E', margin: 0, flex: 1 }}>{h.body}</p>
               </Link>
             </motion.div>
           ))}
