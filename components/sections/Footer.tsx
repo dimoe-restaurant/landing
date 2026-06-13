@@ -63,6 +63,15 @@ export default function Footer() {
         >
           {t('privacy')}
         </a>
+        <span style={{ opacity: 0.4 }}>·</span>
+        <button
+          onClick={() => { localStorage.removeItem('dimoe_cookie_consent'); location.reload(); }}
+          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'rgba(155,139,126,0.6)', fontSize: '12px', fontFamily: 'inherit', transition: 'color 0.2s' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#C17A3B')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(155,139,126,0.6)')}
+        >
+          {t('cookies')}
+        </button>
       </div>
     </footer>
   );
