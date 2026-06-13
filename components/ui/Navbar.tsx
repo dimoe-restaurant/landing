@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { IconGlobe } from '@/components/ui/icons';
+import { trackEvent } from '@/lib/analytics';
 
 export default function Navbar() {
   const t = useTranslations('nav');
@@ -90,6 +91,7 @@ export default function Navbar() {
           </button>
 
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_click', { location: 'navbar' })}
             style={{ background: '#C17A3B', color: '#F2EDE4', fontSize: '14px', fontWeight: 600, padding: '10px 22px', borderRadius: '100px', textDecoration: 'none', transition: 'opacity 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
@@ -130,7 +132,7 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" onClick={() => { setMobileOpen(false); trackEvent('whatsapp_click', { location: 'navbar_mobile' }); }}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px', background: '#C17A3B', color: '#F2EDE4', padding: '14px', borderRadius: '100px', fontSize: '15px', fontWeight: 600, textDecoration: 'none' }}
           >
             {t('reserve')}

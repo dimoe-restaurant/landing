@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
+import { trackEvent } from '@/lib/analytics';
 
 export default function Hero() {
   const t = useTranslations('hero');
@@ -46,11 +47,13 @@ export default function Hero() {
 
         <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
           <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_click', { location: 'hero' })}
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#C17A3B', color: '#F2EDE4', padding: '14px 32px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s', flex: '1 1 auto', maxWidth: '260px' }}
           >
             {t('cta_reserve')}
           </a>
           <Link href="/carta"
+            onClick={() => trackEvent('menu_click', { location: 'hero' })}
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', color: '#F2EDE4', border: '1px solid rgba(242,237,228,0.2)', padding: '14px 32px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'border-color 0.2s', flex: '1 1 auto', maxWidth: '260px' }}
           >
             {t('cta_menu')}

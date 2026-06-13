@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 import Navbar from '@/components/ui/Navbar';
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
 import CookieBanner from '@/components/ui/CookieBanner';
+import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
 import '@/app/globals.css';
 
 const playfair = Playfair_Display({ variable: '--font-playfair', subsets: ['latin'], display: 'swap' });
@@ -113,6 +114,7 @@ export default async function LocaleLayout({
           {children}
           <WhatsAppFloat />
           <CookieBanner />
+          <GoogleAnalytics />
         </NextIntlClientProvider>
       </body>
     </html>
