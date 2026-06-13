@@ -7,6 +7,7 @@ import Navbar from '@/components/ui/Navbar';
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat';
 import CookieBanner from '@/components/ui/CookieBanner';
 import GoogleAnalytics from '@/components/ui/GoogleAnalytics';
+import MetaPixel from '@/components/ui/MetaPixel';
 import '@/app/globals.css';
 
 const playfair = Playfair_Display({ variable: '--font-playfair', subsets: ['latin'], display: 'swap' });
@@ -115,6 +116,7 @@ export default async function LocaleLayout({
           <WhatsAppFloat />
           <CookieBanner />
           <GoogleAnalytics />
+          <MetaPixel />
         </NextIntlClientProvider>
       </body>
     </html>
