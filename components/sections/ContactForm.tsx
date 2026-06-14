@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { trackEvent } from '@/lib/analytics';
+import { trackPixelEvent } from '@/lib/meta-pixel';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -29,7 +31,8 @@ export default function ContactForm() {
     setStatus('loading');
     try {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre: data.get('nombre'), email: data.get('email'), mensaje: data.get('mensaje') }) });
-      setStatus(res.ok ? 'success' : 'error');
+      if (res.ok) { setStatus('success'); trackEvent('form_submit_success'); trackPixelEvent('Lead'); }
+      else setStatus('error');
     } catch { setStatus('error'); }
   }
 

@@ -1,5 +1,7 @@
 'use client';
 
+import { trackEvent } from '@/lib/analytics';
+
 const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
 
 export default function WhatsAppFloat() {
@@ -28,6 +30,7 @@ export default function WhatsAppFloat() {
         rel="noopener noreferrer"
         aria-label="Reservar por WhatsApp"
         className="wa-float"
+        onClick={() => trackEvent('whatsapp_click', { location: 'float' })}
         style={{
           position: 'fixed',
           bottom: '28px',
