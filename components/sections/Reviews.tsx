@@ -41,6 +41,11 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
     const data = await res.json() as PlacesResponse;
     const reviews = (data.reviews ?? [])
       .filter(r => r.rating >= 4)
+      .sort((a, b) => {
+        const ta = a.publishTime ? new Date(a.publishTime).getTime() : 0;
+        const tb = b.publishTime ? new Date(b.publishTime).getTime() : 0;
+        return tb - ta;
+      })
       .slice(0, 3)
       .map(r => ({
         author_name: r.authorAttribution?.displayName ?? 'Anónimo',

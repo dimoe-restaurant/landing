@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [{ hostname: 'lh3.googleusercontent.com' }],
+    remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
   async headers() {
     return [
