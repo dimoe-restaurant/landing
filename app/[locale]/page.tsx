@@ -11,10 +11,10 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <About />
       <MenuTeaser />
-      <Gallery />
       <Reviews />
+      <About />
+      <Gallery />
       <InstagramFeed />
       <Contact />
       <Footer />

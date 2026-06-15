@@ -117,10 +117,10 @@ export default function MenuTeaser() {
           style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: 'clamp(18px, 2.5vw, 24px) clamp(20px, 3vw, 32px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
           <div>
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 2vw, 19px)', fontWeight: 700, color: '#F2EDE4', margin: '0 0 4px' }}>
-              {locale === 'en' ? "Can't make it today?" : '¿No podés venir hoy?'}
+              {t('order_q')}
             </p>
             <p style={{ fontSize: '13px', color: '#9B8B7E', margin: 0 }}>
-              {locale === 'en' ? 'Order online and pick up at the restaurant.' : 'Pedí online y retirá en nuestro local.'}
+              {t('order_title')}
             </p>
           </div>
           <a href={process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe'} target="_blank" rel="noopener noreferrer"

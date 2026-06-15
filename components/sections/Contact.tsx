@@ -30,7 +30,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contacto" style={{ background: '#0D0B09', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
+    <section id="contacto" style={{ background: '#181310', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ textAlign: 'center', marginBottom: '64px' }}>
@@ -42,7 +42,7 @@ export default function Contact() {
 
           {/* Hours */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-            style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('hours_title')}</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -57,7 +57,7 @@ export default function Contact() {
 
           {/* Location */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('location_title')}</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
@@ -78,7 +78,7 @@ export default function Contact() {
 
           {/* Contact */}
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
+            style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('contact_title')}</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -120,7 +120,7 @@ export default function Contact() {
 
         {/* Events callout */}
         <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ marginTop: '16px', background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '28px 32px', textAlign: 'center' }}
+          style={{ marginTop: '16px', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '28px 32px', textAlign: 'center' }}
         >
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{t('event_title')}</p>
           <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 14px' }}>{t('event_desc')}</p>

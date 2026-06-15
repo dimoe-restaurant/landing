@@ -24,10 +24,10 @@ export default function Gallery() {
           style={{ textAlign: 'center', marginBottom: '32px' }}
         >
           <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>
-            Ambiente · Cocina · Barra
+            La experiencia
           </p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#F2EDE4', margin: 0, lineHeight: 1.15 }}>
-            Vívelo en persona
+            Desde el horno hasta la terraza
           </h2>
         </motion.div>
 

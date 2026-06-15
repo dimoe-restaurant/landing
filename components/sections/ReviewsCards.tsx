@@ -84,13 +84,13 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
   const ratingValue = placeRating ?? 4.8;
 
   return (
-    <section id="resenas" style={{ background: '#181310', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
+    <section id="resenas" style={{ background: '#0D0B09', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} style={{ textAlign: 'center', marginBottom: '20px' }}>
           <p className="eyebrow" style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>{label}</p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: '0 0 24px' }}>{headline}</h2>
           <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '100px', padding: '10px 20px', textDecoration: 'none', transition: 'border-color 0.2s' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#181310', border: '1px solid #2A2520', borderRadius: '100px', padding: '10px 20px', textDecoration: 'none', transition: 'border-color 0.2s' }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = '#C17A3B')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A2520')}
           >
@@ -110,7 +110,7 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
             const color = AVATAR_COLORS[i % AVATAR_COLORS.length];
             return (
               <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
-                style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}
+                style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {review.profile_photo_url ? (
