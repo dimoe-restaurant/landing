@@ -28,65 +28,143 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const isEn = locale === 'en';
 
   return {
+    metadataBase: new URL('https://dimoe.cl'),
     title: isEn
       ? 'DiMOE — Neapolitan Pizzeria & Restobar | Paine, Chile'
       : 'DiMOE — Pizzería Napolitana y Restobar | Paine, Chile',
     description: isEn
-      ? 'Award-winning Neapolitan pizza, artisan pasta and craft cocktails. 35 minutes from Santiago, in Paine. 2nd Best Restaurant in Chile 2025. Book your table.'
-      : 'Pizza napolitana con ingredientes frescos, pastas artesanales y cócteles de autor. A 35 minutos de Santiago, en Paine. 2° Top Chile 2025. Reserva tu mesa.',
+      ? 'Award-winning Neapolitan pizza, artisan pasta and craft cocktails. 35 min from Santiago, in Paine, Chile. 2nd Best Restaurant in Chile 2025. Book your table on WhatsApp.'
+      : 'Pizza napolitana en horno de leña, pastas artesanales y cócteles de autor. A 35 min de Santiago, en Paine. 2° Mejor Restaurante de Chile 2025 · 4,8 ⭐ en Google. Reserva ya.',
     keywords: isEn
-      ? ['Neapolitan pizza', 'Paine', 'Chile', 'Santiago day trip', 'restobar', 'pasta', 'cocktails', 'best restaurant Chile']
-      : ['pizzería', 'pizza napolitana', 'Paine', 'Chile', 'restobar', 'pasta', 'cócteles', 'Santiago', 'restaurante'],
+      ? ['Neapolitan pizza Paine', 'restaurant Paine Chile', 'wood-fired pizza Chile', 'restobar Paine', 'artisan pasta Chile', 'best restaurant Chile 2025', 'Santiago day trip restaurant', 'pizza near Santiago', 'DiMOE Paine']
+      : ['pizza napolitana Paine', 'pizzería Paine', 'restaurante Paine Chile', 'pizza horno leña Paine', 'restobar Paine', 'pasta artesanal Paine', 'donde comer Paine', 'restaurante cerca Santiago', 'mejor restaurante Chile 2025', 'DiMOE Paine'],
     authors: [{ name: 'DiMOE' }],
     openGraph: {
-      title: isEn ? 'DiMOE — Neapolitan Pizzeria & Restobar' : 'DiMOE — Pizzería Napolitana y Restobar',
+      title: isEn ? 'DiMOE — Neapolitan Pizzeria & Restobar | Paine, Chile' : 'DiMOE — Pizzería Napolitana y Restobar | Paine, Chile',
       description: isEn
-        ? 'Neapolitan pizza, artisan pasta & cocktails. 2nd Best in Chile 2025. 35 min from Santiago.'
-        : 'Pizza napolitana, pastas artesanales y cócteles. 2° Top Chile 2025. A 35 minutos de Santiago.',
+        ? 'Wood-fired Neapolitan pizza, artisan pasta & cocktails. 2nd Best in Chile 2025 · 4.8 ⭐. 35 min from Santiago.'
+        : 'Pizza napolitana en horno de leña, pastas y cócteles. 2° Mejor Restaurante Chile 2025 · 4,8 ⭐. A 35 min de Santiago.',
       url: isEn ? 'https://dimoe.cl/en' : 'https://dimoe.cl',
       siteName: 'DiMOE',
       locale: isEn ? 'en_US' : 'es_CL',
       type: 'website',
-      images: [{ url: 'https://dimoe.cl/og-image.jpg', width: 1200, height: 630, alt: 'DiMOE Pizzería Napolitana y Restobar — Paine, Chile' }],
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'DiMOE Pizzería Napolitana y Restobar — Paine, Chile' }],
     },
     twitter: {
       card: 'summary_large_image',
       title: isEn ? 'DiMOE — Neapolitan Pizzeria | Paine, Chile' : 'DiMOE — Pizzería Napolitana y Restobar | Paine',
-      description: isEn ? 'Neapolitan pizza & cocktails. 2nd Best in Chile 2025.' : 'Pizza napolitana, pastas y cócteles. 2° Top Chile 2025.',
-      images: ['https://dimoe.cl/og-image.jpg'],
+      description: isEn ? 'Wood-fired pizza & cocktails. 2nd Best in Chile 2025 · 4.8 ⭐' : 'Pizza napolitana, pastas y cócteles. 2° Top Chile 2025 · 4,8 ⭐',
+      images: ['/opengraph-image'],
     },
     alternates: {
       canonical: isEn ? 'https://dimoe.cl/en' : 'https://dimoe.cl',
       languages: { 'es': 'https://dimoe.cl', 'en': 'https://dimoe.cl/en' },
     },
-    robots: { index: true, follow: true },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' } },
   };
 }
 
 const restaurantSchema = {
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
+  '@id': 'https://dimoe.cl/#restaurant',
   name: 'DiMOE Pizzería Napolitana y Restobar',
+  alternateName: 'DiMOE',
+  description: 'Restaurante en Paine especializado en pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. 2° Mejor Restaurante de Chile 2025. A 35 minutos de Santiago por la Ruta 5 Sur.',
   url: 'https://dimoe.cl',
   telephone: '+56973694101',
   email: 'contacto@dimoe.cl',
-  image: 'https://dimoe.cl/og-image.jpg',
+  image: ['https://dimoe.cl/opengraph-image', 'https://dimoe.cl/images/gs_fb_891682793088451_1440x1440.jpg', 'https://dimoe.cl/images/gs_fb_868552525401478_1440x1800.jpg'],
   priceRange: '$$',
-  servesCuisine: ['Italian', 'Neapolitan Pizza', 'Pasta'],
-  address: { '@type': 'PostalAddress', streetAddress: 'Darío Pavez 16, Champa', addressLocality: 'Paine', addressRegion: 'Región Metropolitana', addressCountry: 'CL' },
+  currenciesAccepted: 'CLP',
+  paymentAccepted: 'Cash, Credit Card, Debit Card',
+  servesCuisine: ['Italian', 'Neapolitan Pizza', 'Pasta', 'Pizza napolitana', 'Cocina italiana', 'Cócteles'],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.8',
+    bestRating: '5',
+    worstRating: '1',
+    ratingCount: '200',
+  },
+  award: '2° Mejor Restaurante de Chile 2025 — Google Business',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Darío Pavez 16, Champa',
+    addressLocality: 'Paine',
+    addressRegion: 'Región Metropolitana',
+    postalCode: '9640000',
+    addressCountry: 'CL',
+  },
   geo: { '@type': 'GeoCoordinates', latitude: -33.8555048, longitude: -70.7650772 },
+  areaServed: [
+    { '@type': 'City', name: 'Paine' },
+    { '@type': 'City', name: 'Santiago' },
+    { '@type': 'AdministrativeArea', name: 'Región Metropolitana' },
+  ],
   hasMap: 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7',
-  menu: 'https://linktr.ee/di_moe',
-  sameAs: ['https://instagram.com/dimoe_restobar', 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7'],
+  menu: 'https://dimoe.cl/carta',
+  sameAs: [
+    'https://instagram.com/dimoe_restobar',
+    'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7',
+  ],
   openingHoursSpecification: [
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday'], opens: '12:30', closes: '22:30' },
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Friday', 'Saturday'], opens: '13:00', closes: '00:00' },
     { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Sunday'], opens: '13:00', closes: '17:30' },
   ],
   amenityFeature: [
-    { '@type': 'LocationFeatureSpecification', name: 'Estacionamiento', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Estacionamiento gratuito', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Pet-friendly', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Opciones vegetarianas', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Terraza exterior', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Reservas por WhatsApp', value: true },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '¿Dónde está DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE está en Darío Pavez 16, Champa, Paine, Región Metropolitana de Chile — a 40 km al sur de Santiago, aproximadamente 35–40 minutos por la Ruta 5 Sur.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Cuáles son los horarios de DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Martes a jueves: 12:30–22:30 · Viernes y sábado: 13:00–00:00 · Domingo: 13:00–17:30. Lunes cerrado.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Cómo se hace una reserva en DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Puedes reservar por WhatsApp al +56 9 7369 4101 o completando el formulario de contacto en dimoe.cl. No se cobra seña.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Qué tipo de comida sirve DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE sirve pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario con masa fresca y cócteles de autor. Todo con ingredientes frescos y recetas de inspiración italiana.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿DiMOE tiene estacionamiento?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Sí, DiMOE cuenta con estacionamiento amplio y gratuito frente al local.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿DiMOE acepta mascotas?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Sí. La terraza exterior de DiMOE es pet-friendly.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Cuánto cuesta comer en DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'El valor promedio por persona es de $15.000 a $25.000 CLP según lo que se pida. Se acepta efectivo y tarjeta.' },
+    },
+    {
+      '@type': 'Question',
+      name: '¿Qué reconocimientos tiene DiMOE?',
+      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE fue elegido 2° Mejor Restaurante de Chile 2025 por Google Business y cuenta con una calificación de 4,8 sobre 5 estrellas basada en más de 200 reseñas verificadas de clientes.' },
+    },
   ],
 };
 
@@ -108,6 +186,7 @@ export default async function LocaleLayout({
         <link rel="dns-prefetch" href="https://maps.google.com" />
         <link rel="dns-prefetch" href="https://wa.me" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       </head>
       <body style={{ margin: 0, minHeight: '100vh' }}>
         <NextIntlClientProvider messages={messages}>

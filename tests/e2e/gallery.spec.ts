@@ -1,9 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 // El lightbox tiene aria-modal="true", el cookie banner no → locator único
 const LIGHTBOX = '[role="dialog"][aria-modal="true"]';
 
-async function openLightbox(page: Parameters<Parameters<typeof test>[1]>[0]) {
+async function openLightbox(page: Page) {
   const btn = page.locator('button[aria-label^="Ver foto:"]').first();
   await btn.scrollIntoViewIfNeeded();
   await expect(btn).toBeVisible();
