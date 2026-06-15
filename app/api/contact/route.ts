@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { saveContact } from '@/lib/notion';
 
 const DESTINATION = 'contacto@dimoe.cl';
 const FROM = 'DiMOE <contacto@dimoe.cl>';
@@ -163,6 +164,10 @@ export async function POST(req: NextRequest) {
       console.error('Resend error:', notif.error ?? confirm.error);
       return NextResponse.json({ error: 'Error al enviar el email' }, { status: 500 });
     }
+
+    // Fire-and-forget: no bloquea ni falla la respuesta si Notion falla
+    saveContact({ nombre, email, telefono: telefono ?? null, mensaje, marketing: !!marketing_consent })
+      .catch(err => console.error('[Notion] fire-and-forget error:', err));
 
     return NextResponse.json({ ok: true });
   } catch (err) {

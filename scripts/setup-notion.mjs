@@ -8,15 +8,18 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-// Cargar .env.local manualmente
+// Cargar .env.local solo si la var no viene ya del entorno
 try {
   const env = readFileSync(resolve(process.cwd(), '.env.local'), 'utf8')
   for (const line of env.split('\n')) {
     const [key, ...rest] = line.split('=')
-    if (key && rest.length) process.env[key.trim()] = rest.join('=').trim()
+    if (key && rest.length && !process.env[key.trim()]) {
+      const val = rest.join('=').trim().replace(/^["']|["']$/g, '')
+      if (val) process.env[key.trim()] = val
+    }
   }
 } catch {
-  // Si no existe .env.local, asumir que la var ya está en el entorno
+  // Si no existe .env.local, la var debe venir del entorno
 }
 
 const TOKEN = process.env.NOTION_ACCESS_TOKEN
@@ -64,12 +67,23 @@ async function createDatabase(title, parentPageId, properties) {
   })
 }
 
+const ROOT_PAGE_ID = '3804832a0f4c80ebbb46c89f46cdfe37'
+
 async function main() {
   console.log('🚀  Creando estructura Notion para dimoe...\n')
 
-  // --- Root pages ---
-  const cms = await createPage('CMS — Landing', '🖊️')
-  const crm = await createPage('CRM — Leads', '📥')
+  // Renombrar la página raíz
+  await notion('PATCH', `/pages/${ROOT_PAGE_ID}`, {
+    icon: { type: 'emoji', emoji: '🍕' },
+    properties: {
+      title: { title: [{ text: { content: 'dimoe — Panel Central' } }] },
+    },
+  })
+  console.log('✓  Raíz renombrada: dimoe — Panel Central')
+
+  // --- Sub-páginas ---
+  const cms = await createPage('CMS — Contenido Landing', '🖊️', ROOT_PAGE_ID)
+  const crm = await createPage('CRM — Leads', '📥', ROOT_PAGE_ID)
   console.log(`✓  CMS page:  ${cms.id}`)
   console.log(`✓  CRM page:  ${crm.id}`)
 
