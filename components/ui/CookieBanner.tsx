@@ -21,6 +21,7 @@ export default function CookieBanner() {
     localStorage.setItem(CONSENT_KEY, value);
     setVisible(false);
     if (value === 'all') window.dispatchEvent(new Event('dimoe:consent-granted'));
+    else document.dispatchEvent(new Event('dimoe:consent-essential'));
   }
 
   if (!visible) return null;

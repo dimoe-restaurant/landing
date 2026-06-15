@@ -1,10 +1,26 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { trackEvent } from '@/lib/analytics';
+import { getConsent } from './CookieBanner';
 
 const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
 
 export default function WhatsAppFloat() {
+  const [bottom, setBottom] = useState('100px');
+
+  useEffect(() => {
+    if (getConsent()) setBottom('28px');
+    const handler = () => setBottom('28px');
+    window.addEventListener('dimoe:consent-granted', handler);
+    const handleEssential = () => setBottom('28px');
+    document.addEventListener('dimoe:consent-essential', handleEssential);
+    return () => {
+      window.removeEventListener('dimoe:consent-granted', handler);
+      document.removeEventListener('dimoe:consent-essential', handleEssential);
+    };
+  }, []);
+
   return (
     <>
       <style>{`
@@ -14,8 +30,7 @@ export default function WhatsAppFloat() {
         }
         .wa-float {
           animation: wa-pulse 2.4s ease-in-out infinite;
-          transition: transform 0.2s, opacity 0.2s;
-          bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+          transition: transform 0.2s, opacity 0.2s, bottom 0.3s ease;
         }
         .wa-float:hover { transform: scale(1.08); opacity: 0.93; }
         @media (max-width: 767px) {
@@ -33,7 +48,7 @@ export default function WhatsAppFloat() {
         onClick={() => trackEvent('whatsapp_click', { location: 'float' })}
         style={{
           position: 'fixed',
-          bottom: '28px',
+          bottom,
           right: '24px',
           zIndex: 40,
           width: '56px',
