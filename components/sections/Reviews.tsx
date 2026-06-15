@@ -13,14 +13,15 @@ type PlacesReview = {
   };
 };
 
+const PLACE_ID = 'ChIJs8epApEjY5YRphwLvQ4OeKo';
+
 async function fetchGoogleReviews(): Promise<GoogleReview[] | null> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  const placeId = process.env.GOOGLE_PLACE_ID;
-  if (!apiKey || !placeId) return null;
+  if (!apiKey) return null;
 
   try {
     const res = await fetch(
-      `https://places.googleapis.com/v1/places/${placeId}?languageCode=es`,
+      `https://places.googleapis.com/v1/places/${PLACE_ID}?languageCode=es`,
       {
         headers: {
           'X-Goog-Api-Key': apiKey,
