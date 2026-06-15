@@ -3,6 +3,7 @@ import About from '@/components/sections/About';
 import MenuTeaser from '@/components/sections/MenuTeaser';
 import Gallery from '@/components/sections/Gallery';
 import Press from '@/components/sections/Press';
+import LocationStrip from '@/components/sections/LocationStrip';
 import Reviews from '@/components/sections/Reviews';
 import InstagramFeed from '@/components/sections/InstagramFeed';
 import Faq from '@/components/sections/Faq';
@@ -14,6 +15,7 @@ export default function Home() {
     <main>
       <Hero />
       <MenuTeaser />
+      <LocationStrip />
       <Reviews />
       <About />
       <Gallery />
