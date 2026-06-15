@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    const [notif, confirm] = await Promise.all([
+    const [notif, confirm, _notion] = await Promise.allSettled([
       resend.emails.send({
         from: FROM,
         to: DESTINATION,
@@ -158,16 +158,26 @@ export async function POST(req: NextRequest) {
         subject: 'Recibimos tu mensaje — DiMOE',
         html: confirmationHtml(nombre),
       }),
+      saveContact({ nombre, email, telefono: telefono ?? null, mensaje, marketing: !!marketing_consent }),
     ]);
 
-    if (notif.error || confirm.error) {
-      console.error('Resend error:', notif.error ?? confirm.error);
+    if (notif.status === 'rejected' || confirm.status === 'rejected') {
+      const reason = notif.status === 'rejected' ? (notif as PromiseRejectedResult).reason : (confirm as PromiseRejectedResult).reason;
+      console.error('Resend error:', reason);
       return NextResponse.json({ error: 'Error al enviar el email' }, { status: 500 });
     }
 
-    // Fire-and-forget: no bloquea ni falla la respuesta si Notion falla
-    saveContact({ nombre, email, telefono: telefono ?? null, mensaje, marketing: !!marketing_consent })
-      .catch(err => console.error('[Notion] fire-and-forget error:', err));
+    const notifVal = (notif as PromiseFulfilledResult<typeof notif extends PromiseFulfilledResult<infer T> ? T : never>).value;
+    const confirmVal = (confirm as PromiseFulfilledResult<typeof confirm extends PromiseFulfilledResult<infer T> ? T : never>).value;
+
+    if (notifVal.error || confirmVal.error) {
+      console.error('Resend error:', notifVal.error ?? confirmVal.error);
+      return NextResponse.json({ error: 'Error al enviar el email' }, { status: 500 });
+    }
+
+    if (_notion.status === 'rejected') {
+      console.error('[Notion] saveContact error:', (_notion as PromiseRejectedResult).reason);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
