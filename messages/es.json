@@ -47,8 +47,8 @@
     "c3_desc": "De autor y clásicos italianos cuidadosamente ejecutados. El Negroni que merecías.",
     "c4_name": "Más",
     "c4_desc": "Entradas, ensaladas, vinos, postres y opciones vegetarianas y veganas. Carta completa para quedarse.",
-    "order_q": "¿No podés venir hoy?",
-    "order_title": "Pedí online y retirá en nuestro local",
+    "order_q": "¿No puedes venir hoy?",
+    "order_title": "Pide online y retira en nuestro local",
     "order_cta": "Ver la carta →"
   },
   "reviews": {
@@ -82,7 +82,7 @@
     "wa_message": "Hola! Quiero hacer una reserva"
   },
   "form": {
-    "title": "Escribinos",
+    "title": "Escríbenos",
     "subtitle": "Reservas, eventos o cualquier consulta — respondemos rápido.",
     "name": "Tu nombre",
     "email": "tu@email.com",
@@ -91,7 +91,7 @@
     "sending": "Enviando...",
     "success_title": "¡Mensaje enviado!",
     "success_body": "Te responderemos a la brevedad.",
-    "error": "Hubo un problema al enviar. Intentá de nuevo o escribinos a",
+    "error": "Hubo un problema al enviar. Intenta de nuevo o escríbenos a",
     "err_name": "El nombre es obligatorio",
     "err_email_req": "El email es obligatorio",
     "err_email_inv": "Email inválido",

@@ -63,7 +63,7 @@ export default function About() {
         <motion.div initial={{ opacity: 0, scale: 1.03 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', height: 'clamp(320px, 40vw, 500px)', position: 'relative' }}
         >
-          <Image src="/images/gs_fb_955131646743565_1440x1800.jpg" alt="Marisol Osorio, dueña y pizzaiola de DiMOE, estirando masa napolitana" fill style={{ objectFit: 'cover', objectPosition: 'center 25%' }} />
+          <Image src="/images/landing-actual-3.jpg" alt="Marisol Osorio, pizzaiola de DiMOE, lanzando masa napolitana al aire" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} sizes="(max-width: 768px) 100vw, 1100px" />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,11,9,0.5) 0%, transparent 50%)' }} />
         </motion.div>
 

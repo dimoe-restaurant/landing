@@ -27,7 +27,7 @@ export default function Gallery() {
             Ambiente · Cocina · Barra
           </p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#F2EDE4', margin: 0, lineHeight: 1.15 }}>
-            Vivilo en persona
+            Vívelo en persona
           </h2>
         </motion.div>
 
