@@ -32,7 +32,7 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
       {
         headers: {
           'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'rating,reviews,reviews.publishTime,reviews.authorAttribution.uri',
+          'X-Goog-FieldMask': 'rating,reviews',
         },
         next: { revalidate: 1800 },
       }
