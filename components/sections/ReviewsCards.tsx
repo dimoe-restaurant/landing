@@ -7,24 +7,50 @@ export type GoogleReview = {
   rating: number;
   text: string;
   relative_time_description: string;
+  publish_time?: string;
   profile_photo_url?: string;
+  author_uri?: string;
 };
 
 const FALLBACK_REVIEWS: GoogleReview[] = [
-  { author_name: 'María J.', rating: 5, text: 'La pizza napolitana más auténtica que he probado en Chile. El nuevo local es espectacular — amplio, con terraza y patio. La atmósfera de noche, con las lucecitas, es realmente especial. Ya somos habitués.', relative_time_description: 'hace 2 semanas' },
-  { author_name: 'Felipe R.', rating: 5, text: 'El nivel es constante y alto. Los cócteles están perfectamente ejecutados y la carta de vinos sorprende para un lugar en Paine. Vale mucho la pena el viaje desde Santiago, más aún con estacionamiento propio.', relative_time_description: 'hace 1 mes' },
-  { author_name: 'Carolina M.', rating: 5, text: 'Fuimos con nuestra perra y la bienvenida fue increíble — el patio es perfecto para mascotas. La pizza San Marzano es sublime. El nuevo local tiene mucho más espacio y las mesas están bien distribuidas.', relative_time_description: 'hace 3 semanas' },
+  { author_name: 'María J.', rating: 5, text: 'La pizza napolitana más auténtica que he probado en Chile. El nuevo local es espectacular — amplio, con terraza y patio. La atmósfera de noche, con las lucecitas, es realmente especial. Ya somos habitués.', relative_time_description: 'hace 2 semanas', publish_time: undefined },
+  { author_name: 'Felipe R.', rating: 5, text: 'El nivel es constante y alto. Los cócteles están perfectamente ejecutados y la carta de vinos sorprende para un lugar en Paine. Vale mucho la pena el viaje desde Santiago, más aún con estacionamiento propio.', relative_time_description: 'hace 1 mes', publish_time: undefined },
+  { author_name: 'Carolina M.', rating: 5, text: 'Fuimos con nuestra perra y la bienvenida fue increíble — el patio es perfecto para mascotas. La pizza San Marzano es sublime. El nuevo local tiene mucho más espacio y las mesas están bien distribuidas.', relative_time_description: 'hace 3 semanas', publish_time: undefined },
 ];
+
+function formatDate(isoString: string): string {
+  try {
+    return new Date(isoString).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch {
+    return '';
+  }
+}
 
 const AVATAR_COLORS = ['#5B7FA6', '#6B9E78', '#A67B5B', '#7B6BA6', '#A68B5B'];
 
-function Stars({ count }: { count: number }) {
+function Stars({ count, size = 14 }: { count: number; size?: number }) {
+  const full = Math.floor(count);
+  const partial = count - full;
+  const empty = 5 - Math.ceil(count);
+  const starPath = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#C17A3B" aria-hidden>
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      {Array.from({ length: full }).map((_, i) => (
+        <svg key={`f${i}`} width={size} height={size} viewBox="0 0 24 24" fill="#C17A3B" aria-hidden><path d={starPath} /></svg>
+      ))}
+      {partial > 0 && (
+        <svg key="p" width={size} height={size} viewBox="0 0 24 24" aria-hidden>
+          <defs>
+            <linearGradient id="ps">
+              <stop offset={`${Math.round(partial * 100)}%`} stopColor="#C17A3B" />
+              <stop offset={`${Math.round(partial * 100)}%`} stopColor="#2A2520" />
+            </linearGradient>
+          </defs>
+          <path d={starPath} fill="url(#ps)" />
         </svg>
+      )}
+      {Array.from({ length: empty }).map((_, i) => (
+        <svg key={`e${i}`} width={size} height={size} viewBox="0 0 24 24" fill="#2A2520" aria-hidden><path d={starPath} /></svg>
       ))}
     </div>
   );
@@ -49,10 +75,13 @@ type Props = {
   cta: string;
   googleMapsUrl: string;
   reviews: GoogleReview[] | null;
+  placeRating?: number | null;
 };
 
-export default function ReviewsCards({ label, headline, googleLabel, award, cta, googleMapsUrl, reviews }: Props) {
+export default function ReviewsCards({ label, headline, googleLabel, award, cta, googleMapsUrl, reviews, placeRating }: Props) {
   const displayReviews = (reviews && reviews.length > 0) ? reviews.slice(0, 3) : FALLBACK_REVIEWS;
+  const ratingDisplay = placeRating != null ? placeRating.toFixed(1) : '4.8';
+  const ratingValue = placeRating ?? 4.8;
 
   return (
     <section id="resenas" style={{ background: '#181310', padding: 'clamp(64px, 8vw, 96px) clamp(16px, 4vw, 24px)' }}>
@@ -65,8 +94,8 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
             onMouseEnter={e => (e.currentTarget.style.borderColor = '#C17A3B')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A2520')}
           >
-            <GoogleLogo /><Stars count={5} />
-            <span style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4' }}>5.0</span>
+            <GoogleLogo /><Stars count={ratingValue} />
+            <span style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4' }}>{ratingDisplay}</span>
             <span style={{ fontSize: '13px', color: '#9B8B7E' }}>{googleLabel}</span>
           </a>
         </motion.div>
@@ -85,18 +114,26 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {review.profile_photo_url ? (
-                    <img src={review.profile_photo_url} alt={review.author_name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                    <img src={review.profile_photo_url} alt={review.author_name} referrerPolicy="no-referrer" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                   ) : (
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>{initial}</div>
                   )}
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: '14px', fontWeight: 600, color: '#F2EDE4', margin: '0 0 2px' }}>{review.author_name}</p>
-                    <p style={{ fontSize: '12px', color: '#9B8B7E', margin: 0 }}>{review.relative_time_description}</p>
+                    <p style={{ fontSize: '11px', color: '#9B8B7E', margin: 0 }}>
+                      {review.publish_time ? formatDate(review.publish_time) : review.relative_time_description}
+                    </p>
                   </div>
                   <GoogleLogo />
                 </div>
                 <Stars count={review.rating} />
                 <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(242,237,228,0.65)', margin: 0 }}>&ldquo;{review.text}&rdquo;</p>
+                <a
+                  href={review.author_uri ?? googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: '12px', color: '#C17A3B', textDecoration: 'none', alignSelf: 'flex-start', opacity: 0.85 }}
+                >Ver en Google →</a>
               </motion.div>
             );
           })}

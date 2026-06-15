@@ -7,17 +7,24 @@ type PlacesReview = {
   rating: number;
   text?: { text: string };
   relativePublishTimeDescription?: string;
+  publishTime?: string;
   authorAttribution?: {
     displayName: string;
     photoUri?: string;
+    uri?: string;
   };
+};
+
+type PlacesResponse = {
+  rating?: number;
+  reviews?: PlacesReview[];
 };
 
 const PLACE_ID = 'ChIJs8epApEjY5YRphwLvQ4OeKo';
 
-async function fetchGoogleReviews(): Promise<GoogleReview[] | null> {
+async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; placeRating: number | null }> {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  if (!apiKey) return null;
+  if (!apiKey) return { reviews: null, placeRating: null };
 
   try {
     const res = await fetch(
@@ -25,14 +32,14 @@ async function fetchGoogleReviews(): Promise<GoogleReview[] | null> {
       {
         headers: {
           'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'reviews',
+          'X-Goog-FieldMask': 'rating,reviews,reviews.publishTime,reviews.authorAttribution.uri',
         },
-        next: { revalidate: 3600 },
+        next: { revalidate: 1800 },
       }
     );
-    if (!res.ok) return null;
-    const data = await res.json() as { reviews?: PlacesReview[] };
-    return (data.reviews ?? [])
+    if (!res.ok) return { reviews: null, placeRating: null };
+    const data = await res.json() as PlacesResponse;
+    const reviews = (data.reviews ?? [])
       .filter(r => r.rating >= 4)
       .slice(0, 3)
       .map(r => ({
@@ -40,16 +47,19 @@ async function fetchGoogleReviews(): Promise<GoogleReview[] | null> {
         rating: r.rating,
         text: r.text?.text ?? '',
         relative_time_description: r.relativePublishTimeDescription ?? '',
+        publish_time: r.publishTime,
         profile_photo_url: r.authorAttribution?.photoUri,
+        author_uri: r.authorAttribution?.uri,
       }));
+    return { reviews, placeRating: data.rating ?? null };
   } catch {
-    return null;
+    return { reviews: null, placeRating: null };
   }
 }
 
 export default async function Reviews() {
   const t = await getTranslations('reviews');
-  const reviews = await fetchGoogleReviews();
+  const { reviews, placeRating } = await fetchGoogleReviews();
 
   return (
     <ReviewsCards
@@ -60,6 +70,7 @@ export default async function Reviews() {
       cta={t('cta')}
       googleMapsUrl={GOOGLE_MAPS_URL}
       reviews={reviews}
+      placeRating={placeRating}
     />
   );
 }

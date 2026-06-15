@@ -15,7 +15,7 @@ export default function Hero() {
     <section id="inicio" style={{ position: 'relative', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '72px 20px 0', overflow: 'hidden', background: '#0D0B09' }}>
       {/* Real photo background */}
       <div style={{ position: 'absolute', inset: 0 }}>
-        <Image src="/images/foto-3.jpg" alt="" fill priority style={{ objectFit: 'cover', objectPosition: 'center 35%' }} />
+        <Image src="/images/landing-actual-4.jpg" alt="" fill priority style={{ objectFit: 'cover', objectPosition: 'center 40%' }} />
       </div>
       {/* Overlays */}
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)' }} />
