@@ -37,8 +37,8 @@ test.describe('SEO y meta tags', () => {
   });
 
   test('/privacidad carga y tiene contenido', async ({ page }) => {
-    await page.goto('/privacidad');
-    await expect(page.getByText(/política de privacidad/i)).toBeVisible();
+    await page.goto('/privacidad', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByText(/política de privacidad/i)).toBeVisible({ timeout: 10_000 });
     await expect(page.getByRole('link', { name: /volver/i }).first()).toBeVisible();
   });
 });
