@@ -95,7 +95,12 @@
     "err_name": "El nombre es obligatorio",
     "err_email_req": "El email es obligatorio",
     "err_email_inv": "Email inválido",
-    "err_msg": "El mensaje es obligatorio"
+    "err_msg": "El mensaje es obligatorio",
+    "phone": "Teléfono (opcional)",
+    "phone_hint": "Ej: +56 9 1234 5678",
+    "marketing": "Acepto recibir comunicaciones de marketing y promociones de DiMOE",
+    "privacy_link": "Política de privacidad",
+    "err_phone": "Formato inválido. Ej: +56912345678"
   },
   "footer": {
     "tagline": "Pizzería Napolitana y Restobar",

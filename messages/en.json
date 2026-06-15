@@ -95,7 +95,12 @@
     "err_name": "Name is required",
     "err_email_req": "Email is required",
     "err_email_inv": "Invalid email",
-    "err_msg": "Message is required"
+    "err_msg": "Message is required",
+    "phone": "Phone (optional)",
+    "phone_hint": "e.g. +56 9 1234 5678",
+    "marketing": "I agree to receive marketing communications and promotions from DiMOE",
+    "privacy_link": "Privacy policy",
+    "err_phone": "Invalid format. e.g. +56912345678"
   },
   "footer": {
     "tagline": "Neapolitan Pizzeria & Restobar",
