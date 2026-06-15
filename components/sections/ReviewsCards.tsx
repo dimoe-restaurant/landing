@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 export type GoogleReview = {
   author_name: string;
@@ -115,9 +114,8 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   {review.profile_photo_url ? (
-                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
-                      <Image src={review.profile_photo_url} alt={review.author_name} fill sizes="40px" style={{ objectFit: 'cover' }} referrerPolicy="no-referrer" />
-                    </div>
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={review.profile_photo_url} alt={review.author_name} width={40} height={40} referrerPolicy="no-referrer" crossOrigin="anonymous" style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                   ) : (
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontWeight: 700, flexShrink: 0 }}>{initial}</div>
                   )}
