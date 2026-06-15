@@ -8,6 +8,7 @@ type PlacesReview = {
   text?: { text: string };
   relativePublishTimeDescription?: string;
   publishTime?: string;
+  googleMapsUri?: string;
   authorAttribution?: {
     displayName: string;
     photoUri?: string;
@@ -32,9 +33,9 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
       {
         headers: {
           'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'rating,reviews',
+          'X-Goog-FieldMask': 'rating,reviews.rating,reviews.text,reviews.relativePublishTimeDescription,reviews.publishTime,reviews.googleMapsUri,reviews.authorAttribution',
         },
-        next: { revalidate: 1800 },
+        next: { revalidate: 600 },
       }
     );
     if (!res.ok) return { reviews: null, placeRating: null };
@@ -54,7 +55,7 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
         relative_time_description: r.relativePublishTimeDescription ?? '',
         publish_time: r.publishTime,
         profile_photo_url: r.authorAttribution?.photoUri,
-        author_uri: r.authorAttribution?.uri,
+        author_uri: r.googleMapsUri ?? r.authorAttribution?.uri,
       }));
     return { reviews, placeRating: data.rating ?? null };
   } catch {
