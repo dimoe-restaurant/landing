@@ -10,7 +10,7 @@ const stats = [
   { value: '2°', label: 'Top Chile 2025' },
 ];
 
-const tags = ['Pet-friendly', 'Vegetariano · Vegano', '35 min de Santiago'];
+const tags = ['Pet-friendly', 'Vegetariano, vegano y carnes', '35 min de Santiago'];
 
 export default function About() {
   const t = useTranslations('about');

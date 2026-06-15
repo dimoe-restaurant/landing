@@ -44,7 +44,8 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
             style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('hours_title')}</h3>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px', paddingBottom: '14px', borderBottom: '2px solid #C17A3B' }}>{t('hours_title')}</h3>
+            <div style={{ marginBottom: '18px' }} />
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {hours.map(h => (
                 <li key={h.days} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -59,7 +60,8 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
             style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('location_title')}</h3>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px', paddingBottom: '14px', borderBottom: '2px solid #C17A3B' }}>{t('location_title')}</h3>
+            <div style={{ marginBottom: '18px' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
               <p style={{ margin: 0, color: '#F2EDE4', fontWeight: 500 }}>{t('address')}</p>
               <p style={{ margin: 0, color: '#9B8B7E' }}>{t('region')}</p>
@@ -80,7 +82,8 @@ export default function Contact() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
             style={{ background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}
           >
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 24px' }}>{t('contact_title')}</h3>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px', paddingBottom: '14px', borderBottom: '2px solid #C17A3B' }}>{t('contact_title')}</h3>
+            <div style={{ marginBottom: '18px' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {contacts.map(c => (
                 <a key={c.text} href={c.href} target="_blank" rel="noopener noreferrer"
