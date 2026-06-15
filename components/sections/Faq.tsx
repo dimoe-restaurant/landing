@@ -3,10 +3,21 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const faqs = [
+const MAPS = 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
+const WA = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
+const THE_TOP = 'https://thetop.cl/post/mejores-pizzas-chile-2025/';
+const SOPROLE = 'https://comunidadsoprolefp.cl/marisol-osorio-presenta-del-campo-a-tu-mesa-maestri-pizzaioli-2023-soprole-food-professionals/';
+
+const ls: React.CSSProperties = {
+  color: '#C17A3B',
+  textDecoration: 'underline',
+  textDecorationColor: 'rgba(193,122,59,0.35)',
+};
+
+const faqs: { q: string; a: React.ReactNode }[] = [
   {
     q: '¿Dónde está DiMOE?',
-    a: 'En Darío Pavez 16, Champa, Paine — a 40 km al sur de Santiago, unos 35–40 minutos por la Ruta 5 Sur. Contamos con amplio estacionamiento gratuito.',
+    a: <>En Darío Pavez 16, Champa, Paine — a 40 km al sur de Santiago, unos 35–40 minutos por la Ruta 5 Sur. Estacionamiento gratuito. <a href={MAPS} target="_blank" rel="noopener noreferrer" style={ls}>Ver en Google Maps →</a></>,
   },
   {
     q: '¿Cuáles son los horarios?',
@@ -14,23 +25,23 @@ const faqs = [
   },
   {
     q: '¿Cómo se hace una reserva?',
-    a: 'Por WhatsApp al +56 9 7369 4101 o completando el formulario de contacto en esta página. No cobramos seña.',
+    a: <><a href={WA} target="_blank" rel="noopener noreferrer" style={ls}>WhatsApp al +56 9 7369 4101</a> o completando el formulario de contacto en esta página. Sin seña ni cargo por reserva.</>,
   },
   {
     q: '¿Qué tipo de comida sirven?',
-    a: 'Pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario con masa fresca y cócteles de autor. Todo con ingredientes frescos de inspiración italiana.',
+    a: 'Pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. Todo con ingredientes frescos de inspiración italiana.',
   },
   {
     q: '¿Aceptan mascotas?',
-    a: 'Sí, la terraza exterior de DiMOE es pet-friendly.',
+    a: 'Sí, la terraza exterior es pet-friendly.',
   },
   {
     q: '¿Qué reconocimientos tiene DiMOE?',
-    a: 'DiMOE obtuvo el 2° lugar en The Top Pizza Chile (Región Metropolitana) y el 2° lugar en el Premio Maestro Pizzaiolo de Soprole (2023). Tiene una calificación de 4,8 ⭐ en Google Maps.',
+    a: <><a href={THE_TOP} target="_blank" rel="noopener noreferrer" style={ls}>2° lugar en The Top Pizza Chile 2025</a> (Región Metropolitana) y 3° lugar en el <a href={SOPROLE} target="_blank" rel="noopener noreferrer" style={ls}>Maestri Pizzaioli de Soprole 2023</a>. Calificación de 4,8 ⭐ en <a href={MAPS} target="_blank" rel="noopener noreferrer" style={ls}>Google Maps</a>.</>,
   },
   {
     q: '¿Tienen opciones vegetarianas?',
-    a: 'Sí. Nuestra carta incluye pizzas y pastas sin carne. Pregúntale a tu mozo por las opciones del día.',
+    a: 'Sí. La carta incluye pizzas y pastas sin carne. Consulta a tu mozo por las opciones del día.',
   },
 ];
 
@@ -54,7 +65,7 @@ export default function Faq() {
             Preguntas frecuentes
           </p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px, 3.5vw, 40px)', fontWeight: 700, color: '#F2EDE4', margin: 0, lineHeight: 1.18 }}>
-            Todo lo que necesitás saber
+            Todo lo que necesitas saber
           </h2>
         </motion.div>
 

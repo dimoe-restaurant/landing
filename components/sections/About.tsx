@@ -73,10 +73,17 @@ export default function About() {
             </div>
 
             {/* Award badge */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(193,122,59,0.07)', border: '1px solid rgba(193,122,59,0.28)', borderRadius: '100px', padding: '8px 18px', marginBottom: '36px', alignSelf: 'flex-start' }}>
+            <a
+              href="https://thetop.cl/post/mejores-pizzas-chile-2025/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(193,122,59,0.07)', border: '1px solid rgba(193,122,59,0.28)', borderRadius: '100px', padding: '8px 18px', marginBottom: '36px', alignSelf: 'flex-start', textDecoration: 'none', transition: 'background 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(193,122,59,0.14)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(193,122,59,0.07)')}
+            >
               <span style={{ fontSize: '13px' }}>🏆</span>
-              <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', color: '#C17A3B' }}>2° Mejor Restaurante · Top Chile 2025</span>
-            </div>
+              <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', color: '#C17A3B' }}>2° Mejor Restaurante · Top Chile 2025 →</span>
+            </a>
 
             {/* Stats */}
             <div style={{ display: 'flex', gap: 'clamp(20px, 4vw, 40px)', paddingTop: '28px', borderTop: '1px solid #2A2520' }}>
