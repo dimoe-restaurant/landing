@@ -33,17 +33,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'DiMOE — Neapolitan Pizzeria & Restobar | Paine, Chile'
       : 'DiMOE — Pizzería Napolitana y Restobar | Paine, Chile',
     description: isEn
-      ? 'Award-winning Neapolitan pizza, artisan pasta and craft cocktails. 35 min from Santiago, in Paine, Chile. 2nd Best Restaurant in Chile 2025. Book your table on WhatsApp.'
-      : 'Pizza napolitana en horno de leña, pastas artesanales y cócteles de autor. A 35 min de Santiago, en Paine. 2° Mejor Restaurante de Chile 2025 · 4,8 ⭐ en Google. Reserva ya.',
+      ? 'Neapolitan pizza from a wood-fired oven, artisan pasta and craft cocktails. 35 min from Santiago, in Paine, Chile. 2nd place Top Pizza Chile & Maestro Pizzaiolo Award. 4.8 ⭐ on Google.'
+      : 'Pizza napolitana en horno de leña, pastas artesanales y cócteles de autor. En Paine, a 35 min de Santiago. 2° Top Pizza Chile · Premio Maestro Pizzaiolo Soprole 2023 · 4,8 ⭐ Google.',
     keywords: isEn
-      ? ['Neapolitan pizza Paine', 'restaurant Paine Chile', 'wood-fired pizza Chile', 'restobar Paine', 'artisan pasta Chile', 'best restaurant Chile 2025', 'Santiago day trip restaurant', 'pizza near Santiago', 'DiMOE Paine']
-      : ['pizza napolitana Paine', 'pizzería Paine', 'restaurante Paine Chile', 'pizza horno leña Paine', 'restobar Paine', 'pasta artesanal Paine', 'donde comer Paine', 'restaurante cerca Santiago', 'mejor restaurante Chile 2025', 'DiMOE Paine'],
+      ? ['Neapolitan pizza Paine', 'restaurant Paine Chile', 'wood-fired pizza Chile', 'restobar Paine', 'artisan pasta Chile', 'Top Pizza Chile', 'Santiago day trip restaurant', 'pizza near Santiago', 'DiMOE Paine']
+      : ['pizza napolitana Paine', 'pizzería Paine', 'restaurante Paine Chile', 'pizza horno leña Paine', 'restobar Paine', 'pasta artesanal Paine', 'donde comer Paine', 'restaurante cerca Santiago', 'Top Pizza Chile', 'DiMOE Paine'],
     authors: [{ name: 'DiMOE' }],
     openGraph: {
       title: isEn ? 'DiMOE — Neapolitan Pizzeria & Restobar | Paine, Chile' : 'DiMOE — Pizzería Napolitana y Restobar | Paine, Chile',
       description: isEn
-        ? 'Wood-fired Neapolitan pizza, artisan pasta & cocktails. 2nd Best in Chile 2025 · 4.8 ⭐. 35 min from Santiago.'
-        : 'Pizza napolitana en horno de leña, pastas y cócteles. 2° Mejor Restaurante Chile 2025 · 4,8 ⭐. A 35 min de Santiago.',
+        ? 'Wood-fired Neapolitan pizza, artisan pasta & cocktails. 4.8 ⭐ on Google. 35 min from Santiago, Paine.'
+        : 'Pizza napolitana en horno de leña, pastas y cócteles. 4,8 ⭐ en Google. A 35 min de Santiago, en Paine.',
       url: isEn ? 'https://dimoe.cl/en' : 'https://dimoe.cl',
       siteName: 'DiMOE',
       locale: isEn ? 'en_US' : 'es_CL',
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     twitter: {
       card: 'summary_large_image',
       title: isEn ? 'DiMOE — Neapolitan Pizzeria | Paine, Chile' : 'DiMOE — Pizzería Napolitana y Restobar | Paine',
-      description: isEn ? 'Wood-fired pizza & cocktails. 2nd Best in Chile 2025 · 4.8 ⭐' : 'Pizza napolitana, pastas y cócteles. 2° Top Chile 2025 · 4,8 ⭐',
+      description: isEn ? 'Wood-fired pizza & cocktails. 2nd place Top Pizza Chile · 4.8 ⭐ Google' : 'Pizza napolitana, pastas y cócteles. 2° Top Pizza Chile · 4,8 ⭐ Google',
       images: ['/opengraph-image'],
     },
     alternates: {
@@ -70,7 +70,7 @@ const restaurantSchema = {
   '@id': 'https://dimoe.cl/#restaurant',
   name: 'DiMOE Pizzería Napolitana y Restobar',
   alternateName: 'DiMOE',
-  description: 'Restaurante en Paine especializado en pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. 2° Mejor Restaurante de Chile 2025. A 35 minutos de Santiago por la Ruta 5 Sur.',
+  description: 'Restaurante en Paine especializado en pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. 2° lugar The Top Pizza Chile (Región Metropolitana) y 2° lugar Premio Maestro Pizzaiolo Soprole 2023. A 35 minutos de Santiago por la Ruta 5 Sur.',
   url: 'https://dimoe.cl',
   telephone: '+56973694101',
   email: 'contacto@dimoe.cl',
@@ -86,7 +86,7 @@ const restaurantSchema = {
     worstRating: '1',
     ratingCount: '200',
   },
-  award: '2° Mejor Restaurante de Chile 2025 — Google Business',
+  award: ['2° lugar The Top Pizza Chile — Región Metropolitana', '2° lugar Premio Maestro Pizzaiolo — Soprole 2023'],
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Darío Pavez 16, Champa',
@@ -157,13 +157,8 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: '¿Cuánto cuesta comer en DiMOE?',
-      acceptedAnswer: { '@type': 'Answer', text: 'El valor promedio por persona es de $15.000 a $25.000 CLP según lo que se pida. Se acepta efectivo y tarjeta.' },
-    },
-    {
-      '@type': 'Question',
       name: '¿Qué reconocimientos tiene DiMOE?',
-      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE fue elegido 2° Mejor Restaurante de Chile 2025 por Google Business y cuenta con una calificación de 4,8 sobre 5 estrellas basada en más de 200 reseñas verificadas de clientes.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE obtuvo el 2° lugar en The Top Pizza Chile (Región Metropolitana) y el 2° lugar en el Premio Maestro Pizzaiolo de Soprole (2023). Además, tiene una calificación de 4,8 sobre 5 estrellas en Google Maps.' },
     },
   ],
 };

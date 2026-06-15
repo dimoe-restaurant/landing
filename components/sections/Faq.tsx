@@ -25,12 +25,8 @@ const faqs = [
     a: 'Sí, la terraza exterior de DiMOE es pet-friendly.',
   },
   {
-    q: '¿Cuánto cuesta comer en DiMOE?',
-    a: 'El valor promedio por persona es de $15.000 a $25.000 CLP según lo que pidas. Aceptamos efectivo y tarjeta.',
-  },
-  {
-    q: '¿Qué reconocimiento tiene DiMOE?',
-    a: 'DiMOE fue elegido 2° Mejor Restaurante de Chile 2025 por Google Business, con una calificación de 4,8 ⭐ sobre 5 en más de 200 reseñas verificadas.',
+    q: '¿Qué reconocimientos tiene DiMOE?',
+    a: 'DiMOE obtuvo el 2° lugar en The Top Pizza Chile (Región Metropolitana) y el 2° lugar en el Premio Maestro Pizzaiolo de Soprole (2023). Tiene una calificación de 4,8 ⭐ en Google Maps.',
   },
   {
     q: '¿Tienen opciones vegetarianas?',
