@@ -63,7 +63,7 @@ export default function About() {
         <motion.div initial={{ opacity: 0, scale: 1.03 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', height: 'clamp(320px, 40vw, 500px)', position: 'relative' }}
         >
-          <Image src="/images/foto-3.jpg" alt="Chef DiMOE preparando la masa" fill style={{ objectFit: 'cover', objectPosition: 'center 62%' }} />
+          <Image src="/images/foto-2.jpg" alt="Ambiente nocturno en DiMOE, Paine" fill style={{ objectFit: 'cover', objectPosition: 'center 40%' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,11,9,0.5) 0%, transparent 50%)' }} />
         </motion.div>
 
