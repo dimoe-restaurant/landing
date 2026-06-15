@@ -13,34 +13,27 @@ export default function Icon() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 6,
       }}
     >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 0,
-      }}>
-        {/* Jarra simplificada */}
-        <div style={{
-          width: 10, height: 8,
-          background: '#C17A3B',
-          borderRadius: '50% 50% 40% 40%',
-          marginBottom: 1,
-        }} />
-        <span style={{
-          color: '#F2EDE4',
-          fontSize: 13,
-          fontWeight: 800,
-          fontFamily: 'Georgia, serif',
-          letterSpacing: '-0.5px',
-          lineHeight: 1,
-        }}>
-          DiM
-        </span>
-      </div>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        {/* Jarra de aceite — símbolo DiMOE */}
+        <path
+          d="M9 3h6l1 3H8L9 3z"
+          fill="#C17A3B"
+        />
+        <path
+          d="M7 6h10l-1.5 12a1 1 0 01-1 .9H9.5a1 1 0 01-1-.9L7 6z"
+          fill="#C17A3B"
+        />
+        <path
+          d="M17 9c1.5 0 3 1 3 2.5S18.5 14 17 14"
+          stroke="#C17A3B"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <circle cx="12" cy="20.5" r="1" fill="#F2EDE4" opacity="0.6" />
+      </svg>
     </div>,
     { ...size },
   );

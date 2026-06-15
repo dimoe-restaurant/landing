@@ -16,14 +16,12 @@ export default function AppleIcon() {
         borderRadius: 40,
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="https://landing-sagajardos-projects.vercel.app/images/logo-transparent.png"
-        width={148}
-        height={56}
-        alt="DiMOE"
-        style={{ objectFit: 'contain', filter: 'brightness(1.2)' }}
-      />
+      <svg width="110" height="110" viewBox="0 0 24 24" fill="none">
+        <path d="M9 3h6l1 3H8L9 3z" fill="#C17A3B" />
+        <path d="M7 6h10l-1.5 12a1 1 0 01-1 .9H9.5a1 1 0 01-1-.9L7 6z" fill="#C17A3B" />
+        <path d="M17 9c1.5 0 3 1 3 2.5S18.5 14 17 14" stroke="#C17A3B" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <circle cx="12" cy="20.5" r="1" fill="#F2EDE4" opacity="0.6" />
+      </svg>
     </div>,
     { ...size },
   );
