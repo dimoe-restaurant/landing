@@ -11,17 +11,14 @@ export async function GET(req: NextRequest) {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey) return NextResponse.json({ error: 'Sin API key' }, { status: 500 });
 
-  const res = await fetch(
-    `https://places.googleapis.com/v1/places/${PLACE_ID}?languageCode=es`,
-    {
-      headers: {
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'rating,reviews.rating,reviews.text,reviews.relativePublishTimeDescription,reviews.publishTime,reviews.googleMapsUri,reviews.authorAttribution',
-      },
-      cache: 'no-store',
-    }
-  );
+  const url = new URL('https://maps.googleapis.com/maps/api/place/details/json');
+  url.searchParams.set('place_id', PLACE_ID);
+  url.searchParams.set('fields', 'rating,reviews');
+  url.searchParams.set('language', 'es');
+  url.searchParams.set('reviews_sort', 'newest');
+  url.searchParams.set('key', apiKey);
 
+  const res = await fetch(url.toString(), { cache: 'no-store' });
   const data = await res.json();
   return NextResponse.json(data);
 }

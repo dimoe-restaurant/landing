@@ -3,22 +3,23 @@ import ReviewsCards, { type GoogleReview } from './ReviewsCards';
 
 const GOOGLE_MAPS_URL = process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 
-type PlacesReview = {
+// Old Places API — battle-tested, profile_photo_url es URL directa de CDN
+type LegacyReview = {
+  author_name: string;
+  author_url?: string;
+  profile_photo_url?: string;
   rating: number;
-  text?: { text: string };
-  relativePublishTimeDescription?: string;
-  publishTime?: string;
-  googleMapsUri?: string;
-  authorAttribution?: {
-    displayName: string;
-    photoUri?: string;
-    uri?: string;
-  };
+  relative_time_description?: string;
+  text?: string;
+  time?: number; // Unix timestamp
 };
 
-type PlacesResponse = {
-  rating?: number;
-  reviews?: PlacesReview[];
+type LegacyResponse = {
+  result?: {
+    rating?: number;
+    reviews?: LegacyReview[];
+  };
+  status?: string;
 };
 
 const PLACE_ID = 'ChIJs8epApEjY5YRphwLvQ4OeKo';
@@ -28,36 +29,34 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
   if (!apiKey) return { reviews: null, placeRating: null };
 
   try {
-    const res = await fetch(
-      `https://places.googleapis.com/v1/places/${PLACE_ID}?languageCode=es`,
-      {
-        headers: {
-          'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': 'rating,reviews.rating,reviews.text,reviews.relativePublishTimeDescription,reviews.publishTime,reviews.googleMapsUri,reviews.authorAttribution',
-        },
-        next: { revalidate: 600 },
-      }
-    );
+    const url = new URL('https://maps.googleapis.com/maps/api/place/details/json');
+    url.searchParams.set('place_id', PLACE_ID);
+    url.searchParams.set('fields', 'rating,reviews');
+    url.searchParams.set('language', 'es');
+    url.searchParams.set('reviews_sort', 'newest');
+    url.searchParams.set('key', apiKey);
+
+    const res = await fetch(url.toString(), { next: { revalidate: 600 } });
     if (!res.ok) return { reviews: null, placeRating: null };
-    const data = await res.json() as PlacesResponse;
-    const reviews = (data.reviews ?? [])
+
+    const data = await res.json() as LegacyResponse;
+    if (data.status !== 'OK' || !data.result) return { reviews: null, placeRating: null };
+
+    const reviews = (data.result.reviews ?? [])
       .filter(r => r.rating >= 4)
-      .sort((a, b) => {
-        const ta = a.publishTime ? new Date(a.publishTime).getTime() : 0;
-        const tb = b.publishTime ? new Date(b.publishTime).getTime() : 0;
-        return tb - ta;
-      })
+      .sort((a, b) => (b.time ?? 0) - (a.time ?? 0))
       .slice(0, 3)
       .map(r => ({
-        author_name: r.authorAttribution?.displayName ?? 'Anónimo',
+        author_name: r.author_name,
         rating: r.rating,
-        text: r.text?.text ?? '',
-        relative_time_description: r.relativePublishTimeDescription ?? '',
-        publish_time: r.publishTime,
-        profile_photo_url: r.authorAttribution?.photoUri,
-        author_uri: r.googleMapsUri ?? r.authorAttribution?.uri,
+        text: r.text ?? '',
+        relative_time_description: r.relative_time_description ?? '',
+        publish_time: r.time ? new Date(r.time * 1000).toISOString() : undefined,
+        profile_photo_url: r.profile_photo_url,
+        author_uri: r.author_url,
       }));
-    return { reviews, placeRating: data.rating ?? null };
+
+    return { reviews, placeRating: data.result.rating ?? null };
   } catch {
     return { reviews: null, placeRating: null };
   }
