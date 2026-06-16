@@ -11,23 +11,23 @@
   },
   "dependencies": {
     "framer-motion": "^11",
-    "next": "16.2.6",
+    "next": "16.2.9",
     "next-intl": "^4.13.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "resend": "^6.12.4"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["@parcel/watcher", "@swc/core", "sharp", "unrs-resolver"]
   },
   "devDependencies": {
-    "@playwright/test": "^1.52",
+    "@playwright/test": "^1.61",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
