@@ -140,12 +140,20 @@ export default function ReviewsCards({ label, headline, googleLabel, award, cta,
           })}
         </div>
 
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} style={{ textAlign: 'center', marginTop: '40px' }}>
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} style={{ textAlign: 'center', marginTop: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
           <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer"
             style={{ fontSize: '14px', fontWeight: 500, color: '#C17A3B', textDecoration: 'none' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >{cta}</a>
+          <a href="https://www.tripadvisor.com/Restaurant_Review-g5981996-d34460013-Reviews-Dimoe_Restaurant-Paine_Santiago_Metropolitan_Region.html" target="_blank" rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', fontSize: '13px', color: '#9B8B7E', textDecoration: 'none', transition: 'color 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.color = '#00AA6C')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#9B8B7E')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden><circle cx="7.5" cy="13" r="5" fill="#00AA6C" /><circle cx="16.5" cy="13" r="5" fill="#00AA6C" /><circle cx="7.5" cy="13" r="3" fill="white" /><circle cx="16.5" cy="13" r="3" fill="white" /><circle cx="7.5" cy="13" r="1.6" fill="#00AA6C" /><circle cx="16.5" cy="13" r="1.6" fill="#00AA6C" /></svg>
+            ¿Ya visitaste DiMOE? Sé el primero en reseñarnos en TripAdvisor →
+          </a>
         </motion.div>
       </div>
     </section>

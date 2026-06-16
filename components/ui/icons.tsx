@@ -54,6 +54,20 @@ export function IconCar({ size = 16, className }: { size?: number; className?: s
   );
 }
 
+export function IconTripAdvisor({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-label="TripAdvisor" role="img">
+      <circle cx="7.5" cy="13" r="5" fill="#00AA6C" />
+      <circle cx="16.5" cy="13" r="5" fill="#00AA6C" />
+      <circle cx="7.5" cy="13" r="3" fill="white" />
+      <circle cx="16.5" cy="13" r="3" fill="white" />
+      <circle cx="7.5" cy="13" r="1.6" fill="#00AA6C" />
+      <circle cx="16.5" cy="13" r="1.6" fill="#00AA6C" />
+      <path d="M5 8.5C5 8.5 6.5 5 12 5s7 3.5 7 3.5" stroke="#00AA6C" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
 export function IconTrain({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>

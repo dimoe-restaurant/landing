@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import ContactForm from './ContactForm';
-import { IconInstagram, IconWhatsApp, IconEmail, IconCar, IconTrain } from '@/components/ui/icons';
+import { IconInstagram, IconWhatsApp, IconEmail, IconCar, IconTrain, IconTripAdvisor } from '@/components/ui/icons';
 
 const MAPS_LINK = 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 const MAPS_EVENTS_LINK = 'mailto:contacto@dimoe.cl?subject=Consulta%20evento';
@@ -27,6 +27,7 @@ export default function Contact() {
     { Icon: IconWhatsApp, color: '#25D366', text: '+56 9 7369 4101', href: waUrl },
     { Icon: IconEmail, color: '#C17A3B', text: 'contacto@dimoe.cl', href: 'mailto:contacto@dimoe.cl' },
     { Icon: IconInstagram, color: '#E1306C', text: '@dimoe_restobar', href: 'https://instagram.com/dimoe_restobar' },
+    { Icon: IconTripAdvisor, color: '#00AA6C', text: 'TripAdvisor', href: 'https://www.tripadvisor.com/Restaurant_Review-g5981996-d34460013-Reviews-Dimoe_Restaurant-Paine_Santiago_Metropolitan_Region.html' },
   ];
 
   return (
