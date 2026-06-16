@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       ? 'DiMOE — Neapolitan Pizzeria & Restobar | Paine, Chile'
       : 'DiMOE — Pizzería Napolitana y Restobar | Paine, Chile',
     description: isEn
-      ? 'Neapolitan pizza from a wood-fired oven, artisan pasta and craft cocktails. 35 min from Santiago, in Paine, Chile. 2nd place Top Pizza Chile & Maestro Pizzaiolo Award. 4.8 ⭐ on Google.'
-      : 'Pizza napolitana en horno de leña, pastas artesanales y cócteles de autor. En Paine, a 35 min de Santiago. 2° Top Pizza Chile · Premio Maestro Pizzaiolo Soprole 2023 · 4,8 ⭐ Google.',
+      ? 'Neapolitan pizza from a wood-fired oven, artisan pasta and craft cocktails. 35 min from Santiago, in Paine, Chile. 2nd place Top Pizza Chile · 3rd Maestri Pizzaioli Soprole 2023 · 4.8 ⭐ Google.'
+      : 'Pizza napolitana en horno de leña, pastas artesanales y cócteles de autor. En Paine, a 35 min de Santiago. 2° Top Pizza Chile · 3° Maestri Pizzaioli Soprole 2023 · 4,8 ⭐ Google.',
     keywords: isEn
       ? ['Neapolitan pizza Paine', 'restaurant Paine Chile', 'wood-fired pizza Chile', 'restobar Paine', 'artisan pasta Chile', 'Top Pizza Chile', 'Santiago day trip restaurant', 'pizza near Santiago', 'DiMOE Paine']
       : ['pizza napolitana Paine', 'pizzería Paine', 'restaurante Paine Chile', 'pizza horno leña Paine', 'restobar Paine', 'pasta artesanal Paine', 'donde comer Paine', 'restaurante cerca Santiago', 'Top Pizza Chile', 'DiMOE Paine'],
@@ -70,7 +70,7 @@ const restaurantSchema = {
   '@id': 'https://dimoe.cl/#restaurant',
   name: 'DiMOE Pizzería Napolitana y Restobar',
   alternateName: 'DiMOE',
-  description: 'Restaurante en Paine especializado en pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. 2° lugar The Top Pizza Chile (Región Metropolitana) y 2° lugar Premio Maestro Pizzaiolo Soprole 2023. A 35 minutos de Santiago por la Ruta 5 Sur.',
+  description: 'Restaurante en Paine especializado en pizza napolitana cocinada en horno de leña, pastas artesanales elaboradas a diario y cócteles de autor. 2° lugar The Top Pizza Chile (Región Metropolitana) y 3° lugar Maestri Pizzaioli Soprole 2023. A 35 minutos de Santiago por la Ruta 5 Sur.',
   url: 'https://dimoe.cl',
   telephone: '+56973694101',
   email: 'contacto@dimoe.cl',
@@ -86,7 +86,7 @@ const restaurantSchema = {
     worstRating: '1',
     ratingCount: '200',
   },
-  award: ['2° lugar The Top Pizza Chile — Región Metropolitana', '2° lugar Premio Maestro Pizzaiolo — Soprole 2023'],
+  award: ['2° lugar The Top Pizza Chile — Región Metropolitana', '3° lugar Maestri Pizzaioli — Soprole 2023'],
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Darío Pavez 16, Champa',
@@ -158,7 +158,7 @@ const faqSchema = {
     {
       '@type': 'Question',
       name: '¿Qué reconocimientos tiene DiMOE?',
-      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE obtuvo el 2° lugar en The Top Pizza Chile (Región Metropolitana) y el 2° lugar en el Premio Maestro Pizzaiolo de Soprole (2023). Además, tiene una calificación de 4,8 sobre 5 estrellas en Google Maps.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'DiMOE obtuvo el 2° lugar en The Top Pizza Chile (Región Metropolitana) y el 3° lugar en el Maestri Pizzaioli de Soprole (2023). Tiene una calificación de 4,8 sobre 5 estrellas en Google Maps.' },
     },
   ],
 };
