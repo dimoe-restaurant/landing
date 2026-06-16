@@ -73,13 +73,26 @@ const AVATAR_COLORS = ['#5B7FA6', '#6B9E78', '#A67B5B', '#7B6BA6', '#A68B5B'];
 
 function Stars({ count, size = 14 }: { count: number; size?: number }) {
   const full = Math.floor(count);
-  const empty = 5 - full;
+  const partial = count - full;
+  const empty = 5 - Math.ceil(count);
   const starPath = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+  const gradId = `ps-${size}`;
   return (
     <div style={{ display: 'flex', gap: '2px' }}>
       {Array.from({ length: full }).map((_, i) => (
         <svg key={`f${i}`} width={size} height={size} viewBox="0 0 24 24" fill="#C17A3B" aria-hidden><path d={starPath} /></svg>
       ))}
+      {partial > 0 && (
+        <svg key="p" width={size} height={size} viewBox="0 0 24 24" aria-hidden>
+          <defs>
+            <linearGradient id={gradId}>
+              <stop offset={`${Math.round(partial * 100)}%`} stopColor="#C17A3B" />
+              <stop offset={`${Math.round(partial * 100)}%`} stopColor="#2A2520" />
+            </linearGradient>
+          </defs>
+          <path d={starPath} fill={`url(#${gradId})`} />
+        </svg>
+      )}
       {Array.from({ length: empty }).map((_, i) => (
         <svg key={`e${i}`} width={size} height={size} viewBox="0 0 24 24" fill="#2A2520" aria-hidden><path d={starPath} /></svg>
       ))}

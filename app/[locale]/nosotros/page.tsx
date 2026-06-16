@@ -8,8 +8,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: isEn ? 'About Us — DiMOE Pizzería Napolitana | Paine' : 'Nosotros — DiMOE Pizzería Napolitana | Paine',
     description: isEn
-      ? 'The story of Marisol and DiMOE: award-winning Neapolitan pizza born in Paine, Chile. 2nd best pizza in the Metropolitan Region, Top Chile 2025.'
-      : 'La historia de Marisol y DiMOE: pizzería napolitana premiada nacida en Paine, Chile. 2° mejor pizza de la Región Metropolitana, Top Chile 2025.',
+      ? 'The story behind DiMOE: a Neapolitan pizzeria born in Paine, Chile, recognized as the 2nd best pizza in the Metropolitan Region by The Top Chile 2025.'
+      : 'La historia de DiMOE: una pizzería napolitana nacida en Paine, Chile, reconocida como la 2° mejor pizza de la Región Metropolitana por The Top Chile 2025.',
   };
 }
 
@@ -21,60 +21,66 @@ const SOPROLE_LINK = 'https://comunidadsoprolefp.cl/marisol-osorio-presenta-del-
 
 const milestones = [
   {
-    year: '2019',
-    es: 'DiMOE abre sus puertas en Paine. Horno de barro, masa fermentada y la idea de que una pizza napolitana de verdad podía nacer en una comuna como Paine.',
-    en: 'DiMOE opens in Paine. A clay oven, fermented dough, and the belief that real Neapolitan pizza could be born in a small town like Paine.',
+    year: '2020',
+    es: 'Durante la pandemia, Marisol comienza a hacer pizza napolitana en casa para sus vecinos de Paine. Nace Moe Pizzas — solo para llevar, con lista de espera y mucho cariño.',
+    en: 'During the pandemic, Marisol starts making Neapolitan pizza at home for her Paine neighbours. Moe Pizzas is born — takeout only, with a waiting list and a lot of love.',
   },
   {
     year: '2023',
     href: SOPROLE_LINK,
     label_es: 'Maestri Pizzaioli · Soprole Food Professionals',
     label_en: 'Maestri Pizzaioli · Soprole Food Professionals',
-    es: 'Marisol compitió con su pizza "Del Campo A Tu Mesa" en el concurso nacional Maestri Pizzaioli de Soprole Food Professionals, obteniendo el 3° lugar. La primera vez que la cocina de DiMOE se midió a nivel nacional.',
-    en: 'Marisol competed with her pizza "Del Campo A Tu Mesa" at the national Maestri Pizzaioli competition by Soprole Food Professionals, finishing 3rd — the first time DiMOE\'s kitchen measured itself nationally.',
+    es: 'Con la pizza "Del Campo A Tu Mesa" participa en el concurso nacional Maestri Pizzaioli de Soprole Food Professionals y obtiene el 3° lugar. Una validación que confirma lo que los vecinos de Paine ya sabían.',
+    en: 'With the pizza "Del Campo A Tu Mesa", DiMOE enters the national Maestri Pizzaioli competition by Soprole Food Professionals and finishes 3rd — validating what the people of Paine already knew.',
   },
   {
     year: '2024',
-    es: 'DiMOE inaugura su primer local propio en Champa, Paine: terraza, patio pet-friendly, estacionamiento gratuito y el mismo horno de leña que empezó todo.',
-    en: 'DiMOE opens its first own venue in Champa, Paine: terrace, pet-friendly courtyard, free parking, and the same wood-fired oven that started it all.',
+    es: 'En abril, DiMOE abre su primer local propio en Champa, Paine. Terraza, patio pet-friendly, estacionamiento gratuito y el mismo horno de leña que empezó todo. Un lugar para quedarse.',
+    en: 'In April, DiMOE opens its first own venue in Champa, Paine. Terrace, pet-friendly courtyard, free parking, and the same wood-fired oven that started everything. A place to stay awhile.',
   },
   {
     year: '2025',
     href: THETOP_LINK,
     label_es: '2° mejor pizza · The Top Chile',
     label_en: '2nd best pizza · The Top Chile',
-    es: 'The Top Chile reconoció a DiMOE como el 2° mejor restaurante de pizza de la Región Metropolitana, con la Mechada e Cipolla. Un reconocimiento que confirmó lo que los clientes de Paine ya sabían.',
-    en: 'The Top Chile recognized DiMOE as the 2nd best pizza restaurant in the Metropolitan Region, featuring the Mechada e Cipolla. An award that confirmed what Paine regulars already knew.',
+    es: 'The Top Chile reconoce a DiMOE como el 2° mejor restaurante de pizza de la Región Metropolitana con la Mechada e Cipolla — demostrando que la mejor pizza no necesariamente está en Santiago.',
+    en: 'The Top Chile recognizes DiMOE as the 2nd best pizza restaurant in the Metropolitan Region — proving that the best pizza doesn\'t have to be in Santiago.',
   },
 ];
 
 const values = [
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 2C8 2 4 6 4 10c0 6 8 12 8 12s8-6 8-12c0-4-4-8-8-8z"/><circle cx="12" cy="10" r="2"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    ),
+    es_title: 'Un lugar para volver',
+    en_title: 'A place to return to',
+    es: 'Cada visita se siente como llegar a casa. Atención personalizada, ambiente cálido y el detalle de siempre — con o sin reserva.',
+    en: 'Every visit feels like coming home. Personalized attention, warm atmosphere and the same care every time — with or without a reservation.',
+  },
+  {
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+      </svg>
     ),
     es_title: 'Ingredientes sin atajos',
-    en_title: 'No shortcuts on ingredients',
-    es: 'Mozzarella fresca, tomates San Marzano y masa fermentada 48 horas. Los mismos ingredientes de Nápoles, acá en Paine.',
+    en_title: 'Ingredients without shortcuts',
+    es: 'Mozzarella fresca, tomates San Marzano, masa fermentada 48 horas. Los mismos ingredientes de Nápoles, acá en Paine.',
     en: 'Fresh mozzarella, San Marzano tomatoes, 48-hour fermented dough. The same ingredients as Naples, right here in Paine.',
   },
   {
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M17 11a5 5 0 0 0-10 0v2a5 5 0 0 0 10 0v-2z"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
     ),
-    es_title: 'Horno de leña a 450°C',
-    en_title: 'Wood-fired at 450°C',
-    es: 'El sabor que no se puede replicar en horno eléctrico. La corteza con leopardeo, el fondo crujiente, el borde ahumado.',
-    en: 'The flavour you simply cannot replicate in an electric oven. Leopard crust, crispy base, smoky edge.',
-  },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    ),
-    es_title: 'Para todos',
-    en_title: 'A table for everyone',
-    es: 'Vegetarianos, veganos y omnívoros. El patio es pet-friendly. Porque una buena noche no deja a nadie fuera.',
-    en: 'Vegetarians, vegans, meat lovers. The courtyard is pet-friendly. Because a good night out leaves no one behind.',
+    es_title: 'Parte de Paine',
+    en_title: 'Part of the community',
+    es: 'Talleres, música en vivo, actividades familiares. DiMOE es más que una pizzería — es un punto de encuentro para la gente de Paine.',
+    en: 'Workshops, live music, family events. DiMOE is more than a restaurant — it\'s a meeting point for the people of Paine.',
   },
 ];
 
@@ -98,25 +104,31 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
         <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
           {isEn ? 'Our story' : 'Nuestra historia'}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 6vw, 60px)', fontWeight: 700, color: '#F2EDE4', lineHeight: 1.1, margin: '0 0 24px' }}>
-          {isEn ? <>Neapolitan at heart,<br /><span style={{ color: '#C17A3B' }}>Chilean at soul.</span></> : <>La pizza que Paine<br /><span style={{ color: '#C17A3B' }}>se merecía.</span></>}
-        </h1>
-        <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', lineHeight: 1.75, color: 'rgba(242,237,228,0.65)', maxWidth: '600px', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 6vw, 60px)', fontWeight: 700, color: '#F2EDE4', lineHeight: 1.1, margin: '0 0 28px' }}>
           {isEn
-            ? 'Marisol went to compete — and came back with awards and one idea fixed in her head: do this right, no shortcuts. DiMOE grew alongside its regulars until it earned its own place in Champa: terrace, courtyard and wood-fired oven. Same flavour. Much more room to share it.'
-            : 'Marisol salió a competir — y volvió con premios y con una sola idea en la cabeza: hacer esto bien, sin atajos. DiMOE fue creciendo junto a sus clientes hasta llegar a este local propio en Champa: terraza, patio y horno de leña. Mismo sabor. Mucho más espacio para compartirlo.'}
+            ? <><span style={{ color: '#C17A3B' }}>More than a pizzeria.</span><br />A place to belong.</>
+            : <><span style={{ color: '#C17A3B' }}>Más que una pizzería.</span><br />Un lugar para quedarse.</>}
+        </h1>
+        <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', lineHeight: 1.8, color: 'rgba(242,237,228,0.65)', maxWidth: '620px', margin: '0 0 20px' }}>
+          {isEn
+            ? 'DiMOE was born during the pandemic from a simple conviction: Paine deserved a place where quality and warmth go hand in hand. What started as a takeout-only operation has grown into a full restaurant — terrace, courtyard, wood-fired oven — where each visit feels like coming home.'
+            : 'DiMOE nació durante la pandemia con una convicción simple: Paine merecía un lugar donde la calidad y la calidez fueran de la mano. Lo que empezó solo para llevar creció hasta convertirse en un restaurante propio — con terraza, patio y horno de leña — donde cada visita se siente como volver a casa.'}
+        </p>
+        <p style={{ fontSize: 'clamp(14px, 1.8vw, 16px)', lineHeight: 1.8, color: 'rgba(242,237,228,0.5)', maxWidth: '620px', margin: 0 }}>
+          {isEn
+            ? 'The team believes that memorable dining experiences, attentive service and great cocktails don\'t belong only to Santiago. They belong in Paine too.'
+            : 'La convicción es que las experiencias gastronómicas memorables, la atención personalizada y los buenos cócteles no son solo para Santiago. También son para Paine.'}
         </p>
       </div>
 
       {/* Photo */}
-      <div style={{ maxWidth: '860px', margin: '48px auto 0', padding: '0 clamp(16px, 4vw, 24px)' }}>
-        <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid #2A2520', background: '#181310', aspectRatio: '16/7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ maxWidth: '860px', margin: '56px auto 0', padding: '0 clamp(16px, 4vw, 24px)' }}>
+        <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid #2A2520', background: '#181310', aspectRatio: '16/7', position: 'relative' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/about-marisol.jpg"
             alt={isEn ? 'Marisol, founder of DiMOE, shaping dough' : 'Marisol, fundadora de DiMOE, trabajando la masa'}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%', display: 'block' }}
-            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%', display: 'block' }}
           />
         </div>
         <p style={{ textAlign: 'center', fontSize: '12px', color: 'rgba(155,139,126,0.5)', marginTop: '10px', fontStyle: 'italic' }}>
@@ -151,12 +163,11 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.25em', color: 'rgba(155,139,126,0.6)', textTransform: 'uppercase', marginBottom: '32px' }}>
           {isEn ? 'The DiMOE story' : 'La historia DiMOE'}
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           {milestones.map((m, i) => (
             <div key={m.year} style={{ display: 'flex', gap: '24px', paddingBottom: i < milestones.length - 1 ? '32px' : 0 }}>
-              {/* Year + line */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, width: '52px' }}>
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#C17A3B', flexShrink: 0, marginTop: '4px' }} />
+                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#C17A3B', flexShrink: 0, marginTop: '5px' }} />
                 {i < milestones.length - 1 && <div style={{ width: '1px', background: 'linear-gradient(to bottom, #C17A3B, #2A2520)', flex: 1, marginTop: '8px' }} />}
               </div>
               <div style={{ flex: 1 }}>
@@ -181,12 +192,12 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
       <div style={{ maxWidth: '860px', margin: '72px auto 0', padding: '0 clamp(16px, 4vw, 24px)' }}>
         <div style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '20px', padding: 'clamp(32px, 5vw, 56px)', textAlign: 'center' }}>
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: 700, color: '#F2EDE4', margin: '0 0 12px', lineHeight: 1.2 }}>
-            {isEn ? 'Come see it for yourself.' : 'Ven a conocernos.'}
+            {isEn ? 'Come and see for yourself.' : 'Ven a conocernos.'}
           </p>
           <p style={{ fontSize: '14px', color: 'rgba(242,237,228,0.5)', margin: '0 0 28px', lineHeight: 1.6 }}>
             {isEn
-              ? 'Darío Pavez 16, Champa, Paine — 35 min from Santiago. Terrace, courtyard, free parking and pet-friendly.'
-              : 'Darío Pavez 16, Champa, Paine — a 35 minutos de Santiago. Terraza, patio, estacionamiento gratuito y pet-friendly.'}
+              ? 'Darío Pavez 16, Champa, Paine — 35 min from Santiago. Terrace, courtyard, free parking, pet-friendly.'
+              : 'Darío Pavez 16, Champa, Paine — a 35 minutos de Santiago. Terraza, patio, estacionamiento gratuito, pet-friendly.'}
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href={waUrl} target="_blank" rel="noopener noreferrer"

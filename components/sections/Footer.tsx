@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { IconInstagram, IconWhatsApp, IconEmail } from '@/components/ui/icons';
+import { IconInstagram, IconWhatsApp, IconEmail, IconTripAdvisor, IconGoogleMaps } from '@/components/ui/icons';
 
 const year = new Date().getFullYear();
 
@@ -20,6 +20,8 @@ export default function Footer() {
     { href: 'https://instagram.com/dimoe_restobar', text: '@dimoe_restobar', Icon: IconInstagram, color: '#E1306C' },
     { href: 'https://wa.me/56973694101', text: '+56 9 7369 4101', Icon: IconWhatsApp, color: '#25D366' },
     { href: 'mailto:contacto@dimoe.cl', text: 'contacto@dimoe.cl', Icon: IconEmail, color: '#C17A3B' },
+    { href: 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7', text: 'Google Maps', Icon: IconGoogleMaps, color: '#4285F4' },
+    { href: 'https://www.tripadvisor.com/Restaurant_Review-g5981996-d34460013-Reviews-Dimoe_Restaurant-Paine_Santiago_Metropolitan_Region.html', text: 'TripAdvisor', Icon: IconTripAdvisor, color: '#00AA6C' },
   ];
 
   return (

@@ -10,6 +10,7 @@ const VIDEOS = [
     desc: 'El equipo de Sabingo volvió a Paine — y volvió a DiMOE.',
     href: 'https://www.facebook.com/watch/?v=1517782482512425',
     thumb: '/images/press-sabingo-2026.jpg',
+    thumbPos: 'center top',
   },
   {
     channel: 'Visita especial',
@@ -17,6 +18,7 @@ const VIDEOS = [
     desc: 'El conductor pasó por DiMOE y lo compartió con sus seguidores.',
     href: 'https://www.instagram.com/reel/DPZe_1fEXVI/',
     thumb: '/images/press-sergio-lagos.jpg',
+    thumbPos: 'center 20%',
   },
   {
     channel: 'Municipalidad de Paine',
@@ -24,13 +26,14 @@ const VIDEOS = [
     desc: 'La municipalidad destacó a DiMOE como referente gastronómico de Paine.',
     href: 'https://www.instagram.com/dimoe_restobar/reel/C6g1T9su9hx/',
     thumb: '/images/press-muni-paine.jpg',
+    thumbPos: '72% top',
   },
 ];
 
 const ARTICLES = [
   {
     outlet: 'The Top Chile 2025',
-    year: '2025',
+    year: '2do lugar RM 2025',
     quote: '«2° mejor pizza de la Región Metropolitana — con la Mechada e Cipolla.»',
     href: 'https://thetop.cl/post/mejores-pizzas-chile-2025/',
     logo: '/images/logo-thetop.svg',
@@ -86,7 +89,7 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
             src={v.thumb}
             alt=""
             onError={() => setImgOk(false)}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', display: 'block' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: v.thumbPos, display: 'block' }}
           />
         )}
         {!imgOk && (
