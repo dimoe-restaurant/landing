@@ -46,6 +46,11 @@ const milestones = [
     es: 'The Top Chile reconoce a DiMOE como el 2° mejor restaurante de pizza de la Región Metropolitana con la Mechada e Cipolla — demostrando que la mejor pizza no necesariamente está en Santiago.',
     en: 'The Top Chile recognizes DiMOE as the 2nd best pizza restaurant in the Metropolitan Region — proving that the best pizza doesn\'t have to be in Santiago.',
   },
+  {
+    year: '2026',
+    es: 'DiMOE se muda a un local más grande en Champa. Más espacio para recibir más gente, una propuesta gastronómica ampliada en la mesa y el bar, y el mismo espíritu de siempre: hacer las cosas bien, con cariño.',
+    en: 'DiMOE moves to a larger space in Champa — more room to welcome more guests, an expanded food and bar menu, and the same spirit as always: doing things right, with care.',
+  },
 ];
 
 const values = [
@@ -126,9 +131,9 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
         <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid #2A2520', background: '#181310', aspectRatio: '16/7', position: 'relative' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/about-marisol.jpg"
+            src="/images/landing-actual-3.jpg"
             alt={isEn ? 'Marisol, founder of DiMOE, shaping dough' : 'Marisol, fundadora de DiMOE, trabajando la masa'}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%', display: 'block' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
           />
         </div>
         <p style={{ textAlign: 'center', fontSize: '12px', color: 'rgba(155,139,126,0.5)', marginTop: '10px', fontStyle: 'italic' }}>

@@ -10,7 +10,7 @@ const VIDEOS = [
     desc: 'El equipo de Sabingo volvió a Paine — y volvió a DiMOE.',
     href: 'https://www.facebook.com/watch/?v=1517782482512425',
     thumb: '/images/press-sabingo-2026.jpg',
-    thumbPos: 'center top',
+    thumbPos: 'center 35%',
   },
   {
     channel: 'Visita especial',
@@ -26,7 +26,8 @@ const VIDEOS = [
     desc: 'La municipalidad destacó a DiMOE como referente gastronómico de Paine.',
     href: 'https://www.instagram.com/dimoe_restobar/reel/C6g1T9su9hx/',
     thumb: '/images/press-muni-paine.jpg',
-    thumbPos: '72% top',
+    thumbPos: '78% 38%',
+    thumbScale: 1.25,
   },
 ];
 
@@ -89,7 +90,7 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
             src={v.thumb}
             alt=""
             onError={() => setImgOk(false)}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: v.thumbPos, display: 'block' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: v.thumbPos, display: 'block', transform: v.thumbScale ? `scale(${v.thumbScale})` : undefined }}
           />
         )}
         {!imgOk && (
