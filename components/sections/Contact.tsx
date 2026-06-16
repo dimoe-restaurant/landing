@@ -64,7 +64,8 @@ export default function Contact() {
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px', paddingBottom: '14px', borderBottom: '2px solid #C17A3B' }}>{t('location_title')}</h3>
             <div style={{ marginBottom: '18px' }} />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
-              <p style={{ margin: 0, color: '#F2EDE4', fontWeight: 500 }}>{t('address')}</p>
+              <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer" style={{ margin: 0, color: '#F2EDE4', fontWeight: 500, textDecoration: 'none', transition: 'opacity 0.2s' }} onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>{t('address')}</a>
+              <p style={{ margin: 0, color: 'rgba(155,139,126,0.65)', fontSize: '12px', fontStyle: 'italic' }}>{t('landmark')}</p>
               <p style={{ margin: 0, color: '#9B8B7E' }}>{t('region')}</p>
               <div style={{ height: '1px', background: '#2A2520', margin: '8px 0' }} />
               <p style={{ margin: 0, color: '#9B8B7E', display: 'flex', alignItems: 'center', gap: '8px' }}><IconCar size={15} />{t('parking')}</p>

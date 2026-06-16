@@ -38,9 +38,9 @@ export default function Navbar() {
   }
 
   const links = [
-    { label: t('about'), href: a('nosotros') },
+    { label: t('about'), href: '/nosotros' },
     { label: t('menu'), href: '/carta' },
-    { label: t('reviews'), href: a('resenas') },
+    { label: t('reviews'), href: '/resenas' },
     { label: t('contact'), href: a('contacto') },
   ];
 

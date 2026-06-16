@@ -15,15 +15,15 @@ const VIDEOS = [
     channel: 'Visita especial',
     outlet: 'Sergio Lagos',
     desc: 'El conductor pasó por DiMOE y lo compartió con sus seguidores.',
-    href: 'https://www.instagram.com/dimoe_restobar/reel/C6g1T9su9hx/',
+    href: 'https://www.instagram.com/reel/DPZe_1fEXVI/',
     thumb: '/images/press-sergio-lagos.jpg',
   },
   {
-    channel: 'Chilevision · 2025',
-    outlet: 'Sabingo',
-    desc: 'La primera vez que Sabingo llegó a Paine buscando la mejor pizza.',
-    href: 'https://www.instagram.com/reel/DPZe_1fEXVI/',
-    thumb: '/images/press-sabingo-2025.jpg',
+    channel: 'Municipalidad de Paine',
+    outlet: 'Alcalde de Paine',
+    desc: 'La municipalidad destacó a DiMOE como referente gastronómico de Paine.',
+    href: 'https://www.instagram.com/dimoe_restobar/reel/C6g1T9su9hx/',
+    thumb: '/images/press-muni-paine.jpg',
   },
 ];
 
@@ -33,12 +33,18 @@ const ARTICLES = [
     year: '2025',
     quote: '«2° mejor pizza de la Región Metropolitana — con la Mechada e Cipolla.»',
     href: 'https://thetop.cl/post/mejores-pizzas-chile-2025/',
+    logo: '/images/logo-thetop.svg',
+    logoBg: 'transparent',
+    logoH: 28,
   },
   {
     outlet: 'Soprole Food Professionals',
     year: 'Maestri Pizzaioli 2023',
     quote: '«La combinación de ingredientes nobles y la técnica correcta — 3° lugar con Del Campo A Tu Mesa.»',
     href: 'https://comunidadsoprolefp.cl/marisol-osorio-presenta-del-campo-a-tu-mesa-maestri-pizzaioli-2023-soprole-food-professionals/',
+    logo: '/images/logo-soprole.svg',
+    logoBg: '#fff',
+    logoH: 22,
   },
 ];
 
@@ -74,17 +80,15 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
     >
       {/* Preview area */}
       <div style={{ position: 'relative', height: '190px', overflow: 'hidden', background: '#111009' }}>
-        {/* Thumbnail — cargada si el archivo existe */}
         {imgOk && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={v.thumb}
             alt=""
             onError={() => setImgOk(false)}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', display: 'block' }}
           />
         )}
-        {/* Fallback gradient */}
         {!imgOk && (
           <div style={{
             position: 'absolute', inset: 0,
@@ -92,7 +96,6 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
             backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.055) 3px, rgba(0,0,0,0.055) 4px)',
           }} />
         )}
-        {/* Overlay + play button */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.08) 55%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <motion.div
             variants={{ hover: { scale: 1.1 } }}
@@ -104,7 +107,6 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
             </svg>
           </motion.div>
         </div>
-        {/* Channel badge */}
         <span style={{ position: 'absolute', top: '14px', left: '14px', fontSize: '10px', fontWeight: 600, letterSpacing: '0.12em', color: 'rgba(242,237,228,0.85)', textTransform: 'uppercase', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', borderRadius: '100px', padding: '4px 10px' }}>
           {v.channel}
         </span>
@@ -122,6 +124,43 @@ function VideoCard({ v, i }: { v: Video; i: number }) {
           Ver segmento <ArrowIcon />
         </span>
       </div>
+    </motion.a>
+  );
+}
+
+type Article = typeof ARTICLES[0];
+
+function ArticleCard({ art, i }: { art: Article; i: number }) {
+  return (
+    <motion.a
+      key={art.href}
+      href={art.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-30px' }}
+      transition={{ duration: 0.5, delay: i * 0.08 }}
+      style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px 26px', gap: '10px', transition: 'border-color 0.2s' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(193,122,59,0.35)')}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A2520')}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+        {/* Logo */}
+        <div style={{ background: art.logoBg, borderRadius: art.logoBg === '#fff' ? '6px' : undefined, padding: art.logoBg === '#fff' ? '4px 8px' : undefined, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={art.logo} alt={art.outlet} style={{ height: `${art.logoH}px`, width: 'auto', display: 'block' }} />
+        </div>
+        <span style={{ fontSize: '11px', color: '#C17A3B', fontWeight: 600, letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
+          {art.year}
+        </span>
+      </div>
+      <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.55)', margin: 0, fontStyle: 'italic', flex: 1 }}>
+        {art.quote}
+      </p>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 500, color: '#C17A3B', marginTop: '4px' }}>
+        Ver publicación <ArrowIcon />
+      </span>
     </motion.a>
   );
 }
@@ -148,7 +187,7 @@ export default function Press() {
 
         {/* TV */}
         <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.25em', color: 'rgba(155,139,126,0.6)', textTransform: 'uppercase', marginBottom: '14px' }}>
-          En televisión
+          En televisión y redes
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: '12px', marginBottom: '40px' }}>
           {VIDEOS.map((v, i) => <VideoCard key={v.href} v={v} i={i} />)}
@@ -159,36 +198,7 @@ export default function Press() {
           Premios & prensa escrita
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))', gap: '12px', marginBottom: '28px' }}>
-          {ARTICLES.map((art, i) => (
-            <motion.a
-              key={art.href}
-              href={art.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', padding: '24px 26px', gap: '10px', transition: 'border-color 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(193,122,59,0.35)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#2A2520')}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                <p style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: 0, lineHeight: 1.2 }}>
-                  {art.outlet}
-                </p>
-                <span style={{ fontSize: '11px', color: '#C17A3B', fontWeight: 600, letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
-                  {art.year}
-                </span>
-              </div>
-              <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.55)', margin: 0, fontStyle: 'italic', flex: 1 }}>
-                {art.quote}
-              </p>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 500, color: '#C17A3B', marginTop: '4px' }}>
-                Ver publicación <ArrowIcon />
-              </span>
-            </motion.a>
-          ))}
+          {ARTICLES.map((art, i) => <ArticleCard key={art.href} art={art} i={i} />)}
         </div>
 
         {/* Minor mentions */}

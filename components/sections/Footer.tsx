@@ -10,9 +10,9 @@ export default function Footer() {
 
   const navLinks = [
     { href: '#inicio', label: t('home') },
-    { href: '#nosotros', label: t('about') },
+    { href: '/nosotros', label: t('about') },
     { href: '#menu', label: t('menu') },
-    { href: '#resenas', label: t('reviews') },
+    { href: '/resenas', label: t('reviews') },
     { href: '#contacto', label: t('contact') },
   ];
 
