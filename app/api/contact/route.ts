@@ -84,7 +84,7 @@ function confirmationHtml(nombre: string) {
         <tr><td style="padding:36px 40px">
           <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#1A1410;line-height:1.5">Hola, ${nombre}.</p>
           <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Recibimos tu mensaje y te responderemos a la brevedad.</p>
-          <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Si necesitás hablar con alguien más rápido, podés escribirnos al WhatsApp.</p>
+          <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Si necesitas hablar con alguien más rápido, puedes escribirnos al WhatsApp.</p>
         </td></tr>
         <!-- Divider -->
         <tr><td style="padding:0 40px"><div style="height:1px;background:#EDE8E2"></div></td></tr>
