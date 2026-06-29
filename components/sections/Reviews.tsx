@@ -43,7 +43,7 @@ async function fetchGoogleReviews(): Promise<{ reviews: GoogleReview[] | null; p
     if (data.status !== 'OK' || !data.result) return { reviews: null, placeRating: null };
 
     const reviews = (data.result.reviews ?? [])
-      .filter(r => r.rating >= 4)
+      .filter(r => r.rating >= 4 && r.text && r.text.trim().length > 0)
       .sort((a, b) => (b.time ?? 0) - (a.time ?? 0))
       .slice(0, 3)
       .map(r => ({
@@ -66,16 +66,38 @@ export default async function Reviews() {
   const t = await getTranslations('reviews');
   const { reviews, placeRating } = await fetchGoogleReviews();
 
+  const reviewSchema = reviews && reviews.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@graph': reviews.map(r => ({
+          '@type': 'Review',
+          itemReviewed: { '@id': 'https://dimoe.cl/#restaurant' },
+          author: { '@type': 'Person', name: r.author_name },
+          reviewRating: { '@type': 'Rating', ratingValue: String(r.rating), bestRating: '5' },
+          ...(r.publish_time ? { datePublished: r.publish_time.substring(0, 10) } : {}),
+          reviewBody: r.text,
+        })),
+      }
+    : null;
+
   return (
-    <ReviewsCards
-      label={t('label')}
-      headline={t('headline')}
-      googleLabel={t('google_label')}
-      award={t('award')}
-      cta={t('cta')}
-      googleMapsUrl={GOOGLE_MAPS_URL}
-      reviews={reviews}
-      placeRating={placeRating}
-    />
+    <>
+      {reviewSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+        />
+      )}
+      <ReviewsCards
+        label={t('label')}
+        headline={t('headline')}
+        googleLabel={t('google_label')}
+        award={t('award')}
+        cta={t('cta')}
+        googleMapsUrl={GOOGLE_MAPS_URL}
+        reviews={reviews}
+        placeRating={placeRating}
+      />
+    </>
   );
 }
