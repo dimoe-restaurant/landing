@@ -32,6 +32,15 @@ type NotionMenuPage = {
     Nota: { rich_text: NotionText[] }
     Badge: { rich_text: NotionText[] }
     Orden: { number: number | null }
+    // Días activos — L=Lunes M=Martes W=Miércoles J=Jueves V=Viernes S=Sábado D=Domingo
+    // Todos en false (default) = mostrar siempre. Al menos uno en true = mostrar sólo ese(os) día(s).
+    L?: { checkbox: boolean }
+    M?: { checkbox: boolean }
+    W?: { checkbox: boolean }
+    J?: { checkbox: boolean }
+    V?: { checkbox: boolean }
+    S?: { checkbox: boolean }
+    D?: { checkbox: boolean }
   }
 }
 
@@ -54,6 +63,12 @@ function parseMenuPages(
     if (!byTab.has(menuTab)) byTab.set(menuTab, new Map())
     const groups = byTab.get(menuTab)!
     if (!groups.has(subcat)) groups.set(subcat, [])
+
+    // Filtro de días: 0=Dom 1=Lun 2=Mar 3=Mié 4=Jue 5=Vie 6=Sáb
+    const DAY_KEYS = ['D', 'L', 'M', 'W', 'J', 'V', 'S'] as const
+    const todayKey = DAY_KEYS[new Date().getDay()]
+    const anyDaySet = (['L', 'M', 'W', 'J', 'V', 'S', 'D'] as const).some(k => p[k]?.checkbox === true)
+    if (anyDaySet && !p[todayKey]?.checkbox) continue
 
     const nameEs = p.Nombre?.title?.[0]?.plain_text ?? ''
     const nameEn = p['Nombre EN']?.rich_text?.[0]?.plain_text ?? ''
