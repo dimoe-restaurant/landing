@@ -16,21 +16,21 @@ const TAB_BG: Record<MenuTab, string> = {
   BAR:      '#1A0E35',
 };
 
-// DSC food shots — sin personas, sin rostros, platos y manos del restaurante
+// Fotos food — todas cargadas en el DOM, sin rostros
 const TAB_PHOTO: Record<MenuTab, string> = {
-  ENTRADAS: '/images/DSC01931.jpg',   // bruschettas prosciutto con mano
-  PIZZAS:   '/images/DSC09219.jpg',   // cheese pull con horno napolitano
+  ENTRADAS: '/images/DSC02385.jpg',   // palitos di agglio, manos (landscape)
+  PIZZAS:   '/images/DSC09219.jpg',   // cheese pull + horno napolitano
   FONDOS:   '/images/DSC02482.jpg',   // pappardelle bolognesa humeante
   POSTRES:  '/images/DSC02223.jpg',   // pappardelle camarón con flores
-  BAR:      '/images/DSC02288.jpg',   // cóctel de berries en copa de cristal
+  BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
 };
 
 const TAB_PHOTO_POS: Record<MenuTab, string> = {
-  ENTRADAS: 'center 52%',
-  PIZZAS:   'center 36%',
-  FONDOS:   'center 40%',
-  POSTRES:  'center 28%',
-  BAR:      'center 54%',
+  ENTRADAS: 'center 60%',
+  PIZZAS:   'center 40%',
+  FONDOS:   'center 45%',
+  POSTRES:  'center 30%',
+  BAR:      'center 55%',
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
@@ -55,7 +55,6 @@ export default function Menu({ menu }: Props) {
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = resolvedMenu[active];
 
-  // Leer hash de URL al cargar: /carta#pizzas → activa PIZZAS
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
@@ -72,11 +71,11 @@ export default function Menu({ menu }: Props) {
       style={{
         background: TAB_BG[active],
         transition: 'background-color 0.45s ease',
-        padding: 'clamp(48px, 7vw, 80px) 0 clamp(48px, 7vw, 80px)',
+        paddingBottom: 'clamp(48px, 7vw, 80px)',
       }}
     >
       {/* Label + headline */}
-      <div style={{ textAlign: 'center', marginBottom: '32px', padding: '0 clamp(16px, 4vw, 24px)' }}>
+      <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 32px' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
@@ -89,6 +88,7 @@ export default function Menu({ menu }: Props) {
         background: TAB_BG[active], transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap',
+        paddingLeft: '16px', paddingRight: '16px',
       }}>
         {TABS.map(tab => (
           <button key={tab} onClick={() => handleTab(tab)}
@@ -108,194 +108,185 @@ export default function Menu({ menu }: Props) {
         ))}
       </div>
 
-      {/* Layout: contenido + foto lateral */}
-      <div style={{ maxWidth: '1060px', margin: '0 auto', display: 'flex', minHeight: '600px' }}>
+      {/* ── Banner horizontal de foto ────────────────────────────────────────
+          Todas las fotos están en el DOM (preload). Solo la activa es visible.
+          El usuario puede cambiar height desde aquí.
+      ──────────────────────────────────────────────────────────────────────── */}
+      <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
+        {TABS.map(tab => (
+          <img
+            key={tab}
+            src={TAB_PHOTO[tab]}
+            alt={TAB_DISPLAY[tab]}
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover',
+              objectPosition: TAB_PHOTO_POS[tab],
+              opacity: active === tab ? 1 : 0,
+              transition: 'opacity 0.4s ease',
+              display: 'block',
+            }}
+          />
+        ))}
+        {/* Gradiente inferior para integrar con el contenido */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
+          background: `linear-gradient(to bottom, transparent, ${TAB_BG[active]})`,
+          transition: 'background 0.45s ease',
+          pointerEvents: 'none',
+        }} />
+      </div>
 
-        {/* Columna contenido */}
-        <div style={{ flex: 1, minWidth: 0, padding: 'clamp(32px, 5vw, 48px) clamp(16px, 4vw, 40px)' }}>
-          <AnimatePresence mode="wait">
-            <motion.div key={active}
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.28 }}
-            >
-              {/* Título watermark de sección */}
-              <p style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(52px, 9vw, 96px)',
-                fontWeight: 900, lineHeight: 1,
-                color: 'rgba(242,237,228,0.07)',
-                margin: '0 0 28px',
-                letterSpacing: '-0.02em',
-                userSelect: 'none',
-              }}>
-                {TAB_DISPLAY[active]}
-              </p>
+      {/* Contenido */}
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 40px)' }}>
+        <AnimatePresence mode="wait">
+          <motion.div key={active}
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.28 }}
+          >
+            {groups.map((group, gi) => {
+              const isHappyHour = group.name === 'Happy Hour';
+              const isKids = group.name === 'Para Niños';
+              const isBarTab = active === 'BAR';
+              const noDesc = group.items.every(i => !i.desc);
+              const isCompact = isBarTab || (noDesc && group.items.length > 2);
 
-              {groups.map((group, gi) => {
-                const isHappyHour = group.name === 'Happy Hour';
-                const isKids = group.name === 'Para Niños';
-                const isBarTab = active === 'BAR';
-                // BAR siempre compacto; otros grupos compactos si ningún ítem tiene desc larga
-                const noDesc = group.items.every(i => !i.desc);
-                const isCompact = isBarTab || (noDesc && group.items.length > 2);
+              return (
+                <div key={gi} style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
 
-                return (
-                  <div key={gi} style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0 }}>
-
-                    {/* Happy Hour — banner ámbar prominente */}
-                    {isHappyHour && (
-                      <div style={{
-                        background: 'linear-gradient(135deg, rgba(193,122,59,0.13) 0%, rgba(193,122,59,0.06) 100%)',
-                        border: '1px solid rgba(193,122,59,0.28)',
-                        borderRadius: '12px',
-                        padding: '13px 18px 10px',
-                        marginBottom: '16px',
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                          <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#C17A3B' }}>Happy Hour</span>
-                          <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(193,122,59,0.72)' }}>
-                            {group.subtitle ?? 'Todos los días · 12:30 – 19:30'}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Para Niños — separador sutil con línea punteada */}
-                    {isKids && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-                        <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(242,237,228,0.22)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                          Para los pequeños
+                  {/* Happy Hour — banner ámbar */}
+                  {isHappyHour && (
+                    <div style={{
+                      background: 'linear-gradient(135deg, rgba(193,122,59,0.13) 0%, rgba(193,122,59,0.06) 100%)',
+                      border: '1px solid rgba(193,122,59,0.28)',
+                      borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#C17A3B' }}>Happy Hour</span>
+                        <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(193,122,59,0.72)' }}>
+                          {group.subtitle ?? 'Miércoles a Viernes · 17:00 – 20:00'}
                         </span>
-                        <div style={{ flex: 1, borderTop: '1px dashed rgba(242,237,228,0.10)' }} />
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {/* Header regular (no Happy Hour, no Niños) */}
-                    {group.name && !isHappyHour && !isKids && (
-                      <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '1px solid rgba(242,237,228,0.08)' }}>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
-                          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
-                          {group.subtitle && (
-                            <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.38)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                              {group.subtitle}
-                            </span>
-                          )}
-                        </div>
+                  {/* Para Niños — separador punteado */}
+                  {isKids && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                      <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(242,237,228,0.22)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                        Para los pequeños
+                      </span>
+                      <div style={{ flex: 1, borderTop: '1px dashed rgba(242,237,228,0.10)' }} />
+                    </div>
+                  )}
+
+                  {/* Header regular */}
+                  {group.name && !isHappyHour && !isKids && (
+                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '1px solid rgba(242,237,228,0.08)' }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
+                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
+                        {group.subtitle && (
+                          <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.38)', letterSpacing: '0.06em' }}>
+                            {group.subtitle}
+                          </span>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {/* Ítems */}
-                    <div style={isCompact ? {
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-                      gap: '2px 20px',
-                    } : {}}>
-                      {group.items.map((item, ii) => (
-                        <div key={ii} style={{
-                          display: 'flex',
-                          alignItems: isCompact ? 'baseline' : 'flex-start',
-                          justifyContent: 'space-between',
-                          gap: isCompact ? '8px' : '16px',
-                          padding: isCompact ? '7px 0' : '16px 0',
-                          borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
-                          opacity: isKids ? 0.62 : 1,
-                        }}>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{
-                              display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
-                              marginBottom: (!isCompact && item.desc) ? '5px' : 0,
+                  {/* Ítems */}
+                  <div style={isCompact ? {
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(168px, 1fr))',
+                    gap: '2px 20px',
+                  } : {}}>
+                    {group.items.map((item, ii) => (
+                      <div key={ii} style={{
+                        display: 'flex',
+                        alignItems: isCompact ? 'baseline' : 'flex-start',
+                        justifyContent: 'space-between',
+                        gap: isCompact ? '8px' : '16px',
+                        padding: isCompact ? '7px 0' : '16px 0',
+                        borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
+                        opacity: isKids ? 0.62 : 1,
+                      }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{
+                            display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
+                            marginBottom: (!isCompact && item.desc) ? '5px' : 0,
+                          }}>
+                            <span style={{
+                              fontFamily: 'var(--font-serif)',
+                              fontSize: isCompact ? '13px' : '15px',
+                              fontWeight: 700, color: '#F2EDE4', lineHeight: 1.3,
                             }}>
+                              {item.name}
+                            </span>
+                            {item.badge && (
                               <span style={{
-                                fontFamily: 'var(--font-serif)',
-                                fontSize: isCompact ? '13px' : '15px',
-                                fontWeight: 700,
-                                color: '#F2EDE4',
-                                lineHeight: 1.3,
+                                fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em',
+                                color: '#C17A3B', textTransform: 'uppercase',
+                                border: '1px solid rgba(193,122,59,0.4)',
+                                borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
                               }}>
-                                {item.name}
+                                {item.badge}
                               </span>
-                              {item.badge && (
-                                <span style={{
-                                  fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em',
-                                  color: '#C17A3B', textTransform: 'uppercase',
-                                  border: '1px solid rgba(193,122,59,0.4)',
-                                  borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
-                                }}>
-                                  {item.badge}
-                                </span>
-                              )}
-                            </div>
-                            {/* Compact: desc como nota breve de sabor */}
-                            {isCompact && item.desc && (
-                              <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.30)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
-                                {item.desc}
-                              </span>
-                            )}
-                            {/* Full: descripción completa */}
-                            {!isCompact && item.desc && (
-                              <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.38)', margin: 0 }}>
-                                {item.desc}
-                              </p>
-                            )}
-                            {item.note && (
-                              <p style={{ fontSize: '11px', color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
-                                {item.note}
-                              </p>
                             )}
                           </div>
-                          {fmt(item.price) != null && (
-                            <span style={{
-                              flexShrink: 0,
-                              fontSize: isCompact ? '13px' : '14px',
-                              fontWeight: 600,
-                              color: '#C17A3B',
-                              lineHeight: '1.3',
-                            }}>
-                              ${fmt(item.price)}
+                          {isCompact && item.desc && (
+                            <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.30)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
+                              {item.desc}
                             </span>
                           )}
+                          {!isCompact && item.desc && (
+                            <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.38)', margin: 0 }}>
+                              {item.desc}
+                            </p>
+                          )}
+                          {item.note && (
+                            <p style={{ fontSize: '11px', color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
+                              {item.note}
+                            </p>
+                          )}
                         </div>
-                      ))}
-                    </div>
-
+                        {fmt(item.price) != null && (
+                          <span style={{
+                            flexShrink: 0,
+                            fontSize: isCompact ? '13px' : '14px',
+                            fontWeight: 600, color: '#C17A3B', lineHeight: '1.3',
+                          }}>
+                            ${fmt(item.price)}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
 
-          {/* Footer */}
-          <motion.div
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ textAlign: 'left', marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
-          >
-            <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', marginBottom: '16px' }}>
-              Precios en pesos chilenos · IVA incluido
-            </p>
-            <a
-              href={process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe'}
-              target="_blank" rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', background: '#C17A3B', color: '#F2EDE4', padding: '12px 28px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-            >
-              {t('cta')}
-            </a>
+                </div>
+              );
+            })}
           </motion.div>
-        </div>
+        </AnimatePresence>
 
-        {/* Foto lateral — food shots sin rostros */}
-        <div
-          aria-hidden="true"
-          style={{
-            width: 'clamp(80px, 22%, 220px)',
-            flexShrink: 0,
-            backgroundImage: `url(${TAB_PHOTO[active]})`,
-            backgroundSize: 'cover',
-            backgroundPosition: TAB_PHOTO_POS[active],
-            borderLeft: '1px solid rgba(242,237,228,0.04)',
-          }}
-        />
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
+        >
+          <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', marginBottom: '16px' }}>
+            Precios en pesos chilenos · IVA incluido
+          </p>
+          <a
+            href={process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe'}
+            target="_blank" rel="noopener noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', background: '#C17A3B', color: '#F2EDE4', padding: '12px 28px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            {t('cta')}
+          </a>
+        </motion.div>
       </div>
     </section>
   );

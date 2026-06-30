@@ -3,7 +3,6 @@ import type { MenuTab, MenuGroup } from './menu'
 export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
 
   // ── ENTRADAS ──────────────────────────────────────────────────────────────
-  // Orden: badge item primero → diferenciadores → clásicos
   ENTRADAS: [{
     items: [
       { name: 'Jardín de Oliva', desc: 'Aceitunas rellenas artesanalmente con ricota sobre aceite de oliva premium, tomates deshidratados y queso feta.', price: 9900, badge: 'Furor en carta' },
@@ -101,56 +100,169 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
   ],
 
   // ── BAR ───────────────────────────────────────────────────────────────────
-  // Happy Hour con tiempo visible → Spritz → Sours → Coctelería Clásica
   BAR: [
+    // 1. Happy Hour — precio HH, precio normal como nota
     {
       name: 'Happy Hour',
-      subtitle: 'Todos los días · 12:30 – 19:30',
+      subtitle: 'Miércoles a Viernes · 17:00 – 20:00',
       items: [
-        { name: '2x Pisco o Ron', desc: '+1 bebida 350cc', price: 7900 },
-        { name: 'Pisco Sour Catedral', price: 6500 },
-        { name: 'Gin Frutal', desc: 'Tropical o Berries', price: 5700 },
-        { name: 'Spritz', desc: 'Aperol · Ramazzotti · Hugo · Cherry', price: 4900 },
-        { name: 'Mojito Sabores', price: 4900 },
-        { name: 'Gin Tonic', price: 4900 },
-        { name: 'Mojito', price: 3900 },
-        { name: 'Pisco Sour', price: 3900 },
+        { name: '2x Pisco o Ron', desc: '+ 1 bebida 350cc', price: 7900 },
+        { name: 'Pisco Sour Catedral 380', price: 6500, note: 'Normal $8.000' },
+        { name: 'Gin Frutal', desc: 'Tropical o Berries', price: 5700, note: 'Normal $7.500' },
+        { name: 'Mojito Sabores', price: 4900, note: 'Normal $6.500' },
+        { name: 'Gin Tonic', price: 4900, note: 'Normal $6.500' },
+        { name: 'Spritz', desc: 'Ramazzotti · Aperol · Hugo · Cherry', price: 4900, note: 'Normal $6.500' },
+        { name: 'Pisco Sour Sabores', price: 3900, note: 'Normal $4.900' },
+        { name: 'Mojito', price: 3900, note: 'Normal $5.500' },
+        { name: 'Schop 500cc', desc: 'Variedades', price: 3700, note: 'Normal $4.500' },
       ],
     },
+    // 2. Gin Frutal — protagonista visual
+    {
+      name: 'Gin Frutal',
+      subtitle: '$7.500 c/u',
+      items: [
+        { name: 'Berries', price: 7500 },
+        { name: 'Tropical', price: 7500 },
+      ],
+    },
+    // 3. Coctelería de la Casa — firmas del bar
+    {
+      name: 'Coctelería de la Casa',
+      items: [
+        { name: 'Bossa Nova', desc: 'Gin Tanqueray BOSSA NOVA (guayaba brasileña y lemongrass), licor flor de sauco, syrup artesanal de frutas, limón y soda', price: 7500 },
+        { name: 'Bella Italia', desc: 'Jaggermeister, pisco manzana, pulpa frambuesa, limón', price: 7500 },
+        { name: 'Disaronno Fizz', price: 6900 },
+        { name: 'Aranciata', desc: 'Gin Bombay, aperitivo naranja, limón, soda', price: 6800 },
+        { name: 'Dolce Rosso', desc: 'Tequila, licor de guinda, limón, maracuyá', price: 6800 },
+        { name: 'Copón Sangría DiMOE', desc: 'Carmenere, jugo naranja natural, pulpa de frambuesa, destilado de manzana, mix frutas rojas', price: 5500 },
+        { name: 'Jarrón Sangría', desc: '4 copas', price: 12500 },
+      ],
+    },
+    // 4. Spritz
     {
       name: 'Spritz',
       subtitle: '$6.500 c/u',
       items: [
-        { name: 'Aperol Spritz', price: 6500 },
+        { name: 'Aperol Spritz', desc: 'Naranja', price: 6500 },
+        { name: 'Ramazzotti Spritz', desc: 'Flor de Jamaica', price: 6500 },
+        { name: 'Cherry Spritz', desc: 'Guinda', price: 6500 },
         { name: 'Hugo Spritz', desc: 'Flor de Sauco', price: 6500 },
-        { name: 'Limoncello Spritz', desc: 'Fior de Manzana', price: 6500 },
-        { name: 'Cherry Spritz', price: 6500 },
-        { name: 'Ramazzotti Spritz', price: 6500 },
+        { name: 'Limoncello Spritz', desc: 'Licor de limón italiano', price: 6500 },
       ],
     },
+    // 5. Sours
     {
       name: 'Sours',
-      subtitle: '$4.900 c/u',
+      subtitle: '$4.900 c/u · Catedral $8.000',
       items: [
-        { name: 'Copao Sour', desc: 'Natural del Norte', price: 4900 },
-        { name: 'Calafate Sour', desc: 'Natural del Sur', price: 4900 },
-        { name: 'Sandía Sour', desc: 'Natural de Paine', price: 4900 },
-        { name: 'Chardonnay Sour', price: 4900 },
-        { name: 'Mango Sour', price: 4900 },
-        { name: 'Pisco Sour Tradicional', price: 4900 },
+        { name: 'Pisco Sour Catedral', price: 8000 },
+        { name: 'Mango Sour', desc: 'Elaboración DiMOE', price: 4900 },
+        { name: 'Copao Sour', desc: 'Cítrico · Fruta del Norte', price: 4900 },
+        { name: 'Calafate Sour', desc: 'Dulce · Fruta Natural del Sur', price: 4900 },
+        { name: 'Sandía Sour', desc: 'Dulce · Fruta Natural de Paine', price: 4900 },
+        { name: 'Chardonnay Sour', desc: 'Viña Terramater', price: 4900 },
+        { name: 'Tradicional', desc: 'Elaboración DiMOE', price: 4900 },
       ],
     },
+    // 6. Coctelería Clásica — lista completa del PDF
     {
       name: 'Coctelería Clásica',
       items: [
         { name: 'El Padrino', desc: 'Bourbon, amaretto, cítrico', price: 7500 },
-        { name: 'Amaretto Martini', desc: 'Amaretto, vermut, cereza', price: 6000 },
+        { name: 'Moscow Mule', price: 7000 },
+        { name: 'London Mule', price: 7000 },
+        { name: 'Amaretto Martini', desc: 'Amaretto, vermut, cereza', price: 6500 },
+        { name: 'Gin Tonic', price: 6500 },
+        { name: 'Clavo Oxidado', price: 6500 },
+        { name: 'Piña Colada', price: 6500 },
+        { name: 'Apple Mule', price: 6500 },
+        { name: 'Negroni', price: 6000 },
+        { name: 'Margarita', desc: 'Tequila, triple sec, lima', price: 5000 },
         { name: 'Mojito Sabores', price: 6500 },
         { name: 'Caipirinha', desc: 'Cachaça, lima, azúcar', price: 5500 },
-        { name: 'Amaretto Sour', price: 5000 },
-        { name: 'Margarita', desc: 'Tequila, triple sec, lima', price: 5000 },
-        { name: 'Gin Tonic', price: 4500 },
-        { name: 'Mojito', price: 3500 },
+        { name: 'Amaretto Sour', price: 5500 },
+        { name: 'Tom Collins', price: 5500 },
+        { name: 'Daiquiri', price: 5500 },
+        { name: 'Mojito', price: 5500 },
+      ],
+    },
+    // 7. Cervezas
+    {
+      name: 'Cervezas Artesanales — La Casona',
+      items: [
+        { name: 'Litro Degustación', desc: '3 schops 350cc a tu gusto de las cervezas del día', price: 8900 },
+        { name: 'Calafate Premium 500cc', price: 5000 },
+        { name: 'Cuello Negro', desc: '2° Lugar Mundial', price: 6000 },
+        { name: 'Kunstmann Torobayo', price: 5000 },
+        { name: 'Austral Calafate', price: 5000 },
+        { name: 'Golden Ale (Rubia) 500cc', price: 4500 },
+        { name: 'Amber (Roja) 500cc', price: 4500 },
+        { name: 'Peroni', desc: 'Italiana', price: 4000 },
+      ],
+    },
+    // 8. Vinos y Espumantes
+    {
+      name: 'Vinos y Espumantes',
+      items: [
+        { name: 'Botella Gran Reserva', desc: 'Carmenere · Cabernet Sauvignon · Merlot', price: 20000 },
+        { name: 'Botella Vino Varietal/Reserva', price: '9.000 / 15.000' },
+        { name: 'Botella Espumante', price: 12000 },
+        { name: 'Copa de Espumante Brut', price: 3500 },
+        { name: 'Copa de Vino Varietal/Reserva', price: '2.500 / 4.500' },
+      ],
+    },
+    // 9. Coctelería Sin Alcohol
+    {
+      name: 'Sin Alcohol',
+      items: [
+        { name: 'Lampone e Basilico', desc: 'Maceración de albahaca, jengibre, limón y pimienta con toque de frambuesa y tónica', price: 6300 },
+        { name: 'Cetriolo e Pepperoncino', desc: 'Maceración de pepino, menta y pepperoncino italiano con toque de piña y tónica', price: 6300 },
+        { name: 'Mojito Sin Alcohol Sabores', price: 6200 },
+        { name: 'Mojito Sin Alcohol', price: 5200 },
+        { name: 'Orange Espresso', price: 4490 },
+      ],
+    },
+    // 10. Jugos y Bebidas
+    {
+      name: 'Jugos y Bebidas',
+      items: [
+        { name: 'Jugo Natural Jarrito', price: 3900 },
+        { name: 'Limonada Jarrito', price: 3900 },
+        { name: 'Cerveza Jengibre', price: 3500 },
+        { name: 'Bebidas', price: 2500 },
+      ],
+    },
+    // 11. Tragos — licores servidos por copa
+    {
+      name: 'Tragos',
+      items: [
+        { name: 'Chivas Regal', desc: 'Whisky', price: 8000 },
+        { name: 'Horcón Quemado', desc: 'Pisco', price: 7000 },
+        { name: 'Tanqueray', desc: 'Gin', price: 7500 },
+        { name: 'Grants', desc: 'Whisky', price: 6000 },
+        { name: 'Limoncello', desc: 'Bajativo', price: 6000 },
+        { name: 'Bombay', desc: 'Gin', price: 6500 },
+        { name: 'Beefeater', desc: 'Gin', price: 6500 },
+        { name: 'José Cuervo', desc: 'Tequila', price: 5500 },
+        { name: 'Havana', desc: 'Ron', price: 5000 },
+        { name: 'Mistral', desc: 'Pisco', price: 5000 },
+        { name: 'Mistral Manzana', desc: 'Pisco', price: 5000 },
+        { name: 'Alto del Carmen', desc: 'Pisco', price: 5000 },
+        { name: 'Senda', desc: 'Tequila', price: 4000 },
+        { name: 'Amaretto', desc: 'Bajativo', price: 4000 },
+        { name: 'Manzanilla', desc: 'Bajativo', price: 3800 },
+        { name: 'Menta', desc: 'Bajativo', price: 3500 },
+      ],
+    },
+    // 12. Shots
+    {
+      name: 'Shots',
+      subtitle: '$3.000 c/u',
+      items: [
+        { name: 'Tequila José Cuervo', price: 3000 },
+        { name: 'Jagermeister', price: 3000 },
+        { name: 'Fireball', price: 3000 },
       ],
     },
   ],
