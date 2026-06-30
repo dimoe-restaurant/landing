@@ -1,7 +1,7 @@
 const NOTION_API = 'https://api.notion.com/v1'
 const NOTION_VERSION = '2022-06-28'
 
-export type MenuTab = 'ENTRADAS' | 'PIZZAS' | 'FONDOS' | 'POSTRES' | 'BAR'
+export type MenuTab = 'ENTRADAS' | 'PIZZAS' | 'FONDOS' | 'POSTRES' | 'BAR' | 'VINOS' | 'SEMANAL'
 
 export type MenuItem = {
   name: string
@@ -35,7 +35,7 @@ type NotionMenuPage = {
   }
 }
 
-const VALID_TABS = new Set<string>(['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR'])
+const VALID_TABS = new Set<string>(['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'])
 
 function parseMenuPages(
   pages: NotionMenuPage[],
@@ -73,7 +73,7 @@ function parseMenuPages(
   }
 
   const result = {} as Record<MenuTab, MenuGroup[]>
-  for (const tab of ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR'] as MenuTab[]) {
+  for (const tab of ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'] as MenuTab[]) {
     const groups = byTab.get(tab)
     if (!groups) {
       result[tab] = []

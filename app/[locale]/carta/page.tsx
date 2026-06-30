@@ -22,7 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function CartaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const menuData = (await getMenu(locale)) ?? FALLBACK_MENU;
+  const notionData = await getMenu(locale);
+  const menuData = notionData
+    ? { ...notionData, VINOS: FALLBACK_MENU.VINOS, SEMANAL: FALLBACK_MENU.SEMANAL }
+    : FALLBACK_MENU;
 
   return (
     <main style={{ background: '#0D0B09', paddingTop: '72px' }}>

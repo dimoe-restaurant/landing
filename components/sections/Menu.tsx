@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
-const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR'];
+const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
 
 const TAB_BG: Record<MenuTab, string> = {
   ENTRADAS: '#152A1C',
@@ -14,6 +14,8 @@ const TAB_BG: Record<MenuTab, string> = {
   FONDOS:   '#2A1205',
   POSTRES:  '#1E0F35',
   BAR:      '#1A0E35',
+  VINOS:    '#1C0A2A',
+  SEMANAL:  '#1A0808',
 };
 
 // Fotos food — todas cargadas en el DOM, sin rostros
@@ -23,6 +25,8 @@ const TAB_PHOTO: Record<MenuTab, string> = {
   FONDOS:   '/images/DSC02482.jpg',   // pappardelle bolognesa humeante
   POSTRES:  '/images/DSC02223.jpg',   // pappardelle camarón con flores
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
+  VINOS:    '/images/DSC02309.jpg',   // lasagna en greda, maridaje con tinto
+  SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
 const TAB_PHOTO_POS: Record<MenuTab, string> = {
@@ -31,6 +35,8 @@ const TAB_PHOTO_POS: Record<MenuTab, string> = {
   FONDOS:   'center 45%',
   POSTRES:  'center 30%',
   BAR:      'center 55%',
+  VINOS:    'center 50%',
+  SEMANAL:  'center 55%',
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
@@ -39,6 +45,8 @@ const TAB_DISPLAY: Record<MenuTab, string> = {
   FONDOS:   'FONDOS',
   POSTRES:  'DOLCE',
   BAR:      'BAR',
+  VINOS:    'VINOS',
+  SEMANAL:  'MENÚ SEMANAL',
 };
 
 function fmt(p: number | string | undefined | null): string | null {
@@ -87,9 +95,25 @@ export default function Menu({ menu }: Props) {
         position: 'sticky', top: '72px', zIndex: 10,
         background: TAB_BG[active], transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
-        display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap',
+        display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',
         paddingLeft: '16px', paddingRight: '16px',
       }}>
+        {/* Home icon */}
+        <a href="/" aria-label="Ir al inicio" style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: '34px', height: '34px', borderRadius: '100px', flexShrink: 0,
+          border: '1px solid rgba(242,237,228,0.15)',
+          color: 'rgba(242,237,228,0.45)', textDecoration: 'none',
+          transition: 'all 0.2s', marginRight: '4px',
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = '#C17A3B'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.45)'; }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </a>
         {TABS.map(tab => (
           <button key={tab} onClick={() => handleTab(tab)}
             style={{
@@ -148,12 +172,29 @@ export default function Menu({ menu }: Props) {
             {groups.map((group, gi) => {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
+              const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
               const isBarTab = active === 'BAR';
               const noDesc = group.items.every(i => !i.desc);
               const isCompact = isBarTab || (noDesc && group.items.length > 2);
 
               return (
                 <div key={gi} style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
+
+                  {/* Menú Semanal — banner carmesí */}
+                  {isSemanaleChef && (
+                    <div style={{
+                      background: 'linear-gradient(135deg, rgba(180,20,20,0.16) 0%, rgba(180,20,20,0.06) 100%)',
+                      border: '1px solid rgba(180,50,50,0.28)',
+                      borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: 'rgba(220,80,80,0.9)' }}>Menú de la Semana</span>
+                        <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(220,80,80,0.55)' }}>
+                          {group.subtitle ?? 'Actualización semanal · consultar disponibilidad'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Happy Hour — banner ámbar */}
                   {isHappyHour && (

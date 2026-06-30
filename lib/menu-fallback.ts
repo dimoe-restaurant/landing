@@ -266,4 +266,94 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
       ],
     },
   ],
+
+  // ── VINOS ─────────────────────────────────────────────────────────────────
+  // Orden de sommelier: blancos → Carménère (cepa insigne, más stock) →
+  // Cabernet Sauvignon → Merlot → Ensamblajes premium → Dulce
+  VINOS: [
+    {
+      name: 'Sauvignon Blanc',
+      subtitle: 'Copa $4.500 · Botella $15.000',
+      items: [
+        { name: 'Viu Manent Reserva', desc: 'Valle de Colchagua · cítrico y herbal, ideal aperitivo', price: 15000 },
+      ],
+    },
+    {
+      name: 'Chardonnay',
+      subtitle: 'Copa $4.500 · Botella $15.000',
+      items: [
+        { name: 'Viu Manent Reserva', desc: 'Valle de Colchagua · fresco, mineral, notas de pera', price: 15000 },
+        { name: 'Morandé Pionero Reserva', desc: 'Valle Central · redondo, vainilla suave, persistente', price: 15000 },
+      ],
+    },
+    {
+      name: 'Carménère',
+      subtitle: 'Copa $2.500–$4.500 · Botella $9.000–$20.000',
+      items: [
+        { name: 'Tarapacá Gran Reserva', desc: 'Valle del Maipo · especiado, frutos rojos, terroso', price: 20000 },
+        { name: 'San Pedro Castillo del Maule Gran Reserva', desc: 'Valle del Maule · herbáceo, ciruela negra', price: 20000 },
+        { name: 'Casa Silva Doble D Gran Reserva', desc: 'Valle de Colchagua · elegante, pimienta verde, taninos sedosos', price: 20000 },
+        { name: 'Tarapacá Gran Reserva Etiqueta Negra', desc: 'Valle del Maipo · concentrado, especias, largo final', price: 20000 },
+        { name: 'Santa Helena Gran Reserva', desc: 'Valle Central · redondo, frutos negros, buen cuerpo', price: 20000 },
+        { name: 'Montes Limited Selection', desc: 'Valle de Colchagua · medalla de oro, equilibrado y elegante', price: 15000 },
+        { name: 'Santa Ema Select Terroir', desc: 'Valle del Cachapoal · accesible, frutal y directo', price: 9000 },
+      ],
+    },
+    {
+      name: 'Cabernet Sauvignon',
+      subtitle: 'Copa $2.500–$4.500 · Botella $9.000–$20.000',
+      items: [
+        { name: 'Santa Ema Select Terroir Reserva Especial', desc: 'Valle del Cachapoal · robusto, cassis y cedro', price: 15000, note: 'Copa disponible' },
+        { name: 'Requingua Toro de Piedra Gran Reserva', desc: 'Valle del Curicó · mineral, ciruela, tabaco', price: 20000 },
+        { name: 'San Pedro Castillo del Maule Tributo Gran Reserva', desc: 'Valle del Maule · potente, especiado, taninos firmes', price: 20000 },
+        { name: 'Tarapacá Gran Reserva Etiqueta Negra', desc: 'Valle del Maipo · intenso, mineral, largo final', price: 20000 },
+        { name: 'Santa Ema Gran Reserva', desc: 'Valle del Cachapoal · estructura clásica, maduro', price: 20000 },
+        { name: 'Casa Silva Doble D Gran Reserva', desc: 'Valle de Colchagua · añadas 2022 · 2023', price: 20000 },
+        { name: 'Santa Rita 120 Reserva', desc: 'Valle del Maipo · accesible, frutos negros, fácil de beber', price: 9000 },
+      ],
+    },
+    {
+      name: 'Merlot',
+      subtitle: 'Copa $4.500 · Botella $15.000',
+      items: [
+        { name: 'Santa Ema Select Terroir Reserva Especial', desc: 'Valle del Cachapoal · suave, ciruela y chocolate', price: 15000 },
+        { name: 'Santa Catalina El Arpa Blue Reserva Fría', desc: 'Valle Central · fresco, frutos rojos, especias', price: 15000 },
+        { name: 'Santa Rita Medalla Real Reserva', desc: 'Valle del Maipo · aterciopelado, baya oscura', price: 15000 },
+      ],
+    },
+    {
+      name: 'Ensamblajes',
+      subtitle: 'Botella $20.000',
+      items: [
+        { name: 'Tarapacá Gran Reserva Etiqueta Azul', desc: 'Cabernet · Carménère · Syrah · Valle del Maipo', price: 20000 },
+        { name: 'San Pedro Sideral', desc: 'Blend de autor · Valle del Cachapoal · reconocido mundialmente', price: 20000 },
+      ],
+    },
+    {
+      name: 'Dulce',
+      subtitle: 'Botella $9.000',
+      items: [
+        { name: '7 Colores Cortejo Moscato', desc: 'Valle Central · notas de durazno, flores blancas y miel', price: 9000 },
+      ],
+    },
+  ],
+
+  // ── MENÚ SEMANAL ──────────────────────────────────────────────────────────
+  SEMANAL: [
+    {
+      name: 'Menú del Chef',
+      subtitle: 'Actualización semanal · consultar disponibilidad',
+      items: [
+        { name: 'Entrada', desc: 'Reineta fresca del día con el toque justo de limón y especias, presentada sobre una delicada crema de palta artesanal. Una entrada ligera y refrescante.', price: '' },
+        { name: 'Fondo', desc: 'Jugoso filete de salmón en su propia emulsión, servido sobre un artesanal puré de papas y zapallo. Terminado con una fresca salsa de alcaparras y cilantro.', price: '' },
+      ],
+    },
+    {
+      name: 'Elige tu Opción',
+      items: [
+        { name: 'Con Aperitivo Espumante', price: 19900 },
+        { name: 'Con Aperitivo Sour de Sabores', price: 21900 },
+      ],
+    },
+  ],
 }
