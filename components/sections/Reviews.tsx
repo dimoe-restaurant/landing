@@ -85,7 +85,7 @@ export default async function Reviews() {
       {reviewSchema && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema).replace(/</g, '\\u003c') }}
         />
       )}
       <ReviewsCards
