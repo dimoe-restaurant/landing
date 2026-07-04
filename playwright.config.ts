@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: 'line',
   use: { baseURL: `http://localhost:${PORT}`, headless: true },
   webServer: {
-    command: `pnpm dev -- --port ${PORT}`,
+    command: `pnpm dev --port ${PORT}`,
     port: PORT,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
