@@ -5,7 +5,7 @@ test.describe('Secciones principales', () => {
     await page.goto('/');
     await expect(page.locator('h1')).toContainText(/auténtica pizza/i);
     await expect(page.getByText(/35 minutos de Santiago/i)).toBeVisible();
-    const cta = page.getByRole('link', { name: /reservar mesa/i });
+    const cta = page.locator('#inicio').getByRole('link', { name: /reservar mesa/i });
     await expect(cta).toBeVisible();
     await expect(cta).toHaveAttribute('href', /wa\.me\/56973694101/);
   });
