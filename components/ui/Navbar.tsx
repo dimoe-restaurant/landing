@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter, usePathname, Link } from '@/i18n/navigation';
 import { IconGlobe } from '@/components/ui/icons';
@@ -13,12 +13,28 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const prevScrollY = useRef<number>(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const curr = window.scrollY;
+      const prev = prevScrollY.current;
+      setScrolled(curr > 40);
+      if (curr > 120) {
+        setHidden(curr > prev);
+      } else {
+        setHidden(false);
+      }
+      prevScrollY.current = curr;
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (mobileOpen) setHidden(false);
+  }, [mobileOpen]);
 
   function switchLocale() {
     const next = locale === 'es' ? 'en' : 'es';
@@ -49,7 +65,8 @@ export default function Navbar() {
   return (
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      transition: 'background 0.3s ease, border-color 0.3s ease',
+      transition: 'background 0.3s ease, border-color 0.3s ease, transform 0.35s ease',
+      transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
       background: solid ? 'rgba(13,11,9,0.95)' : 'transparent',
       borderBottom: `1px solid ${solid ? '#2A2520' : 'transparent'}`,
       backdropFilter: solid ? 'blur(12px)' : 'none',
@@ -111,7 +128,7 @@ export default function Navbar() {
           </button>
           <button
             className="nav-hamburger"
-            onClick={() => setMobileOpen(o => !o)}
+            onClick={() => { setMobileOpen(o => !o); setHidden(false); }}
             aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', background: 'none', border: 'none', cursor: 'pointer', padding: '8px', color: '#F2EDE4' }}
           >
