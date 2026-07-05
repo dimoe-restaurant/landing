@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
@@ -18,22 +19,22 @@ const TAB_BG: Record<MenuTab, string> = {
   SEMANAL:  '#1A0808',
 };
 
-// Fotos food — todas cargadas en el DOM, sin rostros
+// Fotos food reales de DiMOE — todas cargadas en el DOM, sin rostros
 const TAB_PHOTO: Record<MenuTab, string> = {
-  ENTRADAS: '/images/DSC02385.jpg',   // palitos di agglio, manos (landscape)
-  PIZZAS:   '/images/DSC09219.jpg',   // cheese pull + horno napolitano
-  FONDOS:   '/images/DSC02482.jpg',   // pappardelle bolognesa humeante
-  POSTRES:  '/images/DSC02223.jpg',   // pappardelle camarón con flores
+  ENTRADAS: '/images/menu-entradas-jardin-oliva.jpg',    // Jardín Di Oliva, aceitunas rellenas
+  PIZZAS:   '/images/menu-pizzas-mechada.jpg',            // Pizza Mechada e Cipolla
+  FONDOS:   '/images/menu-fondos-lasagna.jpg',            // Auténtica Lasagna
+  POSTRES:  '/images/menu-postres-tiramisu-pistacho.jpg', // Tiramisù Pistacchio
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
   VINOS:    '/images/DSC02309.jpg',   // lasagna en greda, maridaje con tinto
   SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
 const TAB_PHOTO_POS: Record<MenuTab, string> = {
-  ENTRADAS: 'center 60%',
-  PIZZAS:   'center 40%',
+  ENTRADAS: 'center 50%',
+  PIZZAS:   'center 45%',
   FONDOS:   'center 45%',
-  POSTRES:  'center 30%',
+  POSTRES:  'center 60%',
   BAR:      'center 55%',
   VINOS:    'center 50%',
   SEMANAL:  'center 55%',
@@ -138,18 +139,18 @@ export default function Menu({ menu }: Props) {
       ──────────────────────────────────────────────────────────────────────── */}
       <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
         {TABS.map(tab => (
-          <img
+          <Image
             key={tab}
             src={TAB_PHOTO[tab]}
             alt={TAB_DISPLAY[tab]}
+            fill
+            sizes="100vw"
+            priority={tab === 'ENTRADAS'}
             style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
               objectFit: 'cover',
               objectPosition: TAB_PHOTO_POS[tab],
               opacity: active === tab ? 1 : 0,
               transition: 'opacity 0.4s ease',
-              display: 'block',
             }}
           />
         ))}
