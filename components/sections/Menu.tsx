@@ -67,6 +67,15 @@ const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
     'Tragos': 'Destilados',
     'Shots': 'Destilados',
   },
+  VINOS: {
+    'Sauvignon Blanc': 'Blancos',
+    'Chardonnay': 'Blancos',
+    'Carménère': 'Tintos',
+    'Cabernet Sauvignon': 'Tintos',
+    'Merlot': 'Tintos',
+    'Ensamblajes': 'Ensamblajes y Dulce',
+    'Dulce': 'Ensamblajes y Dulce',
+  },
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
