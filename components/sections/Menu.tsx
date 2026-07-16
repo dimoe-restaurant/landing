@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
+import MenuSubtabs from './MenuSubtabs';
 
 const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
 
@@ -48,6 +49,11 @@ const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>
   POSTRES:  { src: '/images/menu-postres-tiramisu-pistacho.jpg', pos: 'center 55%' },
 };
 
+// Subtabs de navegación dentro de un tab activo — mapea group.name → bucket.
+// Grupos sin entrada caen en "Otros" (no desaparecen silenciosamente).
+// Poblado por tarea: BAR (#107), VINOS (#108). Vacío = sin subtabs, comportamiento actual.
+const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {};
+
 const TAB_DISPLAY: Record<MenuTab, string> = {
   ENTRADAS: 'ANTIPASTI',
   PIZZAS:   'PIZZAS',
@@ -70,10 +76,23 @@ export default function Menu({ menu }: Props) {
   const t = useTranslations('menu');
   const locale = useLocale();
   const [active, setActive] = useState<MenuTab | null>(null);
+  const [activeSubtab, setActiveSubtab] = useState('Todos');
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
   const bg = active ? TAB_BG[active] : '#0D0B09';
+
+  // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual)
+  const subtabConfig = active ? TAB_SUBTABS[active] : undefined;
+  const hasUnmappedGroup = subtabConfig
+    ? groups.some(g => !((g.name ?? '') in subtabConfig))
+    : false;
+  const subtabLabels = subtabConfig
+    ? ['Todos', ...Array.from(new Set(Object.values(subtabConfig))), ...(hasUnmappedGroup ? ['Otros'] : [])]
+    : [];
+  const groupsInSubtabs = subtabConfig
+    ? groups.filter(g => activeSubtab === 'Todos' || (subtabConfig[g.name ?? ''] ?? 'Otros') === activeSubtab)
+    : groups;
 
   // Punto de corte para el separador de foto: después del grupo donde se acumulan
   // ≥6 items, sin insertar justo antes del cierre de la sección.
@@ -81,8 +100,8 @@ export default function Menu({ menu }: Props) {
   let sepIndex = -1;
   if (sepPhoto) {
     let count = 0;
-    for (let i = 0; i < groups.length - 1; i++) {
-      count += groups[i].items.length;
+    for (let i = 0; i < groupsInSubtabs.length - 1; i++) {
+      count += groupsInSubtabs[i].items.length;
       if (count >= 6) { sepIndex = i; break; }
     }
   }
@@ -91,6 +110,10 @@ export default function Menu({ menu }: Props) {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
   }, []);
+
+  useEffect(() => {
+    setActiveSubtab('Todos');
+  }, [active]);
 
   useEffect(() => {
     if (!active) return;
@@ -263,12 +286,14 @@ export default function Menu({ menu }: Props) {
           )}
         </div>
 
+        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} />
+
         <AnimatePresence mode="wait">
-          <motion.div key={active}
+          <motion.div key={`${active}-${activeSubtab}`}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.28 }}
           >
-            {groups.map((group, gi) => {
+            {groupsInSubtabs.map((group, gi) => {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
@@ -278,7 +303,7 @@ export default function Menu({ menu }: Props) {
 
               return (
                 <Fragment key={gi}>
-                <div style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
+                <div style={{ marginBottom: gi < groupsInSubtabs.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
 
                   {/* Menú Semanal — banner carmesí */}
                   {isSemanaleChef && (
