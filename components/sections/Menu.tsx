@@ -107,6 +107,7 @@ export default function Menu({ menu }: Props) {
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabsFade = useScrollFade(tabsRef);
+  const sectionRef = useRef<HTMLElement>(null);
   const bg = active ? TAB_BG[active] : '#0D0B09';
 
   // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual).
@@ -154,6 +155,7 @@ export default function Menu({ menu }: Props) {
   const handleTab = (tab: MenuTab) => {
     setActive(tab);
     window.history.replaceState(null, '', `#${tab.toLowerCase()}`);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleHome = () => {
@@ -164,6 +166,7 @@ export default function Menu({ menu }: Props) {
   return (
     <section
       id="menu"
+      ref={sectionRef}
       className="menu-texture"
       style={{
         backgroundColor: bg,
