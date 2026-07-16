@@ -3,7 +3,7 @@
 import { Fragment, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
@@ -68,6 +68,7 @@ type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
 export default function Menu({ menu }: Props) {
   const t = useTranslations('menu');
+  const locale = useLocale();
   const [active, setActive] = useState<MenuTab | null>(null);
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = active ? resolvedMenu[active] : [];
@@ -165,7 +166,7 @@ export default function Menu({ menu }: Props) {
             onMouseEnter={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = 'rgba(242,237,228,0.8)'; } }}
             onMouseLeave={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.5)'; } }}
           >
-            {tab}
+            {TAB_DISPLAY[tab]}
           </button>
         ))}
       </div>
@@ -419,24 +420,17 @@ export default function Menu({ menu }: Props) {
           </motion.div>
         </AnimatePresence>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
-        >
-          <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', marginBottom: '16px' }}>
-            Precios en pesos chilenos · IVA incluido
-          </p>
-          <a
-            href={process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe'}
-            target="_blank" rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', background: '#C17A3B', color: '#F2EDE4', padding: '12px 28px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        {/* Footer — nota de precios solo en inglés, se asume en restaurantes en español */}
+        {locale === 'en' && (
+          <motion.div
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
           >
-            {t('download_cta')}
-          </a>
-        </motion.div>
+            <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', margin: 0 }}>
+              Prices in Chilean pesos, tax included.
+            </p>
+          </motion.div>
+        )}
       </div>
       </>)}
     </section>
