@@ -312,19 +312,18 @@ export default function Menu({ menu }: Props) {
                     </div>
                   )}
 
-                  {/* Para Niños — separador punteado */}
+                  {/* Para Niños — mismo tratamiento visual que un grupo regular */}
                   {isKids && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-                      <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(242,237,228,0.22)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                        Para los pequeños
-                      </span>
-                      <div style={{ flex: 1, borderTop: '1px dashed rgba(242,237,228,0.10)' }} />
+                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
+                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>
+                        Para los Pequeños
+                      </h3>
                     </div>
                   )}
 
                   {/* Header regular */}
                   {group.name && !isHappyHour && !isKids && (
-                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '1px solid rgba(242,237,228,0.08)' }}>
+                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
                         <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
                         {group.subtitle && (
