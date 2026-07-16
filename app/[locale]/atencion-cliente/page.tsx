@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Footer from '@/components/sections/Footer';
-import AtencionClienteGate from '@/components/sections/AtencionClienteGate';
+import ContactForm from '@/components/sections/ContactForm';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function AtencionClientePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const isEn = locale === 'en';
+  const t = await getTranslations('atencionCliente');
 
   return (
     <main style={{ background: '#0D0B09', paddingTop: '72px' }}>
@@ -27,7 +29,21 @@ export default async function AtencionClientePage({ params }: { params: Promise<
         </Link>
       </div>
 
-      <AtencionClienteGate />
+      <div style={{ maxWidth: '620px', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) clamp(16px, 4vw, 24px) 0' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '16px' }}>
+            {t('label')}
+          </p>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(30px, 5vw, 44px)', fontWeight: 700, lineHeight: 1.2, color: '#F2EDE4', margin: '0 0 16px' }}>
+            {t('headline')}
+          </h1>
+          <p style={{ fontSize: '15px', color: '#9B8B7E', lineHeight: 1.7, margin: 0 }}>
+            {t('subheadline')}
+          </p>
+        </div>
+
+        <ContactForm origen="Atención Cliente" showTipoSelector />
+      </div>
 
       <div style={{ height: 'clamp(64px, 8vw, 96px)' }} />
       <Footer />

@@ -108,22 +108,14 @@
     "tipo_reclamo": "Reclamo",
     "tipo_felicitacion": "Felicitación",
     "success_title_case": "Recibimos tu mensaje",
-    "success_body_case": "Nuestro equipo de atención al cliente lo revisa personalmente y te responderemos dentro de 24-48 horas."
+    "success_body_case": "Nuestro equipo de atención al cliente lo revisa personalmente y te responderemos dentro de 24-48 horas.",
+    "felicitacion_body": "¡Qué alegría! Nos encantaría que compartieras tu experiencia con otros.",
+    "felicitacion_cta": "Dejar reseña en Google"
   },
   "atencionCliente": {
     "label": "Atención al cliente",
-    "headline": "¿Cómo estuvo tu visita a DiMOE?",
-    "subheadline": "Tu experiencia nos importa — cuéntanos cómo te fue.",
-    "happy_option": "Fue una experiencia excelente",
-    "happy_option_hint": "Déjanos una reseña en Google",
-    "other_option": "Hay algo que quiero contarles",
-    "other_option_hint": "Dudas, sugerencias, felicitaciones o reclamos",
-    "happy_title": "¡Qué alegría! 🎉",
-    "happy_body": "Nos encantaría que compartieras tu experiencia con otros — nos ayuda muchísimo.",
-    "happy_cta": "Dejar reseña en Google",
-    "form_intro_title": "Cuéntanos qué pasó",
-    "form_intro_body": "Nuestro equipo de atención al cliente revisa cada mensaje personalmente. Gracias por darnos la oportunidad de mejorar.",
-    "back": "← Volver"
+    "headline": "Cuéntanos qué pasó",
+    "subheadline": "Nuestro equipo de atención al cliente revisa cada mensaje personalmente. Gracias por darnos la oportunidad de mejorar."
   },
   "footer": {
     "tagline": "Pizzería Napolitana y Restobar",

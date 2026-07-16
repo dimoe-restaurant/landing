@@ -8,6 +8,7 @@ import { trackPixelEvent } from '@/lib/meta-pixel';
 type Status = 'idle' | 'loading' | 'success' | 'error';
 const TIPOS = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'] as const;
 type Tipo = typeof TIPOS[number];
+const GOOGLE_MAPS_URL = process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
 
 type ContactFormProps = {
   origen?: 'Home' | 'Atención Cliente';
@@ -89,7 +90,13 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(130px, 100%), 1fr))', gap: '8px' }}>
               {TIPOS.map(opt => (
-                <button key={opt} type="button" onClick={() => setTipo(opt)}
+                <button key={opt} type="button" onClick={() => {
+                  setTipo(opt);
+                  if (opt === 'Felicitación') {
+                    trackEvent('felicitacion_google_redirect');
+                    window.open(GOOGLE_MAPS_URL, '_blank', 'noopener,noreferrer');
+                  }
+                }}
                   style={{
                     background: tipo === opt ? '#C17A3B' : '#0D0B09',
                     color: tipo === opt ? '#F2EDE4' : '#9B8B7E',
@@ -106,76 +113,94 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
           </div>
         )}
 
-        {/* Nombre */}
-        <div>
-          <input name="nombre" type="text" placeholder={t('name')} autoComplete="name"
-            style={{ ...inputStyle, borderColor: errors.nombre ? '#E85D5D' : '#2A2520' }}
-            onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
-            onBlur={e => (e.currentTarget.style.borderColor = errors.nombre ? '#E85D5D' : '#2A2520')} />
-          {errors.nombre && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.nombre}</p>}
-        </div>
-
-        {/* Email + Teléfono en fila */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-          <div>
-            <input name="email" type="email" placeholder={t('email')} autoComplete="email"
-              style={{ ...inputStyle, borderColor: errors.email ? '#E85D5D' : '#2A2520' }}
-              onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
-              onBlur={e => (e.currentTarget.style.borderColor = errors.email ? '#E85D5D' : '#2A2520')} />
-            {errors.email && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.email}</p>}
-          </div>
-          <div>
-            <input name="telefono" type="tel" placeholder={t('phone')} autoComplete="tel"
-              style={{ ...inputStyle, borderColor: errors.telefono ? '#E85D5D' : '#2A2520' }}
-              onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
-              onBlur={e => (e.currentTarget.style.borderColor = errors.telefono ? '#E85D5D' : '#2A2520')} />
-            {errors.telefono && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.telefono}</p>}
-          </div>
-        </div>
-
-        {/* Mensaje */}
-        <div>
-          <textarea name="mensaje" rows={4} placeholder={t('message')}
-            style={{ ...inputStyle, resize: 'vertical', minHeight: '110px', borderColor: errors.mensaje ? '#E85D5D' : '#2A2520' }}
-            onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
-            onBlur={e => (e.currentTarget.style.borderColor = errors.mensaje ? '#E85D5D' : '#2A2520')} />
-          {errors.mensaje && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.mensaje}</p>}
-        </div>
-
-        {/* Consentimiento marketing */}
-        <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
-          <div style={{ position: 'relative', flexShrink: 0, marginTop: '1px' }}>
-            <input type="checkbox" checked={marketing} onChange={e => setMarketing(e.target.checked)}
-              style={{ position: 'absolute', opacity: 0, width: '16px', height: '16px', cursor: 'pointer' }} />
-            <div style={{
-              width: '16px', height: '16px', borderRadius: '4px', border: `1.5px solid ${marketing ? '#C17A3B' : '#2A2520'}`,
-              background: marketing ? '#C17A3B' : 'transparent', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {marketing && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-            </div>
-          </div>
-          <span style={{ fontSize: '12px', color: '#9B8B7E', lineHeight: 1.5 }}>
-            {t('marketing')}{' '}
-            <a href="/privacidad" target="_blank" style={{ color: '#C17A3B', textDecoration: 'none' }}>
-              ({t('privacy_link')})
+        {showTipoSelector && tipo === 'Felicitación' ? (
+          /* Felicitación: no tiene sentido pedir un reclamo escrito — se manda directo a Google */
+          <div style={{ textAlign: 'center', padding: '8px 0 4px' }}>
+            <p style={{ fontSize: '14px', color: '#9B8B7E', lineHeight: 1.7, margin: '0 0 16px' }}>{t('felicitacion_body')}</p>
+            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer"
+              onClick={() => trackEvent('felicitacion_google_click')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#C17A3B', color: '#F2EDE4',
+                borderRadius: '100px', padding: '13px 24px', fontSize: '14px', fontWeight: 600, textDecoration: 'none',
+              }}
+            >
+              {t('felicitacion_cta')}
             </a>
-          </span>
-        </label>
+          </div>
+        ) : (
+          <>
+            {/* Nombre */}
+            <div>
+              <input name="nombre" type="text" placeholder={t('name')} autoComplete="name"
+                style={{ ...inputStyle, borderColor: errors.nombre ? '#E85D5D' : '#2A2520' }}
+                onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
+                onBlur={e => (e.currentTarget.style.borderColor = errors.nombre ? '#E85D5D' : '#2A2520')} />
+              {errors.nombre && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.nombre}</p>}
+            </div>
 
-        {status === 'error' && (
-          <p style={{ fontSize: '13px', color: '#E85D5D', margin: 0 }}>
-            {t('error')} <a href="mailto:contacto@dimoe.cl" style={{ color: '#C17A3B' }}>contacto@dimoe.cl</a>
-          </p>
+            {/* Email + Teléfono en fila */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <input name="email" type="email" placeholder={t('email')} autoComplete="email"
+                  style={{ ...inputStyle, borderColor: errors.email ? '#E85D5D' : '#2A2520' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
+                  onBlur={e => (e.currentTarget.style.borderColor = errors.email ? '#E85D5D' : '#2A2520')} />
+                {errors.email && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.email}</p>}
+              </div>
+              <div>
+                <input name="telefono" type="tel" placeholder={t('phone')} autoComplete="tel"
+                  style={{ ...inputStyle, borderColor: errors.telefono ? '#E85D5D' : '#2A2520' }}
+                  onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
+                  onBlur={e => (e.currentTarget.style.borderColor = errors.telefono ? '#E85D5D' : '#2A2520')} />
+                {errors.telefono && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.telefono}</p>}
+              </div>
+            </div>
+
+            {/* Mensaje */}
+            <div>
+              <textarea name="mensaje" rows={4} placeholder={t('message')}
+                style={{ ...inputStyle, resize: 'vertical', minHeight: '110px', borderColor: errors.mensaje ? '#E85D5D' : '#2A2520' }}
+                onFocus={e => (e.currentTarget.style.borderColor = '#C17A3B')}
+                onBlur={e => (e.currentTarget.style.borderColor = errors.mensaje ? '#E85D5D' : '#2A2520')} />
+              {errors.mensaje && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.mensaje}</p>}
+            </div>
+
+            {/* Consentimiento marketing */}
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer' }}>
+              <div style={{ position: 'relative', flexShrink: 0, marginTop: '1px' }}>
+                <input type="checkbox" checked={marketing} onChange={e => setMarketing(e.target.checked)}
+                  style={{ position: 'absolute', opacity: 0, width: '16px', height: '16px', cursor: 'pointer' }} />
+                <div style={{
+                  width: '16px', height: '16px', borderRadius: '4px', border: `1.5px solid ${marketing ? '#C17A3B' : '#2A2520'}`,
+                  background: marketing ? '#C17A3B' : 'transparent', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {marketing && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+                </div>
+              </div>
+              <span style={{ fontSize: '12px', color: '#9B8B7E', lineHeight: 1.5 }}>
+                {t('marketing')}{' '}
+                <a href="/privacidad" target="_blank" style={{ color: '#C17A3B', textDecoration: 'none' }}>
+                  ({t('privacy_link')})
+                </a>
+              </span>
+            </label>
+
+            {status === 'error' && (
+              <p style={{ fontSize: '13px', color: '#E85D5D', margin: 0 }}>
+                {t('error')} <a href="mailto:contacto@dimoe.cl" style={{ color: '#C17A3B' }}>contacto@dimoe.cl</a>
+              </p>
+            )}
+
+            <button type="submit" disabled={status === 'loading'} style={{
+              background: status === 'loading' ? 'rgba(193,122,59,0.6)' : '#C17A3B',
+              color: '#F2EDE4', border: 'none', borderRadius: '100px', padding: '14px',
+              fontSize: '14px', fontWeight: 600, cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+              fontFamily: 'var(--font-sans)', transition: 'opacity 0.2s',
+            }}>
+              {status === 'loading' ? t('sending') : t('submit')}
+            </button>
+          </>
         )}
-
-        <button type="submit" disabled={status === 'loading'} style={{
-          background: status === 'loading' ? 'rgba(193,122,59,0.6)' : '#C17A3B',
-          color: '#F2EDE4', border: 'none', borderRadius: '100px', padding: '14px',
-          fontSize: '14px', fontWeight: 600, cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-          fontFamily: 'var(--font-sans)', transition: 'opacity 0.2s',
-        }}>
-          {status === 'loading' ? t('sending') : t('submit')}
-        </button>
       </form>
     </div>
   );

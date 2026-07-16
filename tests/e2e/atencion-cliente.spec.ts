@@ -8,30 +8,13 @@ test.describe('Página de Atención al Cliente', () => {
     await page.goto('/atencion-cliente');
   });
 
-  test('muestra el gate de experiencia con las 2 opciones', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: /cómo estuvo tu visita a dimoe/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /fue una experiencia excelente/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /hay algo que quiero contarles/i })).toBeVisible();
-  });
-
-  test('camino feliz: muestra CTA a reseña de Google, sin mostrar el formulario', async ({ page }) => {
-    await page.getByRole('button', { name: /fue una experiencia excelente/i }).click();
-    const reviewLink = page.getByRole('link', { name: /dejar reseña en google/i });
-    await expect(reviewLink).toBeVisible();
-    await expect(reviewLink).toHaveAttribute('target', '_blank');
-    await expect(reviewLink).toHaveAttribute('href', /google|maps/i);
-    await expect(page.getByPlaceholder(/tu nombre/i)).not.toBeVisible();
-  });
-
-  test('camino "hay algo que contarles": despliega el formulario con selector de Tipo', async ({ page }) => {
-    await page.getByRole('button', { name: /hay algo que quiero contarles/i }).click();
+  test('carga directo al formulario, sin ningún gate previo', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /cuéntanos qué pasó/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /^reclamo$/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /^sugerencia$/i })).toBeVisible();
     await expect(page.getByPlaceholder(/tu nombre/i)).toBeVisible();
   });
 
-  test('reclamo: requiere seleccionar un tipo antes de enviar', async ({ page }) => {
-    await page.getByRole('button', { name: /hay algo que quiero contarles/i }).click();
+  test('requiere seleccionar un Tipo antes de enviar', async ({ page }) => {
     await page.getByPlaceholder(/tu nombre/i).fill('Juan Pérez');
     await page.getByPlaceholder(/tu@email\.com/i).fill('juan@test.com');
     await page.getByPlaceholder(/en qué te podemos ayudar/i).fill('La pizza llegó fría.');
@@ -39,9 +22,21 @@ test.describe('Página de Atención al Cliente', () => {
     await expect(page.getByText(/selecciona una opción/i)).toBeVisible();
   });
 
-  test('reclamo: envío exitoso muestra copy de revisión del equipo', async ({ page }) => {
-    await page.getByRole('button', { name: /hay algo que quiero contarles/i }).click();
+  test('Felicitación: abre Google Maps y oculta el resto del formulario', async ({ page, context }) => {
+    const popupPromise = context.waitForEvent('page');
+    await page.getByRole('button', { name: /^felicitación$/i }).click();
+    const popup = await popupPromise;
+    await expect(popup).toHaveURL(/google|maps/i);
+
+    await expect(page.getByPlaceholder(/tu nombre/i)).not.toBeVisible();
+    const reviewLink = page.getByRole('link', { name: /dejar reseña en google/i });
+    await expect(reviewLink).toBeVisible();
+    await expect(reviewLink).toHaveAttribute('target', '_blank');
+  });
+
+  test('Reclamo: muestra el formulario completo y el envío exitoso avisa que el equipo lo revisa', async ({ page }) => {
     await page.getByRole('button', { name: /^reclamo$/i }).click();
+    await expect(page.getByPlaceholder(/tu nombre/i)).toBeVisible();
     await page.getByPlaceholder(/tu nombre/i).fill('Juan Pérez');
     await page.getByPlaceholder(/tu@email\.com/i).fill('juan@test.com');
     await page.getByPlaceholder(/en qué te podemos ayudar/i).fill('La pizza llegó fría.');
