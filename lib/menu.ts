@@ -1,5 +1,5 @@
-const NOTION_API = 'https://api.notion.com/v1'
-const NOTION_VERSION = '2022-06-28'
+import { unstable_cache } from 'next/cache'
+import { get } from '@vercel/blob'
 
 export type MenuTab = 'ENTRADAS' | 'PIZZAS' | 'FONDOS' | 'POSTRES' | 'BAR' | 'VINOS' | 'SEMANAL'
 
@@ -103,36 +103,26 @@ function parseMenuPages(
   return result
 }
 
+const getPublishedMenuPages = unstable_cache(
+  async (): Promise<NotionMenuPage[] | null> => {
+    try {
+      const result = await get('menu-live.json', { access: 'private', useCache: false })
+      if (!result) return null
+      const text = await new Response(result.stream).text()
+      return JSON.parse(text) as NotionMenuPage[]
+    } catch {
+      return null
+    }
+  },
+  ['menu-live-snapshot'],
+  { tags: ['menu'] },
+)
+
 export async function getMenu(
   locale: string,
 ): Promise<Record<MenuTab, MenuGroup[]> | null> {
-  const token = process.env.NOTION_ACCESS_TOKEN
-  const dbId = process.env.NOTION_DB_MENU
-  if (!token || !dbId || token.length < 10) return null
-
   const isEn = locale === 'en'
-
-  try {
-    const res = await fetch(`${NOTION_API}/databases/${dbId}/query`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Notion-Version': NOTION_VERSION,
-      },
-      body: JSON.stringify({
-        filter: { property: 'Activo', checkbox: { equals: true } },
-        sorts: [{ property: 'Orden', direction: 'ascending' }],
-        page_size: 200,
-      }),
-      next: { revalidate: 300, tags: ['menu'] },
-    })
-
-    if (!res.ok) return null
-
-    const data = await res.json() as { results: NotionMenuPage[]; has_more: boolean }
-    return parseMenuPages(data.results, isEn)
-  } catch {
-    return null
-  }
+  const pages = await getPublishedMenuPages()
+  if (!pages) return null
+  return parseMenuPages(pages, isEn)
 }

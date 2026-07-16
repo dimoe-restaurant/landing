@@ -6,8 +6,6 @@ import CartaFooter from '@/components/sections/CartaFooter';
 import { getMenu } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
-export const revalidate = 300;
-
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
