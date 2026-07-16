@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { saveContact } from '@/lib/notion';
+import { saveContact, type ContactTipo, type ContactOrigen } from '@/lib/notion';
+
+const TIPOS_VALIDOS: ContactTipo[] = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'];
+const ORIGENES_VALIDOS: ContactOrigen[] = ['Home', 'Atención Cliente'];
+
+function clientIp(req: NextRequest): string | null {
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.headers.get('x-real-ip');
+}
+
+function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
+  const ua = req.headers.get('user-agent') ?? '';
+  return /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
+}
 
 const DESTINATION = 'contacto@dimoe.cl';
 const FROM = 'DiMOE <contacto@dimoe.cl>';
@@ -127,7 +141,7 @@ function confirmationHtml(nombre: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, email, telefono, mensaje, marketing_consent } = await req.json();
+    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen } = await req.json();
 
     if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
       return NextResponse.json({ error: 'Campos requeridos faltantes' }, { status: 400 });
@@ -136,6 +150,9 @@ export async function POST(req: NextRequest) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email inválido' }, { status: 400 });
     }
+
+    const tipoFinal: ContactTipo = TIPOS_VALIDOS.includes(tipo) ? tipo : 'Consulta';
+    const origenFinal: ContactOrigen = ORIGENES_VALIDOS.includes(origen) ? origen : 'Home';
 
     if (!process.env.RESEND_API_KEY) {
       console.warn('RESEND_API_KEY no configurado — email no enviado');
@@ -158,7 +175,17 @@ export async function POST(req: NextRequest) {
         subject: 'Recibimos tu mensaje — DiMOE',
         html: confirmationHtml(nombre),
       }),
-      saveContact({ nombre, email, telefono: telefono ?? null, mensaje, marketing: !!marketing_consent }),
+      saveContact({
+        nombre,
+        email,
+        telefono: telefono ?? null,
+        mensaje,
+        marketing: !!marketing_consent,
+        tipo: tipoFinal,
+        origen: origenFinal,
+        ip: clientIp(req),
+        dispositivo: deviceFromUserAgent(req),
+      }),
     ]);
 
     if (notif.status === 'rejected' || confirm.status === 'rejected') {
