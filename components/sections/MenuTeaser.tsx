@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
@@ -39,6 +40,7 @@ const HIGHLIGHTS = [
     label: 'Pizzas',
     headline: 'Queen Margherita · Catalina · Veracruz',
     body: 'Masa fermentada 48 horas. Horno de piedra a 450°C. Italianas, biancas y clásicas. La diferencia está en la base.',
+    photo: '/images/menu-pizzas-mechada.jpg',
   },
   {
     key: 'fondos',
@@ -46,6 +48,7 @@ const HIGHLIGHTS = [
     label: 'Fondos',
     headline: 'Risotto · Lasagna · Pappardelle',
     body: 'Especialidades de la casa que la gente vuelve a pedir. Cada plato cocinado al momento, sin atajos.',
+    photo: '/images/menu-fondos-lasagna.jpg',
   },
   {
     key: 'bar',
@@ -53,6 +56,7 @@ const HIGHLIGHTS = [
     label: 'Bar',
     headline: 'Spritz · Sours · Coctelería clásica',
     body: 'Cócteles de autor y clásicos italianos ejecutados con cuidado. El Negroni que merecías. Happy Hour Mar–Vie.',
+    photo: '/images/DSC02288.jpg',
   },
   {
     key: 'postres',
@@ -60,6 +64,7 @@ const HIGHLIGHTS = [
     label: 'Postres',
     headline: 'Tiramisú · Panna Cotta · Pizza Dolce',
     body: 'El Tiramisú Pistacchio es el que se roba la noche. Siempre hay algo dulce para cerrar bien.',
+    photo: '/images/menu-postres-tiramisu-pistacho.jpg',
   },
 ];
 
@@ -96,17 +101,27 @@ export default function MenuTeaser() {
               style={{ height: '100%' }}
             >
               <Link href="/carta" style={{
-                display: 'flex', flexDirection: 'column', textDecoration: 'none',
-                background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px',
+                position: 'relative', display: 'flex', flexDirection: 'column', textDecoration: 'none',
+                background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', overflow: 'hidden',
                 padding: '24px', height: '100%', transition: 'border-color 0.2s',
               }}
                 onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.borderColor = 'rgba(193,122,59,0.4)')}
                 onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.borderColor = '#2A2520')}
               >
-                <div style={{ marginBottom: '16px' }}><h.Icon /></div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{h.label}</h3>
-                <p style={{ fontSize: '12px', fontWeight: 500, color: '#C17A3B', margin: '0 0 10px', lineHeight: 1.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.headline}</p>
-                <p style={{ fontSize: '13px', lineHeight: 1.65, color: '#9B8B7E', margin: 0, flex: 1 }}>{h.body}</p>
+                <Image src={h.photo} alt="" fill aria-hidden
+                  sizes="(max-width: 767px) 100vw, 280px"
+                  style={{ objectFit: 'cover', filter: 'grayscale(1)', zIndex: 0 }}
+                />
+                <div aria-hidden style={{
+                  position: 'absolute', inset: 0, zIndex: 1,
+                  background: 'linear-gradient(180deg, rgba(13,11,9,0.35) 0%, rgba(13,11,9,0.88) 65%, #0D0B09 100%)',
+                }} />
+                <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <div style={{ marginBottom: '16px' }}><h.Icon /></div>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{h.label}</h3>
+                  <p style={{ fontSize: '12px', fontWeight: 500, color: '#C17A3B', margin: '0 0 10px', lineHeight: 1.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.headline}</p>
+                  <p style={{ fontSize: '13px', lineHeight: 1.65, color: '#9B8B7E', margin: 0, flex: 1 }}>{h.body}</p>
+                </div>
               </Link>
             </motion.div>
           ))}
