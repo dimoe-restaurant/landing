@@ -110,6 +110,21 @@
     "success_title_case": "We received your message",
     "success_body_case": "Our customer care team reviews it personally and will get back to you within 24-48 hours."
   },
+  "atencionCliente": {
+    "label": "Customer care",
+    "headline": "How was your visit to DiMOE?",
+    "subheadline": "Your experience matters to us — tell us how it went.",
+    "happy_option": "It was an excellent experience",
+    "happy_option_hint": "Leave us a review on Google",
+    "other_option": "There's something I'd like to share",
+    "other_option_hint": "Questions, suggestions, compliments or complaints",
+    "happy_title": "That's wonderful! 🎉",
+    "happy_body": "We'd love for you to share your experience with others — it helps us a lot.",
+    "happy_cta": "Leave a review on Google",
+    "form_intro_title": "Tell us what happened",
+    "form_intro_body": "Our customer care team reviews every message personally. Thank you for giving us the chance to improve.",
+    "back": "← Back"
+  },
   "footer": {
     "tagline": "Neapolitan Pizzeria & Restobar",
     "location": "Paine, Chile",
