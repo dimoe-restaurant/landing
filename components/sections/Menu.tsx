@@ -52,7 +52,22 @@ const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>
 // Subtabs de navegación dentro de un tab activo — mapea group.name → bucket.
 // Grupos sin entrada caen en "Otros" (no desaparecen silenciosamente).
 // Poblado por tarea: BAR (#107), VINOS (#108). Vacío = sin subtabs, comportamiento actual.
-const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {};
+const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
+  BAR: {
+    'Happy Hour': 'Happy Hour',
+    'Gin Frutal': 'Cócteles',
+    'Coctelería de la Casa': 'Cócteles',
+    'Spritz': 'Cócteles',
+    'Sours': 'Cócteles',
+    'Coctelería Clásica': 'Cócteles',
+    'Cervezas Artesanales — La Casona': 'Cerveza',
+    'Vinos y Espumantes': 'Vino y Espumante',
+    'Sin Alcohol': 'Sin Alcohol',
+    'Jugos y Bebidas': 'Sin Alcohol',
+    'Tragos': 'Destilados',
+    'Shots': 'Destilados',
+  },
+};
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
   ENTRADAS: 'ANTIPASTI',
@@ -82,13 +97,16 @@ export default function Menu({ menu }: Props) {
   const tabsRef = useRef<HTMLDivElement>(null);
   const bg = active ? TAB_BG[active] : '#0D0B09';
 
-  // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual)
+  // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual).
+  // Los buckets se derivan de los grupos realmente presentes (no del mapeo completo),
+  // para no ofrecer un subtab que lleve a una sección vacía si el contenido real (Notion)
+  // todavía no tiene grupos para ese bucket.
   const subtabConfig = active ? TAB_SUBTABS[active] : undefined;
-  const hasUnmappedGroup = subtabConfig
-    ? groups.some(g => !((g.name ?? '') in subtabConfig))
-    : false;
+  const presentBuckets = subtabConfig
+    ? groups.map(g => subtabConfig[g.name ?? ''] ?? 'Otros')
+    : [];
   const subtabLabels = subtabConfig
-    ? ['Todos', ...Array.from(new Set(Object.values(subtabConfig))), ...(hasUnmappedGroup ? ['Otros'] : [])]
+    ? ['Todos', ...Array.from(new Set(presentBuckets))]
     : [];
   const groupsInSubtabs = subtabConfig
     ? groups.filter(g => activeSubtab === 'Todos' || (subtabConfig[g.name ?? ''] ?? 'Otros') === activeSubtab)
