@@ -134,26 +134,29 @@ export default function Menu({ menu }: Props) {
       </div>
 
       {/* ── Banner horizontal de foto ────────────────────────────────────────
-          Todas las fotos están en el DOM (preload). Solo la activa es visible.
-          El usuario puede cambiar height desde aquí.
+          Solo la foto del tab activo se monta — evita descargar las 7 fotos
+          a la vez en la carga inicial. El crossfade lo da AnimatePresence.
       ──────────────────────────────────────────────────────────────────────── */}
       <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
-        {TABS.map(tab => (
-          <Image
-            key={tab}
-            src={TAB_PHOTO[tab]}
-            alt={TAB_DISPLAY[tab]}
-            fill
-            sizes="100vw"
-            priority={tab === 'ENTRADAS'}
-            style={{
-              objectFit: 'cover',
-              objectPosition: TAB_PHOTO_POS[tab],
-              opacity: active === tab ? 1 : 0,
-              transition: 'opacity 0.4s ease',
-            }}
-          />
-        ))}
+        <AnimatePresence>
+          <motion.div
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ position: 'absolute', inset: 0 }}
+          >
+            <Image
+              src={TAB_PHOTO[active]}
+              alt={TAB_DISPLAY[active]}
+              fill
+              sizes="100vw"
+              priority={active === 'ENTRADAS'}
+              style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[active] }}
+            />
+          </motion.div>
+        </AnimatePresence>
         {/* Gradiente inferior para integrar con el contenido */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
