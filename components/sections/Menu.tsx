@@ -29,7 +29,7 @@ const TAB_PHOTO: Record<MenuTab, string> = {
   FONDOS:   '/images/menu-fondos-lasagna.jpg',            // Auténtica Lasagna
   POSTRES:  '/images/menu-postres-tiramisu-pistacho.jpg', // Tiramisù Pistacchio
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
-  VINOS:    '/images/DSC02309.jpg',   // ⚠ REVISAR: es una foto de lasagna, no de vinos. Se revisaron 5 candidatas (DSC02223/02385/02439/02458 + esta) y ninguna sirve — falta subir una foto real de vinos/copas a /public/images y actualizar este path.
+  VINOS:    '/images/DSC02288.jpg',   // reutiliza la foto de BAR — sin foto real de vinos/copas disponible aún (mejor que la lasagna anterior)
   SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
@@ -39,7 +39,7 @@ const TAB_PHOTO_POS: Record<MenuTab, string> = {
   FONDOS:   'center 45%',
   POSTRES:  'center 60%',
   BAR:      'center 55%',
-  VINOS:    'center 50%',
+  VINOS:    'center 55%',
   SEMANAL:  'center 55%',
 };
 
