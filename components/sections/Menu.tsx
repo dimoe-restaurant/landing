@@ -84,7 +84,7 @@ export default function Menu({ menu }: Props) {
 
   const handleHome = () => {
     setActive(null);
-    window.history.replaceState(null, '', window.location.pathname);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
   };
 
   return (
@@ -163,7 +163,9 @@ export default function Menu({ menu }: Props) {
                 border: '1px solid rgba(242,237,228,0.10)', cursor: 'pointer', padding: 0,
               }}
             >
-              <Image src={TAB_PHOTO[tab]} alt={TAB_DISPLAY[tab]} fill sizes="(max-width: 767px) 50vw, 240px"
+              <Image src={TAB_PHOTO[tab]} alt={TAB_DISPLAY[tab]} fill
+                sizes="(max-width: 485px) 100vw, (max-width: 767px) 50vw, 240px"
+                priority={i < 2}
                 style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[tab] }} />
               <div style={{
                 position: 'absolute', inset: 0,

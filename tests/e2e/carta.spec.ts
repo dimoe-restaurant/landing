@@ -23,4 +23,12 @@ test.describe('Carta digital (/carta)', () => {
     await expect(page.getByRole('link', { name: /reservar por whatsapp/i })).toHaveCount(0);
     await expect(page.locator('a[href^="mailto:contacto@dimoe.cl"]')).toBeVisible();
   });
+
+  test('deep-link con hash entra directo a la sección, y volver al home preserva la query string', async ({ page }) => {
+    await page.goto('/carta?utm_source=qr#pizzas');
+    await expect(page.getByText(/precios en pesos chilenos/i)).toBeVisible();
+
+    await page.getByRole('button', { name: /inicio de la carta/i }).click();
+    await expect(page).toHaveURL(/\/carta\?utm_source=qr$/);
+  });
 });

@@ -20,6 +20,11 @@ export default function CartaFooter() {
           <IconWhatsApp size={14} /> +56 9 7369 4101
         </a>
       </div>
+      <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <a href="/privacidad" style={{ fontSize: '11px', color: 'rgba(155,139,126,0.5)', textDecoration: 'none' }}>
+          Privacidad
+        </a>
+      </div>
     </footer>
   );
 }
