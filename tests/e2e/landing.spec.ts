@@ -49,4 +49,15 @@ test.describe('Secciones principales', () => {
     const maps = page.getByRole('link', { name: /Google Maps/i }).first();
     await expect(maps).toHaveAttribute('href', /google\.com\/maps|maps\.app\.goo\.gl/);
   });
+
+  test('tarjetas de "Para todos los gustos" muestran foto de fondo sin ocultar el texto', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#menu').scrollIntoViewIfNeeded();
+    for (const label of ['Pizzas', 'Fondos', 'Bar', 'Postres']) {
+      const heading = page.getByRole('heading', { name: label, exact: true });
+      await expect(heading).toBeVisible();
+      const card = page.locator('#menu a[href="/carta"]').filter({ has: heading });
+      await expect(card.locator('img')).toBeVisible();
+    }
+  });
 });
