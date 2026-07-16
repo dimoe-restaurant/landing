@@ -90,8 +90,9 @@ export default function Menu({ menu }: Props) {
   return (
     <section
       id="menu"
+      className="menu-texture"
       style={{
-        background: bg,
+        backgroundColor: bg,
         transition: 'background-color 0.45s ease',
         paddingBottom: 'clamp(48px, 7vw, 80px)',
       }}
