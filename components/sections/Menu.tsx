@@ -26,7 +26,7 @@ const TAB_PHOTO: Record<MenuTab, string> = {
   FONDOS:   '/images/menu-fondos-lasagna.jpg',            // Auténtica Lasagna
   POSTRES:  '/images/menu-postres-tiramisu-pistacho.jpg', // Tiramisù Pistacchio
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
-  VINOS:    '/images/DSC02309.jpg',   // lasagna en greda, maridaje con tinto
+  VINOS:    '/images/DSC02309.jpg',   // ⚠ REVISAR: es una foto de lasagna, no de vinos. Se revisaron 5 candidatas (DSC02223/02385/02439/02458 + esta) y ninguna sirve — falta subir una foto real de vinos/copas a /public/images y actualizar este path.
   SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
@@ -182,10 +182,11 @@ export default function Menu({ menu }: Props) {
               initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-20px' }} transition={{ duration: 0.4, delay: i * 0.05 }}
               style={{
                 position: 'relative', height: '130px', borderRadius: '14px', overflow: 'hidden',
-                border: '1px solid rgba(242,237,228,0.10)', cursor: 'pointer', padding: 0,
+                border: '1px solid rgba(193,122,59,0.3)', cursor: 'pointer', padding: 0,
               }}
             >
               <Image src={TAB_PHOTO[tab]} alt={TAB_DISPLAY[tab]} fill
+                data-photo={`home-${tab.toLowerCase()}`}
                 sizes="(max-width: 485px) 100vw, (max-width: 767px) 50vw, 240px"
                 priority={i < 2}
                 style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[tab] }} />
@@ -223,8 +224,10 @@ export default function Menu({ menu }: Props) {
             <Image
               src={TAB_PHOTO[active]}
               alt={TAB_DISPLAY[active]}
+              data-photo={`banner-${active.toLowerCase()}`}
               fill
               sizes="100vw"
+              quality={90}
               priority
               style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[active] }}
             />
@@ -405,11 +408,13 @@ export default function Menu({ menu }: Props) {
 
                 {/* Foto real full-bleed — rompe la lista a mitad de sección, ritmo editorial del PDF */}
                 {gi === sepIndex && sepPhoto && (
-                  <div style={{
+                  <div className="menu-separator" style={{
                     position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)',
-                    height: '220px', overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                    overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                    borderTop: '1px solid rgba(193,122,59,0.25)', borderBottom: '1px solid rgba(193,122,59,0.25)',
                   }}>
-                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw"
+                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw" quality={90}
+                      data-photo={`separator-${active.toLowerCase()}`}
                       style={{ objectFit: 'cover', objectPosition: sepPhoto.pos }} />
                     <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${bg}00 0%, ${bg}55 100%)` }} />
                   </div>

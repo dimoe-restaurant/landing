@@ -73,6 +73,12 @@ body {
   background-attachment: fixed;
 }
 
+/* Separador de foto full-bleed dentro del contenido de /carta — más bajo en mobile */
+.menu-separator { height: 220px; }
+@media (max-width: 767px) {
+  .menu-separator { height: 140px; }
+}
+
 /* Scrollbar sutil */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0D0B09; }
