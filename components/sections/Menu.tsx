@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -40,6 +40,14 @@ const TAB_PHOTO_POS: Record<MenuTab, string> = {
   SEMANAL:  'center 55%',
 };
 
+// Foto real full-bleed que rompe la lista a mitad de sección — solo en tabs con suficiente contenido
+const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>> = {
+  ENTRADAS: { src: '/images/menu-entradas-jardin-oliva.jpg', pos: 'center 50%' },
+  PIZZAS:   { src: '/images/menu-pizzas-catalina.jpg', pos: 'center 40%' },
+  FONDOS:   { src: '/images/menu-fondos-pappardelle-camaron.jpg', pos: 'center 50%' },
+  POSTRES:  { src: '/images/menu-postres-tiramisu-pistacho.jpg', pos: 'center 55%' },
+};
+
 const TAB_DISPLAY: Record<MenuTab, string> = {
   ENTRADAS: 'ANTIPASTI',
   PIZZAS:   'PIZZAS',
@@ -65,6 +73,18 @@ export default function Menu({ menu }: Props) {
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
   const bg = active ? TAB_BG[active] : '#0D0B09';
+
+  // Punto de corte para el separador de foto: después del grupo donde se acumulan
+  // ≥6 items, sin insertar justo antes del cierre de la sección.
+  const sepPhoto = active ? TAB_SEPARATOR_PHOTO[active] : undefined;
+  let sepIndex = -1;
+  if (sepPhoto) {
+    let count = 0;
+    for (let i = 0; i < groups.length - 1; i++) {
+      count += groups[i].items.length;
+      if (count >= 6) { sepIndex = i; break; }
+    }
+  }
 
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
@@ -253,7 +273,8 @@ export default function Menu({ menu }: Props) {
               const isCompact = isBarTab || (noDesc && group.items.length > 2);
 
               return (
-                <div key={gi} style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
+                <Fragment key={gi}>
+                <div style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
 
                   {/* Menú Semanal — banner carmesí */}
                   {isSemanaleChef && (
@@ -380,6 +401,19 @@ export default function Menu({ menu }: Props) {
                   </div>
 
                 </div>
+
+                {/* Foto real full-bleed — rompe la lista a mitad de sección, ritmo editorial del PDF */}
+                {gi === sepIndex && sepPhoto && (
+                  <div style={{
+                    position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)',
+                    height: '220px', overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                  }}>
+                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw"
+                      style={{ objectFit: 'cover', objectPosition: sepPhoto.pos }} />
+                    <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${bg}00 0%, ${bg}55 100%)` }} />
+                  </div>
+                )}
+                </Fragment>
               );
             })}
           </motion.div>
