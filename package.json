@@ -16,6 +16,7 @@
     "test:e2e": "playwright test --reporter=line"
   },
   "dependencies": {
+    "@vercel/blob": "^2.6.1",
     "framer-motion": "^12",
     "next": "16.2.10",
     "next-intl": "^4.13.1",

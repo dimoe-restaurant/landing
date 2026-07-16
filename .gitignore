@@ -24,3 +24,6 @@ test-results/
 .vercel
 .env*
 tsconfig.tsbuildinfo
+
+# Backups locales de Notion (scripts/backup-menu.mjs) — no commitear al repo
+backups/
