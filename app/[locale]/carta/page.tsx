@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Menu from '@/components/sections/Menu';
 import CartaFooter from '@/components/sections/CartaFooter';
-import { getMenu } from '@/lib/menu';
+import { getMenu, getMenuPreview } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -20,7 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function CartaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const notionData = await getMenu(locale);
+  const { isEnabled: isPreview } = await draftMode();
+  const notionData = isPreview ? await getMenuPreview(locale) : await getMenu(locale);
   const menuData = notionData
     ? { ...notionData, VINOS: FALLBACK_MENU.VINOS, SEMANAL: FALLBACK_MENU.SEMANAL }
     : FALLBACK_MENU;

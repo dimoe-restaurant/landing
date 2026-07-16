@@ -1,6 +1,9 @@
 import { unstable_cache } from 'next/cache'
 import { get } from '@vercel/blob'
 
+const NOTION_API = 'https://api.notion.com/v1'
+const NOTION_VERSION = '2022-06-28'
+
 export type MenuTab = 'ENTRADAS' | 'PIZZAS' | 'FONDOS' | 'POSTRES' | 'BAR' | 'VINOS' | 'SEMANAL'
 
 export type MenuItem = {
@@ -125,4 +128,43 @@ export async function getMenu(
   const pages = await getPublishedMenuPages()
   if (!pages) return null
   return parseMenuPages(pages, isEn)
+}
+
+/**
+ * Igual que getMenu, pero pega directo a Notion sin pasar por el Blob publicado
+ * ni el cache de Next — para el modo preview (Draft Mode), donde se quiere ver
+ * el estado actual de Notion aunque todavía no se haya publicado.
+ */
+export async function getMenuPreview(
+  locale: string,
+): Promise<Record<MenuTab, MenuGroup[]> | null> {
+  const token = process.env.NOTION_ACCESS_TOKEN
+  const dbId = process.env.NOTION_DB_MENU
+  if (!token || !dbId || token.length < 10) return null
+
+  const isEn = locale === 'en'
+
+  try {
+    const res = await fetch(`${NOTION_API}/databases/${dbId}/query`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Notion-Version': NOTION_VERSION,
+      },
+      body: JSON.stringify({
+        filter: { property: 'Activo', checkbox: { equals: true } },
+        sorts: [{ property: 'Orden', direction: 'ascending' }],
+        page_size: 200,
+      }),
+      cache: 'no-store',
+    })
+
+    if (!res.ok) return null
+
+    const data = await res.json() as { results: NotionMenuPage[]; has_more: boolean }
+    return parseMenuPages(data.results, isEn)
+  } catch {
+    return null
+  }
 }
