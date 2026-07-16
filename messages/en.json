@@ -101,7 +101,14 @@
     "phone_hint": "e.g. +56 9 1234 5678",
     "marketing": "I agree to receive marketing communications and promotions from DiMOE",
     "privacy_link": "Privacy policy",
-    "err_phone": "Invalid format. e.g. +56912345678"
+    "err_phone": "Invalid format. e.g. +56912345678",
+    "err_tipo": "Select an option",
+    "tipo_consulta": "Question",
+    "tipo_sugerencia": "Suggestion",
+    "tipo_reclamo": "Complaint",
+    "tipo_felicitacion": "Compliment",
+    "success_title_case": "We received your message",
+    "success_body_case": "Our customer care team reviews it personally and will get back to you within 24-48 hours."
   },
   "footer": {
     "tagline": "Neapolitan Pizzeria & Restobar",

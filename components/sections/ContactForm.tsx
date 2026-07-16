@@ -6,15 +6,24 @@ import { trackEvent } from '@/lib/analytics';
 import { trackPixelEvent } from '@/lib/meta-pixel';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
+const TIPOS = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'] as const;
+type Tipo = typeof TIPOS[number];
 
-export default function ContactForm() {
+type ContactFormProps = {
+  origen?: 'Home' | 'Atención Cliente';
+  showTipoSelector?: boolean;
+};
+
+export default function ContactForm({ origen = 'Home', showTipoSelector = false }: ContactFormProps) {
   const t = useTranslations('form');
   const [status, setStatus] = useState<Status>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [marketing, setMarketing] = useState(false);
+  const [tipo, setTipo] = useState<Tipo | ''>('');
 
   function validate(data: FormData) {
     const errs: Record<string, string> = {};
+    if (showTipoSelector && !tipo) errs.tipo = t('err_tipo');
     if (!String(data.get('nombre')).trim()) errs.nombre = t('err_name');
     const email = String(data.get('email')).trim();
     if (!email) errs.email = t('err_email_req');
@@ -42,6 +51,8 @@ export default function ContactForm() {
           telefono: String(data.get('telefono')).trim() || null,
           mensaje: data.get('mensaje'),
           marketing_consent: marketing,
+          tipo: showTipoSelector ? tipo : undefined,
+          origen,
         }),
       });
       if (res.ok) { setStatus('success'); trackEvent('form_submit_success'); trackPixelEvent('Lead'); }
@@ -61,8 +72,8 @@ export default function ContactForm() {
         <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(193,122,59,0.15)', border: '1px solid rgba(193,122,59,0.4)', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <p style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 8px' }}>{t('success_title')}</p>
-        <p style={{ fontSize: '14px', color: '#9B8B7E', margin: 0 }}>{t('success_body')}</p>
+        <p style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 8px' }}>{showTipoSelector ? t('success_title_case') : t('success_title')}</p>
+        <p style={{ fontSize: '14px', color: '#9B8B7E', margin: 0 }}>{showTipoSelector ? t('success_body_case') : t('success_body')}</p>
       </div>
     );
   }
@@ -73,6 +84,28 @@ export default function ContactForm() {
       <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 24px' }}>{t('subtitle')}</p>
 
       <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {/* Tipo de caso */}
+        {showTipoSelector && (
+          <div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(130px, 100%), 1fr))', gap: '8px' }}>
+              {TIPOS.map(opt => (
+                <button key={opt} type="button" onClick={() => setTipo(opt)}
+                  style={{
+                    background: tipo === opt ? '#C17A3B' : '#0D0B09',
+                    color: tipo === opt ? '#F2EDE4' : '#9B8B7E',
+                    border: `1px solid ${tipo === opt ? '#C17A3B' : '#2A2520'}`,
+                    borderRadius: '10px', padding: '11px 8px', fontSize: '13px', fontWeight: 600,
+                    fontFamily: 'var(--font-sans)', cursor: 'pointer', transition: 'all 0.15s',
+                  }}
+                >
+                  {t(`tipo_${opt === 'Felicitación' ? 'felicitacion' : opt.toLowerCase()}`)}
+                </button>
+              ))}
+            </div>
+            {errors.tipo && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.tipo}</p>}
+          </div>
+        )}
+
         {/* Nombre */}
         <div>
           <input name="nombre" type="text" placeholder={t('name')} autoComplete="name"
