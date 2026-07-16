@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
+import MenuSubtabs from './MenuSubtabs';
+import ScrollFadeEdges from './ScrollFadeEdges';
+import { useScrollFade } from './use-scroll-fade';
 
 const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
 
@@ -26,7 +29,7 @@ const TAB_PHOTO: Record<MenuTab, string> = {
   FONDOS:   '/images/menu-fondos-lasagna.jpg',            // Auténtica Lasagna
   POSTRES:  '/images/menu-postres-tiramisu-pistacho.jpg', // Tiramisù Pistacchio
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
-  VINOS:    '/images/DSC02309.jpg',   // ⚠ REVISAR: es una foto de lasagna, no de vinos. Se revisaron 5 candidatas (DSC02223/02385/02439/02458 + esta) y ninguna sirve — falta subir una foto real de vinos/copas a /public/images y actualizar este path.
+  VINOS:    '/images/DSC02288.jpg',   // reutiliza la foto de BAR — sin foto real de vinos/copas disponible aún (mejor que la lasagna anterior)
   SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
@@ -36,7 +39,7 @@ const TAB_PHOTO_POS: Record<MenuTab, string> = {
   FONDOS:   'center 45%',
   POSTRES:  'center 60%',
   BAR:      'center 55%',
-  VINOS:    'center 50%',
+  VINOS:    'center 55%',
   SEMANAL:  'center 55%',
 };
 
@@ -46,6 +49,35 @@ const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>
   PIZZAS:   { src: '/images/menu-pizzas-catalina.jpg', pos: 'center 40%' },
   FONDOS:   { src: '/images/menu-fondos-pappardelle-camaron.jpg', pos: 'center 50%' },
   POSTRES:  { src: '/images/menu-postres-tiramisu-pistacho.jpg', pos: 'center 55%' },
+};
+
+// Subtabs de navegación dentro de un tab activo — mapea group.name → bucket.
+// Grupos sin entrada caen en "Otros" (no desaparecen silenciosamente).
+// Poblado por tarea: BAR (#107), VINOS (#108). Vacío = sin subtabs, comportamiento actual.
+const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
+  BAR: {
+    'Happy Hour': 'Happy Hour',
+    'Gin Frutal': 'Cócteles',
+    'Coctelería de la Casa': 'Cócteles',
+    'Spritz': 'Cócteles',
+    'Sours': 'Cócteles',
+    'Coctelería Clásica': 'Cócteles',
+    'Cervezas Artesanales — La Casona': 'Cerveza',
+    'Vinos y Espumantes': 'Vino y Espumante',
+    'Sin Alcohol': 'Sin Alcohol',
+    'Jugos y Bebidas': 'Sin Alcohol',
+    'Tragos': 'Destilados',
+    'Shots': 'Destilados',
+  },
+  VINOS: {
+    'Sauvignon Blanc': 'Blancos',
+    'Chardonnay': 'Blancos',
+    'Carménère': 'Tintos',
+    'Cabernet Sauvignon': 'Tintos',
+    'Merlot': 'Tintos',
+    'Ensamblajes': 'Ensamblajes y Dulce',
+    'Dulce': 'Ensamblajes y Dulce',
+  },
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
@@ -70,10 +102,27 @@ export default function Menu({ menu }: Props) {
   const t = useTranslations('menu');
   const locale = useLocale();
   const [active, setActive] = useState<MenuTab | null>(null);
+  const [activeSubtab, setActiveSubtab] = useState('Todos');
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
+  const tabsFade = useScrollFade(tabsRef);
   const bg = active ? TAB_BG[active] : '#0D0B09';
+
+  // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual).
+  // Los buckets se derivan de los grupos realmente presentes (no del mapeo completo),
+  // para no ofrecer un subtab que lleve a una sección vacía si el contenido real (Notion)
+  // todavía no tiene grupos para ese bucket.
+  const subtabConfig = active ? TAB_SUBTABS[active] : undefined;
+  const presentBuckets = subtabConfig
+    ? groups.map(g => subtabConfig[g.name ?? ''] ?? 'Otros')
+    : [];
+  const subtabLabels = subtabConfig
+    ? ['Todos', ...Array.from(new Set(presentBuckets))]
+    : [];
+  const groupsInSubtabs = subtabConfig
+    ? groups.filter(g => activeSubtab === 'Todos' || (subtabConfig[g.name ?? ''] ?? 'Otros') === activeSubtab)
+    : groups;
 
   // Punto de corte para el separador de foto: después del grupo donde se acumulan
   // ≥6 items, sin insertar justo antes del cierre de la sección.
@@ -81,8 +130,8 @@ export default function Menu({ menu }: Props) {
   let sepIndex = -1;
   if (sepPhoto) {
     let count = 0;
-    for (let i = 0; i < groups.length - 1; i++) {
-      count += groups[i].items.length;
+    for (let i = 0; i < groupsInSubtabs.length - 1; i++) {
+      count += groupsInSubtabs[i].items.length;
       if (count >= 6) { sepIndex = i; break; }
     }
   }
@@ -91,6 +140,10 @@ export default function Menu({ menu }: Props) {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
   }, []);
+
+  useEffect(() => {
+    setActiveSubtab('Todos');
+  }, [active]);
 
   useEffect(() => {
     if (!active) return;
@@ -129,13 +182,14 @@ export default function Menu({ menu }: Props) {
       )}
 
       {/* Sticky tabs */}
-      <div ref={tabsRef} className="menu-tabs" style={{
+      <div ref={tabsRef} className="menu-tabs" onScroll={tabsFade.onScroll} style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: bg, transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',
         paddingLeft: '16px', paddingRight: '16px',
       }}>
+        <ScrollFadeEdges bg={bg} showLeft={tabsFade.showLeft} showRight={tabsFade.showRight} />
         {/* Home — vuelve al selector de secciones de la carta, no al sitio */}
         <button onClick={handleHome} aria-label="Inicio de la carta" style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -263,12 +317,14 @@ export default function Menu({ menu }: Props) {
           )}
         </div>
 
+        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} bg={bg} />
+
         <AnimatePresence mode="wait">
-          <motion.div key={active}
+          <motion.div key={`${active}-${activeSubtab}`}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.28 }}
           >
-            {groups.map((group, gi) => {
+            {groupsInSubtabs.map((group, gi) => {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
@@ -278,7 +334,7 @@ export default function Menu({ menu }: Props) {
 
               return (
                 <Fragment key={gi}>
-                <div style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
+                <div style={{ marginBottom: gi < groupsInSubtabs.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
 
                   {/* Menú Semanal — banner carmesí */}
                   {isSemanaleChef && (

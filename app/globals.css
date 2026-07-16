@@ -52,14 +52,14 @@ body {
 
 /* Tabs de /carta: fila con scroll horizontal en mobile en vez de wrap */
 @media (max-width: 767px) {
-  .menu-tabs {
+  .menu-tabs, .menu-subtabs {
     flex-wrap: nowrap !important;
     justify-content: flex-start !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
-  .menu-tabs::-webkit-scrollbar { display: none; }
+  .menu-tabs::-webkit-scrollbar, .menu-subtabs::-webkit-scrollbar { display: none; }
 }
 
 /* Textura de piedra/mármol CSS-only para el fondo de /carta — sin imágenes, solo gradientes */
