@@ -27,8 +27,16 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
     ? { ...notionData, VINOS: FALLBACK_MENU.VINOS, SEMANAL: FALLBACK_MENU.SEMANAL }
     : FALLBACK_MENU;
 
+  const publishedData = isPreview ? await getMenu(locale) : null;
+  const hasUnpublishedChanges = isPreview && JSON.stringify(notionData) !== JSON.stringify(publishedData);
+
   return (
     <main style={{ background: '#0D0B09' }}>
+      {hasUnpublishedChanges && (
+        <div style={{ background: '#B45309', color: '#FFF7ED', textAlign: 'center', padding: '10px 16px', fontSize: '14px', fontWeight: 600 }}>
+          ⚠️ {isEn ? 'There are unpublished changes' : 'Hay cambios sin publicar'}
+        </div>
+      )}
       {/* Back link */}
       <div style={{ maxWidth: '860px', margin: '0 auto', padding: '24px clamp(16px, 4vw, 24px) 0' }}>
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
