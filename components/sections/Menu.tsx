@@ -228,6 +228,14 @@ export default function Menu({ menu }: Props) {
             {TAB_DISPLAY[active]}
           </h2>
           <div style={{ width: '48px', height: '2px', background: 'rgba(193,122,59,0.4)', margin: '0 auto' }} />
+          {active === 'PIZZAS' && (
+            <p style={{
+              fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'rgba(193,122,59,0.75)', marginTop: '14px', marginBottom: 0,
+            }}>
+              2° Lugar The Top Pizza Chile — Región Metropolitana
+            </p>
+          )}
         </div>
 
         <AnimatePresence mode="wait">
