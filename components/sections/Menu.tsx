@@ -60,10 +60,11 @@ type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
 export default function Menu({ menu }: Props) {
   const t = useTranslations('menu');
-  const [active, setActive] = useState<MenuTab>('ENTRADAS');
+  const [active, setActive] = useState<MenuTab | null>(null);
   const resolvedMenu = menu ?? FALLBACK_MENU;
-  const groups = resolvedMenu[active];
+  const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
+  const bg = active ? TAB_BG[active] : '#0D0B09';
 
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
@@ -71,6 +72,7 @@ export default function Menu({ menu }: Props) {
   }, []);
 
   useEffect(() => {
+    if (!active) return;
     const el = tabsRef.current?.querySelector<HTMLButtonElement>(`[data-tab="${active}"]`);
     el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }, [active]);
@@ -80,47 +82,55 @@ export default function Menu({ menu }: Props) {
     window.history.replaceState(null, '', `#${tab.toLowerCase()}`);
   };
 
+  const handleHome = () => {
+    setActive(null);
+    window.history.replaceState(null, '', window.location.pathname);
+  };
+
   return (
     <section
       id="menu"
       style={{
-        background: TAB_BG[active],
+        background: bg,
         transition: 'background-color 0.45s ease',
         paddingBottom: 'clamp(48px, 7vw, 80px)',
       }}
     >
-      {/* Label + headline */}
-      <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 32px' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
-        </motion.div>
-      </div>
+      {/* Label + headline — solo en la vista home de la carta */}
+      {!active && (
+        <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 40px' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
+          </motion.div>
+        </div>
+      )}
 
       {/* Sticky tabs */}
       <div ref={tabsRef} className="menu-tabs" style={{
         position: 'sticky', top: 0, zIndex: 10,
-        background: TAB_BG[active], transition: 'background-color 0.45s ease',
+        background: bg, transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',
         paddingLeft: '16px', paddingRight: '16px',
       }}>
-        {/* Home icon */}
-        <a href="/" aria-label="Ir al inicio" style={{
+        {/* Home — vuelve al selector de secciones de la carta, no al sitio */}
+        <button onClick={handleHome} aria-label="Inicio de la carta" style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           width: '34px', height: '34px', borderRadius: '100px', flexShrink: 0,
-          border: '1px solid rgba(242,237,228,0.15)',
-          color: 'rgba(242,237,228,0.45)', textDecoration: 'none',
-          transition: 'all 0.2s', marginRight: '4px',
+          border: `1px solid ${!active ? '#C17A3B' : 'rgba(242,237,228,0.15)'}`,
+          background: !active ? '#C17A3B' : 'transparent',
+          color: !active ? '#F2EDE4' : 'rgba(242,237,228,0.45)',
+          cursor: 'pointer', transition: 'all 0.2s', marginRight: '4px',
         }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = '#C17A3B'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.45)'; }}
+          onMouseEnter={e => { if (active) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = '#C17A3B'; } }}
+          onMouseLeave={e => { if (active) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.45)'; } }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-        </a>
+        </button>
         {TABS.map(tab => (
           <button key={tab} data-tab={tab} onClick={() => handleTab(tab)}
             style={{
@@ -139,6 +149,39 @@ export default function Menu({ menu }: Props) {
         ))}
       </div>
 
+      {/* ── Home de la carta: selector de secciones, sin productos ──────────── */}
+      {!active && (
+        <div style={{
+          maxWidth: '760px', margin: '0 auto', padding: '8px clamp(16px, 4vw, 24px) 8px',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '14px',
+        }}>
+          {TABS.map((tab, i) => (
+            <motion.button key={tab} onClick={() => handleTab(tab)}
+              initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-20px' }} transition={{ duration: 0.4, delay: i * 0.05 }}
+              style={{
+                position: 'relative', height: '130px', borderRadius: '14px', overflow: 'hidden',
+                border: '1px solid rgba(242,237,228,0.10)', cursor: 'pointer', padding: 0,
+              }}
+            >
+              <Image src={TAB_PHOTO[tab]} alt={TAB_DISPLAY[tab]} fill sizes="(max-width: 767px) 50vw, 240px"
+                style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[tab] }} />
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: `linear-gradient(180deg, ${TAB_BG[tab]}33 0%, ${TAB_BG[tab]}CC 100%)`,
+              }} />
+              <span style={{
+                position: 'absolute', bottom: '12px', left: '14px', right: '14px', textAlign: 'left',
+                fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4',
+                letterSpacing: '0.02em',
+              }}>
+                {TAB_DISPLAY[tab]}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      )}
+
+      {active && (<>
       {/* ── Banner horizontal de foto ────────────────────────────────────────
           Solo la foto del tab activo se monta — evita descargar las 7 fotos
           a la vez en la carga inicial. El crossfade lo da AnimatePresence.
@@ -158,7 +201,7 @@ export default function Menu({ menu }: Props) {
               alt={TAB_DISPLAY[active]}
               fill
               sizes="100vw"
-              priority={active === 'ENTRADAS'}
+              priority
               style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[active] }}
             />
           </motion.div>
@@ -166,7 +209,7 @@ export default function Menu({ menu }: Props) {
         {/* Gradiente inferior para integrar con el contenido */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
-          background: `linear-gradient(to bottom, transparent, ${TAB_BG[active]})`,
+          background: `linear-gradient(to bottom, transparent, ${bg})`,
           transition: 'background 0.45s ease',
           pointerEvents: 'none',
         }} />
@@ -339,6 +382,7 @@ export default function Menu({ menu }: Props) {
           </a>
         </motion.div>
       </div>
+      </>)}
     </section>
   );
 }
