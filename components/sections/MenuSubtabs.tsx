@@ -1,19 +1,29 @@
 'use client';
 
+import { useRef } from 'react';
+import { useScrollFade } from './use-scroll-fade';
+import ScrollFadeEdges from './ScrollFadeEdges';
+
 type Props = {
   labels: string[];
   active: string;
   onChange: (label: string) => void;
+  bg: string;
 };
 
-export default function MenuSubtabs({ labels, active, onChange }: Props) {
+export default function MenuSubtabs({ labels, active, onChange, bg }: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+  const fade = useScrollFade(ref);
+
   if (labels.length <= 1) return null;
 
   return (
-    <div className="menu-subtabs" role="tablist" style={{
+    <div ref={ref} className="menu-subtabs" role="tablist" onScroll={fade.onScroll} style={{
+      position: 'relative',
       display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',
       gap: '6px', paddingBottom: '20px', paddingLeft: '16px', paddingRight: '16px',
     }}>
+      <ScrollFadeEdges bg={bg} showLeft={fade.showLeft} showRight={fade.showRight} />
       {labels.map(label => {
         const isActive = active === label;
         return (

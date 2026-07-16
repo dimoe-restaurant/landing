@@ -7,6 +7,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 import MenuSubtabs from './MenuSubtabs';
+import ScrollFadeEdges from './ScrollFadeEdges';
+import { useScrollFade } from './use-scroll-fade';
 
 const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
 
@@ -104,6 +106,7 @@ export default function Menu({ menu }: Props) {
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
+  const tabsFade = useScrollFade(tabsRef);
   const bg = active ? TAB_BG[active] : '#0D0B09';
 
   // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual).
@@ -179,13 +182,14 @@ export default function Menu({ menu }: Props) {
       )}
 
       {/* Sticky tabs */}
-      <div ref={tabsRef} className="menu-tabs" style={{
+      <div ref={tabsRef} className="menu-tabs" onScroll={tabsFade.onScroll} style={{
         position: 'sticky', top: 0, zIndex: 10,
         background: bg, transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',
         paddingLeft: '16px', paddingRight: '16px',
       }}>
+        <ScrollFadeEdges bg={bg} showLeft={tabsFade.showLeft} showRight={tabsFade.showRight} />
         {/* Home — vuelve al selector de secciones de la carta, no al sitio */}
         <button onClick={handleHome} aria-label="Inicio de la carta" style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -313,7 +317,7 @@ export default function Menu({ menu }: Props) {
           )}
         </div>
 
-        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} />
+        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} bg={bg} />
 
         <AnimatePresence mode="wait">
           <motion.div key={`${active}-${activeSubtab}`}
