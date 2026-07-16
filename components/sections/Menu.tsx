@@ -331,9 +331,8 @@ export default function Menu({ menu }: Props) {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
-              const isBarTab = active === 'BAR';
               const noDesc = group.items.every(i => !i.desc);
-              const isCompact = isBarTab || (noDesc && group.items.length > 2);
+              const isCompact = noDesc && group.items.length > 2;
 
               return (
                 <Fragment key={gi}>
