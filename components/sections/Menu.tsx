@@ -326,7 +326,7 @@ export default function Menu({ menu }: Props) {
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
             onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
-            {t('cta')}
+            {t('download_cta')}
           </a>
         </motion.div>
       </div>
