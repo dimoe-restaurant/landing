@@ -32,3 +32,66 @@ test.describe('Carta digital (/carta)', () => {
     await expect(page).toHaveURL(/\/carta\?utm_source=qr$/);
   });
 });
+
+test.describe('Subtabs de BAR y VINOS (/carta)', () => {
+  // VINOS siempre usa FALLBACK_MENU (page.tsx fuerza esto aunque Notion esté configurado),
+  // así que sus 3 subtabs (Blancos, Tintos, Ensamblajes y Dulce) son deterministas.
+  test('VINOS: click en "Tintos" muestra solo los tintos y oculta los blancos', async ({ page }) => {
+    await page.goto('/carta#vinos');
+    await expect(page.getByRole('heading', { name: 'VINOS' })).toBeVisible();
+
+    await expect(page.getByRole('tab', { name: 'Sauvignon Blanc' })).toHaveCount(0); // no es subtab, es grupo
+    await page.getByRole('tab', { name: 'Tintos' }).click();
+
+    await expect(page.getByRole('heading', { name: 'Carménère' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cabernet Sauvignon' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Merlot' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Chardonnay' })).not.toBeVisible();
+  });
+
+  test('VINOS: subtab "Todos" muestra todos los grupos', async ({ page }) => {
+    await page.goto('/carta#vinos');
+    await page.getByRole('tab', { name: 'Tintos' }).click();
+    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).not.toBeVisible();
+
+    await page.getByRole('tab', { name: 'Todos' }).click();
+    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Carménère' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Dulce' })).toBeVisible();
+  });
+
+  test('cambiar de tab principal resetea el subtab activo a "Todos"', async ({ page }) => {
+    await page.goto('/carta#vinos');
+    await page.getByRole('tab', { name: 'Tintos' }).click();
+    await expect(page.getByRole('tab', { name: 'Tintos' })).toHaveAttribute('aria-selected', 'true');
+
+    await page.getByRole('button', { name: /^BAR$/ }).click();
+    await page.getByRole('button', { name: /^VINOS$/ }).click();
+
+    await expect(page.getByRole('tab', { name: 'Todos' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).toBeVisible();
+  });
+
+  // BAR puede venir de Notion (contenido variable) — se valida el comportamiento de
+  // filtrado, no un bucket ni conteo de grupos específico, para no depender del
+  // contenido real cargado en cada corrida.
+  test('BAR: click en un subtab distinto de "Todos" filtra el contenido mostrado', async ({ page }) => {
+    await page.goto('/carta#bar');
+    await expect(page.getByRole('heading', { name: 'BAR' })).toBeVisible();
+
+    const tabNames = await page.getByRole('tab').allTextContents();
+    expect(tabNames).toContain('Todos');
+    const otherTabs = tabNames.filter(name => name !== 'Todos');
+    expect(otherTabs.length).toBeGreaterThan(0);
+
+    const contentBefore = await page.locator('body').innerText();
+    await page.getByRole('tab', { name: otherTabs[0], exact: true }).click();
+    await expect(page.getByRole('tab', { name: otherTabs[0], exact: true })).toHaveAttribute('aria-selected', 'true');
+
+    await expect(async () => {
+      const contentAfter = await page.locator('body').innerText();
+      expect(contentAfter).not.toEqual(contentBefore);
+    }).toPass({ timeout: 2000 });
+  });
+});
