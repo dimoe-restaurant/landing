@@ -201,15 +201,13 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
         { name: 'Peroni', desc: 'Italiana', price: 4000 },
       ],
     },
-    // 8. Vinos y Espumantes
+    // 8. Vinos y Espumantes — el detalle de vinos vive en la tab VINOS
     {
       name: 'Vinos y Espumantes',
+      subtitle: 'Ver detalle en la carta de Vinos',
       items: [
-        { name: 'Botella Gran Reserva', desc: 'Carmenere · Cabernet Sauvignon · Merlot', price: 20000 },
-        { name: 'Botella Vino Varietal/Reserva', price: '9.000 / 15.000' },
         { name: 'Botella Espumante', price: 12000 },
         { name: 'Copa de Espumante Brut', price: 3500 },
-        { name: 'Copa de Vino Varietal/Reserva', price: '2.500 / 4.500' },
       ],
     },
     // 9. Coctelería Sin Alcohol
