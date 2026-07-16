@@ -219,6 +219,17 @@ export default function Menu({ menu }: Props) {
 
       {/* Contenido */}
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 40px)' }}>
+        {/* Título de sección */}
+        <div style={{ textAlign: 'center', paddingTop: '28px', paddingBottom: '20px' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 700,
+            letterSpacing: '0.04em', color: '#C17A3B', textTransform: 'uppercase', margin: '0 0 14px',
+          }}>
+            {TAB_DISPLAY[active]}
+          </h2>
+          <div style={{ width: '48px', height: '2px', background: 'rgba(193,122,59,0.4)', margin: '0 auto' }} />
+        </div>
+
         <AnimatePresence mode="wait">
           <motion.div key={active}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
@@ -281,7 +292,7 @@ export default function Menu({ menu }: Props) {
                   {group.name && !isHappyHour && !isKids && (
                     <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '1px solid rgba(242,237,228,0.08)' }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
-                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
+                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
                         {group.subtitle && (
                           <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.38)', letterSpacing: '0.06em' }}>
                             {group.subtitle}
