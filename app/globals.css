@@ -50,6 +50,35 @@ body {
   .footer-inner { justify-content: flex-start !important; }
 }
 
+/* Tabs de /carta: fila con scroll horizontal en mobile en vez de wrap */
+@media (max-width: 767px) {
+  .menu-tabs {
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .menu-tabs::-webkit-scrollbar { display: none; }
+}
+
+/* Textura de piedra/mármol CSS-only para el fondo de /carta — sin imágenes, solo gradientes */
+.menu-texture {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255,255,255,0.028) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(255,255,255,0.022) 0%, transparent 45%),
+    radial-gradient(circle at 50% 95%, rgba(255,255,255,0.016) 0%, transparent 35%),
+    linear-gradient(125deg, transparent 42%, rgba(255,255,255,0.014) 43%, rgba(255,255,255,0.014) 44%, transparent 45%),
+    linear-gradient(35deg, transparent 65%, rgba(255,255,255,0.01) 66%, rgba(255,255,255,0.01) 67%, transparent 68%);
+  background-attachment: fixed;
+}
+
+/* Separador de foto full-bleed dentro del contenido de /carta — más bajo en mobile */
+.menu-separator { height: 220px; }
+@media (max-width: 767px) {
+  .menu-separator { height: 140px; }
+}
+
 /* Scrollbar sutil */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0D0B09; }

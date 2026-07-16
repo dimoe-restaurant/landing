@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
@@ -18,25 +19,33 @@ const TAB_BG: Record<MenuTab, string> = {
   SEMANAL:  '#1A0808',
 };
 
-// Fotos food — todas cargadas en el DOM, sin rostros
+// Fotos food reales de DiMOE — todas cargadas en el DOM, sin rostros
 const TAB_PHOTO: Record<MenuTab, string> = {
-  ENTRADAS: '/images/DSC02385.jpg',   // palitos di agglio, manos (landscape)
-  PIZZAS:   '/images/DSC09219.jpg',   // cheese pull + horno napolitano
-  FONDOS:   '/images/DSC02482.jpg',   // pappardelle bolognesa humeante
-  POSTRES:  '/images/DSC02223.jpg',   // pappardelle camarón con flores
+  ENTRADAS: '/images/menu-entradas-jardin-oliva.jpg',    // Jardín Di Oliva, aceitunas rellenas
+  PIZZAS:   '/images/menu-pizzas-mechada.jpg',            // Pizza Mechada e Cipolla
+  FONDOS:   '/images/menu-fondos-lasagna.jpg',            // Auténtica Lasagna
+  POSTRES:  '/images/menu-postres-tiramisu-pistacho.jpg', // Tiramisù Pistacchio
   BAR:      '/images/DSC02288.jpg',   // cóctel berries copa de cristal
-  VINOS:    '/images/DSC02309.jpg',   // lasagna en greda, maridaje con tinto
+  VINOS:    '/images/DSC02309.jpg',   // ⚠ REVISAR: es una foto de lasagna, no de vinos. Se revisaron 5 candidatas (DSC02223/02385/02439/02458 + esta) y ninguna sirve — falta subir una foto real de vinos/copas a /public/images y actualizar este path.
   SEMANAL:  '/images/DSC02214.jpg',   // pappardelle al camarón, menú especial
 };
 
 const TAB_PHOTO_POS: Record<MenuTab, string> = {
-  ENTRADAS: 'center 60%',
-  PIZZAS:   'center 40%',
+  ENTRADAS: 'center 50%',
+  PIZZAS:   'center 45%',
   FONDOS:   'center 45%',
-  POSTRES:  'center 30%',
+  POSTRES:  'center 60%',
   BAR:      'center 55%',
   VINOS:    'center 50%',
   SEMANAL:  'center 55%',
+};
+
+// Foto real full-bleed que rompe la lista a mitad de sección — solo en tabs con suficiente contenido
+const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>> = {
+  ENTRADAS: { src: '/images/menu-entradas-jardin-oliva.jpg', pos: 'center 50%' },
+  PIZZAS:   { src: '/images/menu-pizzas-catalina.jpg', pos: 'center 40%' },
+  FONDOS:   { src: '/images/menu-fondos-pappardelle-camaron.jpg', pos: 'center 50%' },
+  POSTRES:  { src: '/images/menu-postres-tiramisu-pistacho.jpg', pos: 'center 55%' },
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
@@ -59,104 +68,175 @@ type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
 export default function Menu({ menu }: Props) {
   const t = useTranslations('menu');
-  const [active, setActive] = useState<MenuTab>('ENTRADAS');
+  const locale = useLocale();
+  const [active, setActive] = useState<MenuTab | null>(null);
   const resolvedMenu = menu ?? FALLBACK_MENU;
-  const groups = resolvedMenu[active];
+  const groups = active ? resolvedMenu[active] : [];
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const bg = active ? TAB_BG[active] : '#0D0B09';
+
+  // Punto de corte para el separador de foto: después del grupo donde se acumulan
+  // ≥6 items, sin insertar justo antes del cierre de la sección.
+  const sepPhoto = active ? TAB_SEPARATOR_PHOTO[active] : undefined;
+  let sepIndex = -1;
+  if (sepPhoto) {
+    let count = 0;
+    for (let i = 0; i < groups.length - 1; i++) {
+      count += groups[i].items.length;
+      if (count >= 6) { sepIndex = i; break; }
+    }
+  }
 
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
   }, []);
 
+  useEffect(() => {
+    if (!active) return;
+    const el = tabsRef.current?.querySelector<HTMLButtonElement>(`[data-tab="${active}"]`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [active]);
+
   const handleTab = (tab: MenuTab) => {
     setActive(tab);
     window.history.replaceState(null, '', `#${tab.toLowerCase()}`);
   };
 
+  const handleHome = () => {
+    setActive(null);
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  };
+
   return (
     <section
       id="menu"
+      className="menu-texture"
       style={{
-        background: TAB_BG[active],
+        backgroundColor: bg,
         transition: 'background-color 0.45s ease',
         paddingBottom: 'clamp(48px, 7vw, 80px)',
       }}
     >
-      {/* Label + headline */}
-      <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 32px' }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
-        </motion.div>
-      </div>
+      {/* Label + headline — solo en la vista home de la carta */}
+      {!active && (
+        <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 40px' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
+          </motion.div>
+        </div>
+      )}
 
       {/* Sticky tabs */}
-      <div style={{
-        position: 'sticky', top: '72px', zIndex: 10,
-        background: TAB_BG[active], transition: 'background-color 0.45s ease',
+      <div ref={tabsRef} className="menu-tabs" style={{
+        position: 'sticky', top: 0, zIndex: 10,
+        background: bg, transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',
         paddingLeft: '16px', paddingRight: '16px',
       }}>
-        {/* Home icon */}
-        <a href="/" aria-label="Ir al inicio" style={{
+        {/* Home — vuelve al selector de secciones de la carta, no al sitio */}
+        <button onClick={handleHome} aria-label="Inicio de la carta" style={{
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           width: '34px', height: '34px', borderRadius: '100px', flexShrink: 0,
-          border: '1px solid rgba(242,237,228,0.15)',
-          color: 'rgba(242,237,228,0.45)', textDecoration: 'none',
-          transition: 'all 0.2s', marginRight: '4px',
+          border: `1px solid ${!active ? '#C17A3B' : 'rgba(242,237,228,0.15)'}`,
+          background: !active ? '#C17A3B' : 'transparent',
+          color: !active ? '#F2EDE4' : 'rgba(242,237,228,0.45)',
+          cursor: 'pointer', transition: 'all 0.2s', marginRight: '4px',
         }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = '#C17A3B'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.45)'; }}
+          onMouseEnter={e => { if (active) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = '#C17A3B'; } }}
+          onMouseLeave={e => { if (active) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.45)'; } }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
-        </a>
+        </button>
         {TABS.map(tab => (
-          <button key={tab} onClick={() => handleTab(tab)}
+          <button key={tab} data-tab={tab} onClick={() => handleTab(tab)}
             style={{
               background: active === tab ? '#C17A3B' : 'transparent',
               color: active === tab ? '#F2EDE4' : 'rgba(242,237,228,0.5)',
               border: `1px solid ${active === tab ? '#C17A3B' : 'rgba(242,237,228,0.15)'}`,
               padding: '7px 18px', borderRadius: '100px', fontSize: '11px', fontWeight: 600,
               letterSpacing: '0.12em', cursor: 'pointer', transition: 'all 0.2s',
-              fontFamily: 'var(--font-sans)',
+              fontFamily: 'var(--font-sans)', flexShrink: 0,
             }}
             onMouseEnter={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = 'rgba(242,237,228,0.8)'; } }}
             onMouseLeave={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.5)'; } }}
           >
-            {tab}
+            {TAB_DISPLAY[tab]}
           </button>
         ))}
       </div>
 
+      {/* ── Home de la carta: selector de secciones, sin productos ──────────── */}
+      {!active && (
+        <div style={{
+          maxWidth: '760px', margin: '0 auto', padding: '8px clamp(16px, 4vw, 24px) 8px',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '14px',
+        }}>
+          {TABS.map((tab, i) => (
+            <motion.button key={tab} onClick={() => handleTab(tab)}
+              initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-20px' }} transition={{ duration: 0.4, delay: i * 0.05 }}
+              style={{
+                position: 'relative', height: '130px', borderRadius: '14px', overflow: 'hidden',
+                border: '1px solid rgba(193,122,59,0.3)', cursor: 'pointer', padding: 0,
+              }}
+            >
+              <Image src={TAB_PHOTO[tab]} alt={TAB_DISPLAY[tab]} fill
+                data-photo={`home-${tab.toLowerCase()}`}
+                sizes="(max-width: 485px) 100vw, (max-width: 767px) 50vw, 240px"
+                priority={i < 2}
+                style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[tab] }} />
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: `linear-gradient(180deg, ${TAB_BG[tab]}33 0%, ${TAB_BG[tab]}CC 100%)`,
+              }} />
+              <span style={{
+                position: 'absolute', bottom: '12px', left: '14px', right: '14px', textAlign: 'left',
+                fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4',
+                letterSpacing: '0.02em',
+              }}>
+                {TAB_DISPLAY[tab]}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      )}
+
+      {active && (<>
       {/* ── Banner horizontal de foto ────────────────────────────────────────
-          Todas las fotos están en el DOM (preload). Solo la activa es visible.
-          El usuario puede cambiar height desde aquí.
+          Solo la foto del tab activo se monta — evita descargar las 7 fotos
+          a la vez en la carga inicial. El crossfade lo da AnimatePresence.
       ──────────────────────────────────────────────────────────────────────── */}
       <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
-        {TABS.map(tab => (
-          <img
-            key={tab}
-            src={TAB_PHOTO[tab]}
-            alt={TAB_DISPLAY[tab]}
-            style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-              objectPosition: TAB_PHOTO_POS[tab],
-              opacity: active === tab ? 1 : 0,
-              transition: 'opacity 0.4s ease',
-              display: 'block',
-            }}
-          />
-        ))}
+        <AnimatePresence>
+          <motion.div
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ position: 'absolute', inset: 0 }}
+          >
+            <Image
+              src={TAB_PHOTO[active]}
+              alt={TAB_DISPLAY[active]}
+              data-photo={`banner-${active.toLowerCase()}`}
+              fill
+              sizes="100vw"
+              quality={90}
+              priority
+              style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[active] }}
+            />
+          </motion.div>
+        </AnimatePresence>
         {/* Gradiente inferior para integrar con el contenido */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: '80px',
-          background: `linear-gradient(to bottom, transparent, ${TAB_BG[active]})`,
+          background: `linear-gradient(to bottom, transparent, ${bg})`,
           transition: 'background 0.45s ease',
           pointerEvents: 'none',
         }} />
@@ -164,6 +244,25 @@ export default function Menu({ menu }: Props) {
 
       {/* Contenido */}
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 40px)' }}>
+        {/* Título de sección */}
+        <div style={{ textAlign: 'center', paddingTop: '28px', paddingBottom: '20px' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 700,
+            letterSpacing: '0.04em', color: '#C17A3B', textTransform: 'uppercase', margin: '0 0 14px',
+          }}>
+            {TAB_DISPLAY[active]}
+          </h2>
+          <div style={{ width: '48px', height: '2px', background: 'rgba(193,122,59,0.4)', margin: '0 auto' }} />
+          {active === 'PIZZAS' && (
+            <p style={{
+              fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
+              color: 'rgba(193,122,59,0.75)', marginTop: '14px', marginBottom: 0,
+            }}>
+              2° Lugar The Top Pizza Chile — Región Metropolitana
+            </p>
+          )}
+        </div>
+
         <AnimatePresence mode="wait">
           <motion.div key={active}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
@@ -178,7 +277,8 @@ export default function Menu({ menu }: Props) {
               const isCompact = isBarTab || (noDesc && group.items.length > 2);
 
               return (
-                <div key={gi} style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
+                <Fragment key={gi}>
+                <div style={{ marginBottom: gi < groups.length - 1 ? '44px' : 0, paddingTop: gi === 0 ? '32px' : 0 }}>
 
                   {/* Menú Semanal — banner carmesí */}
                   {isSemanaleChef && (
@@ -212,21 +312,20 @@ export default function Menu({ menu }: Props) {
                     </div>
                   )}
 
-                  {/* Para Niños — separador punteado */}
+                  {/* Para Niños — mismo tratamiento visual que un grupo regular */}
                   {isKids && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-                      <span style={{ fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', color: 'rgba(242,237,228,0.22)', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                        Para los pequeños
-                      </span>
-                      <div style={{ flex: 1, borderTop: '1px dashed rgba(242,237,228,0.10)' }} />
+                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
+                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>
+                        Para los Pequeños
+                      </h3>
                     </div>
                   )}
 
                   {/* Header regular */}
                   {group.name && !isHappyHour && !isKids && (
-                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '1px solid rgba(242,237,228,0.08)' }}>
+                    <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
-                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
+                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
                         {group.subtitle && (
                           <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.38)', letterSpacing: '0.06em' }}>
                             {group.subtitle}
@@ -276,12 +375,12 @@ export default function Menu({ menu }: Props) {
                             )}
                           </div>
                           {isCompact && item.desc && (
-                            <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.30)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
+                            <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.42)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
                               {item.desc}
                             </span>
                           )}
                           {!isCompact && item.desc && (
-                            <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.38)', margin: 0 }}>
+                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
                               {item.desc}
                             </p>
                           )}
@@ -305,30 +404,39 @@ export default function Menu({ menu }: Props) {
                   </div>
 
                 </div>
+
+                {/* Foto real full-bleed — rompe la lista a mitad de sección, ritmo editorial del PDF */}
+                {gi === sepIndex && sepPhoto && (
+                  <div className="menu-separator" style={{
+                    position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)',
+                    overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                    borderTop: '1px solid rgba(193,122,59,0.25)', borderBottom: '1px solid rgba(193,122,59,0.25)',
+                  }}>
+                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw" quality={90}
+                      data-photo={`separator-${active.toLowerCase()}`}
+                      style={{ objectFit: 'cover', objectPosition: sepPhoto.pos }} />
+                    <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${bg}00 0%, ${bg}55 100%)` }} />
+                  </div>
+                )}
+                </Fragment>
               );
             })}
           </motion.div>
         </AnimatePresence>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
-        >
-          <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', marginBottom: '16px' }}>
-            Precios en pesos chilenos · IVA incluido
-          </p>
-          <a
-            href={process.env.NEXT_PUBLIC_MENU_PDF_URL ?? 'https://linktr.ee/di_moe'}
-            target="_blank" rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', background: '#C17A3B', color: '#F2EDE4', padding: '12px 28px', borderRadius: '100px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', transition: 'opacity 0.2s' }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        {/* Footer — nota de precios solo en inglés, se asume en restaurantes en español */}
+        {locale === 'en' && (
+          <motion.div
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
           >
-            {t('cta')}
-          </a>
-        </motion.div>
+            <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', margin: 0 }}>
+              Prices in Chilean pesos, tax included.
+            </p>
+          </motion.div>
+        )}
       </div>
+      </>)}
     </section>
   );
 }

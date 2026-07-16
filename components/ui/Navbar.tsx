@@ -36,6 +36,9 @@ export default function Navbar() {
     if (mobileOpen) setHidden(false);
   }, [mobileOpen]);
 
+  // /carta tiene su propio chrome liviano — el foco ahí es 100% vender, sin distraer con el nav del sitio
+  if (pathname.startsWith('/carta')) return null;
+
   function switchLocale() {
     const next = locale === 'es' ? 'en' : 'es';
     router.replace(pathname, { locale: next });
