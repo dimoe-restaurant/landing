@@ -31,9 +31,9 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
     <main style={{ background: '#0D0B09' }}>
       {/* Back link */}
       <div style={{ maxWidth: '860px', margin: '0 auto', padding: '24px clamp(16px, 4vw, 24px) 0' }}>
-        <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', lineHeight: 1, color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
+        <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'block', flexShrink: 0 }}><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          {isEn ? 'Back to home' : 'Volver al inicio'}
+          <span style={{ display: 'inline-block', lineHeight: '14px' }}>{isEn ? 'Back to home' : 'Volver al inicio'}</span>
         </Link>
       </div>
 

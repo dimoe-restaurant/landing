@@ -375,12 +375,12 @@ export default function Menu({ menu }: Props) {
                             )}
                           </div>
                           {isCompact && item.desc && (
-                            <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.30)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
+                            <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.42)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
                               {item.desc}
                             </span>
                           )}
                           {!isCompact && item.desc && (
-                            <p style={{ fontSize: '13px', lineHeight: 1.65, color: 'rgba(242,237,228,0.38)', margin: 0 }}>
+                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
                               {item.desc}
                             </p>
                           )}
