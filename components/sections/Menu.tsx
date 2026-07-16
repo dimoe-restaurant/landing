@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
@@ -63,11 +63,17 @@ export default function Menu({ menu }: Props) {
   const [active, setActive] = useState<MenuTab>('ENTRADAS');
   const resolvedMenu = menu ?? FALLBACK_MENU;
   const groups = resolvedMenu[active];
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
   }, []);
+
+  useEffect(() => {
+    const el = tabsRef.current?.querySelector<HTMLButtonElement>(`[data-tab="${active}"]`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, [active]);
 
   const handleTab = (tab: MenuTab) => {
     setActive(tab);
@@ -92,7 +98,7 @@ export default function Menu({ menu }: Props) {
       </div>
 
       {/* Sticky tabs */}
-      <div style={{
+      <div ref={tabsRef} className="menu-tabs" style={{
         position: 'sticky', top: '72px', zIndex: 10,
         background: TAB_BG[active], transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
@@ -116,14 +122,14 @@ export default function Menu({ menu }: Props) {
           </svg>
         </a>
         {TABS.map(tab => (
-          <button key={tab} onClick={() => handleTab(tab)}
+          <button key={tab} data-tab={tab} onClick={() => handleTab(tab)}
             style={{
               background: active === tab ? '#C17A3B' : 'transparent',
               color: active === tab ? '#F2EDE4' : 'rgba(242,237,228,0.5)',
               border: `1px solid ${active === tab ? '#C17A3B' : 'rgba(242,237,228,0.15)'}`,
               padding: '7px 18px', borderRadius: '100px', fontSize: '11px', fontWeight: 600,
               letterSpacing: '0.12em', cursor: 'pointer', transition: 'all 0.2s',
-              fontFamily: 'var(--font-sans)',
+              fontFamily: 'var(--font-sans)', flexShrink: 0,
             }}
             onMouseEnter={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = 'rgba(242,237,228,0.8)'; } }}
             onMouseLeave={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.15)'; e.currentTarget.style.color = 'rgba(242,237,228,0.5)'; } }}
