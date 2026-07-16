@@ -146,9 +146,9 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
       items: [
         { name: 'Aperol Spritz', desc: 'Naranja', price: 6500 },
         { name: 'Ramazzotti Spritz', desc: 'Flor de Jamaica', price: 6500 },
-        { name: 'Cherry Spritz', desc: 'Guinda', price: 6500 },
+        { name: 'Cherry Spritz', price: 6500 },
         { name: 'Hugo Spritz', desc: 'Flor de Sauco', price: 6500 },
-        { name: 'Limoncello Spritz', desc: 'Licor de limón italiano', price: 6500 },
+        { name: 'Limoncello Spritz', price: 6500 },
       ],
     },
     // 5. Sours
