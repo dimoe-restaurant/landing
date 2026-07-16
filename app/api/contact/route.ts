@@ -1,13 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { saveContact } from '@/lib/notion';
+import { saveContact, type ContactTipo, type ContactOrigen } from '@/lib/notion';
+
+const TIPOS_VALIDOS: ContactTipo[] = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'];
+const ORIGENES_VALIDOS: ContactOrigen[] = ['Home', 'Atención Cliente'];
+
+function clientIp(req: NextRequest): string | null {
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.headers.get('x-real-ip');
+}
+
+function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
+  const ua = req.headers.get('user-agent') ?? '';
+  return /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop';
+}
 
 const DESTINATION = 'contacto@dimoe.cl';
 const FROM = 'DiMOE <contacto@dimoe.cl>';
 const LOGO_URL = 'https://dev.dimoe.cl/images/logo-transparent.png';
 const LOGO_HEADER = `<tr><td style="background:#0D0B09;padding:28px 40px;text-align:center"><img src="${LOGO_URL}" alt="DiMOE" height="42" style="display:block;margin:0 auto;height:42px;width:auto"></td></tr>`;
 
-function notificationHtml(nombre: string, email: string, telefono: string | null, mensaje: string, marketing: boolean) {
+function notificationHtml(nombre: string, email: string, telefono: string | null, mensaje: string, marketing: boolean, tipo: ContactTipo, origen: ContactOrigen) {
   const fecha = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago', dateStyle: 'full', timeStyle: 'short' });
   return `<!DOCTYPE html>
 <html lang="es">
@@ -43,6 +57,16 @@ function notificationHtml(nombre: string, email: string, telefono: string | null
             </tr>
             <tr><td colspan="2" style="height:12px"></td></tr>
             <tr>
+              <td style="font-family:Arial,sans-serif;font-size:11px;color:#9B8B7E;text-transform:uppercase;letter-spacing:0.08em;padding-bottom:4px">Tipo</td>
+              <td style="padding-bottom:4px"><span style="display:inline-block;font-family:Arial,sans-serif;font-size:12px;font-weight:600;color:#C17A3B;background:rgba(193,122,59,0.12);border-radius:100px;padding:3px 12px">${tipo}</span></td>
+            </tr>
+            <tr><td colspan="2" style="height:12px"></td></tr>
+            <tr>
+              <td style="font-family:Arial,sans-serif;font-size:11px;color:#9B8B7E;text-transform:uppercase;letter-spacing:0.08em;padding-bottom:4px">Origen</td>
+              <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F;padding-bottom:4px">${origen}</td>
+            </tr>
+            <tr><td colspan="2" style="height:12px"></td></tr>
+            <tr>
               <td style="font-family:Arial,sans-serif;font-size:11px;color:#9B8B7E;text-transform:uppercase;letter-spacing:0.08em">Marketing</td>
               <td style="font-family:Arial,sans-serif;font-size:13px;color:${marketing ? '#2A7A4B' : '#9B8B7E'}">${marketing ? 'Sí, autoriza comunicaciones' : 'No autoriza'}</td>
             </tr>
@@ -68,7 +92,43 @@ function notificationHtml(nombre: string, email: string, telefono: string | null
 </html>`;
 }
 
-function confirmationHtml(nombre: string) {
+function confirmationHtml(nombre: string, caso: boolean) {
+  const bodyHtml = caso
+    ? `<p style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#1A1410;line-height:1.5">Hola, ${nombre}.</p>
+       <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Nuestro equipo de servicio al cliente ya está revisando tu mensaje personalmente y te responderemos dentro de las próximas 24-48 horas.</p>
+       <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Gracias por tomarte el tiempo de contarnos — es justamente lo que nos ayuda a mejorar cada día.</p>`
+    : `<p style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#1A1410;line-height:1.5">Hola, ${nombre}.</p>
+       <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Recibimos tu mensaje y te responderemos a la brevedad.</p>
+       <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Si necesitas hablar con alguien más rápido, puedes escribirnos al WhatsApp.</p>`;
+
+  const infoHtml = caso
+    ? `<tr><td style="padding:28px 40px;text-align:center">
+         <a href="https://wa.me/56973694101" style="display:inline-block;background:#25D366;color:#FFFFFF;font-family:Arial,sans-serif;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:100px">¿Prefieres hablar directo? Escríbenos por WhatsApp</a>
+       </td></tr>`
+    : `<tr><td style="padding:28px 40px">
+         <table width="100%" cellpadding="0" cellspacing="0">
+           <tr>
+             <td style="font-family:Arial,sans-serif;font-size:12px;color:#9B8B7E;text-transform:uppercase;letter-spacing:0.08em;padding-bottom:12px" colspan="2">Horarios</td>
+           </tr>
+           <tr>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F;padding-bottom:6px;width:160px">Mar – Jue</td>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600;padding-bottom:6px">12:30 – 22:30</td>
+           </tr>
+           <tr>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F;padding-bottom:6px">Vie – Sáb</td>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600;padding-bottom:6px">13:00 – 00:00</td>
+           </tr>
+           <tr>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F">Dom</td>
+             <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600">13:00 – 17:30</td>
+           </tr>
+         </table>
+       </td></tr>
+       <!-- CTA WhatsApp -->
+       <tr><td style="padding:0 40px 32px;text-align:center">
+         <a href="https://wa.me/56973694101" style="display:inline-block;background:#25D366;color:#FFFFFF;font-family:Arial,sans-serif;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:100px">Escribinos por WhatsApp</a>
+       </td></tr>`;
+
   return `<!DOCTYPE html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"><style>:root{color-scheme:light}</style></head>
@@ -82,36 +142,12 @@ function confirmationHtml(nombre: string) {
         <tr><td style="padding:0 40px"><div style="height:1px;background:#EDE8E2"></div></td></tr>
         <!-- Body -->
         <tr><td style="padding:36px 40px">
-          <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#1A1410;line-height:1.5">Hola, ${nombre}.</p>
-          <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Recibimos tu mensaje y te responderemos a la brevedad.</p>
-          <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Si necesitas hablar con alguien más rápido, puedes escribirnos al WhatsApp.</p>
+          ${bodyHtml}
         </td></tr>
         <!-- Divider -->
         <tr><td style="padding:0 40px"><div style="height:1px;background:#EDE8E2"></div></td></tr>
         <!-- Info -->
-        <tr><td style="padding:28px 40px">
-          <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td style="font-family:Arial,sans-serif;font-size:12px;color:#9B8B7E;text-transform:uppercase;letter-spacing:0.08em;padding-bottom:12px" colspan="2">Horarios</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F;padding-bottom:6px;width:160px">Mar – Jue</td>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600;padding-bottom:6px">12:30 – 22:30</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F;padding-bottom:6px">Vie – Sáb</td>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600;padding-bottom:6px">13:00 – 00:00</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#5A4A3F">Dom</td>
-              <td style="font-family:Arial,sans-serif;font-size:13px;color:#1A1410;font-weight:600">13:00 – 17:30</td>
-            </tr>
-          </table>
-        </td></tr>
-        <!-- CTA WhatsApp -->
-        <tr><td style="padding:0 40px 32px;text-align:center">
-          <a href="https://wa.me/56973694101" style="display:inline-block;background:#25D366;color:#FFFFFF;font-family:Arial,sans-serif;font-size:14px;font-weight:600;text-decoration:none;padding:12px 28px;border-radius:100px">Escribinos por WhatsApp</a>
-        </td></tr>
+        ${infoHtml}
         <!-- Footer -->
         <tr><td style="background:#FAF8F5;padding:20px 40px;border-top:1px solid #EDE8E2">
           <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#BDB3AB;text-align:center;line-height:1.6">
@@ -127,7 +163,7 @@ function confirmationHtml(nombre: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, email, telefono, mensaje, marketing_consent } = await req.json();
+    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen } = await req.json();
 
     if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
       return NextResponse.json({ error: 'Campos requeridos faltantes' }, { status: 400 });
@@ -136,6 +172,9 @@ export async function POST(req: NextRequest) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email inválido' }, { status: 400 });
     }
+
+    const tipoFinal: ContactTipo = TIPOS_VALIDOS.includes(tipo) ? tipo : 'Consulta';
+    const origenFinal: ContactOrigen = ORIGENES_VALIDOS.includes(origen) ? origen : 'Home';
 
     if (!process.env.RESEND_API_KEY) {
       console.warn('RESEND_API_KEY no configurado — email no enviado');
@@ -149,16 +188,26 @@ export async function POST(req: NextRequest) {
         from: FROM,
         to: DESTINATION,
         replyTo: email,
-        subject: `Mensaje de ${nombre}${telefono ? ` · ${telefono}` : ''} — DiMOE`,
-        html: notificationHtml(nombre, email, telefono ?? null, mensaje, !!marketing_consent),
+        subject: `[${tipoFinal}] Mensaje de ${nombre}${telefono ? ` · ${telefono}` : ''} — DiMOE`,
+        html: notificationHtml(nombre, email, telefono ?? null, mensaje, !!marketing_consent, tipoFinal, origenFinal),
       }),
       resend.emails.send({
         from: FROM,
         to: email,
-        subject: 'Recibimos tu mensaje — DiMOE',
-        html: confirmationHtml(nombre),
+        subject: origenFinal === 'Atención Cliente' ? 'Tu mensaje ya está siendo revisado — DiMOE' : 'Recibimos tu mensaje — DiMOE',
+        html: confirmationHtml(nombre, origenFinal === 'Atención Cliente'),
       }),
-      saveContact({ nombre, email, telefono: telefono ?? null, mensaje, marketing: !!marketing_consent }),
+      saveContact({
+        nombre,
+        email,
+        telefono: telefono ?? null,
+        mensaje,
+        marketing: !!marketing_consent,
+        tipo: tipoFinal,
+        origen: origenFinal,
+        ip: clientIp(req),
+        dispositivo: deviceFromUserAgent(req),
+      }),
     ]);
 
     if (notif.status === 'rejected' || confirm.status === 'rejected') {

@@ -101,7 +101,21 @@
     "phone_hint": "Ej: +56 9 1234 5678",
     "marketing": "Acepto recibir comunicaciones de marketing y promociones de DiMOE",
     "privacy_link": "Política de privacidad",
-    "err_phone": "Formato inválido. Ej: +56912345678"
+    "err_phone": "Formato inválido. Ej: +56912345678",
+    "err_tipo": "Selecciona una opción",
+    "tipo_consulta": "Consulta",
+    "tipo_sugerencia": "Sugerencia",
+    "tipo_reclamo": "Reclamo",
+    "tipo_felicitacion": "Felicitación",
+    "success_title_case": "Recibimos tu mensaje",
+    "success_body_case": "Nuestro equipo de atención al cliente lo revisa personalmente y te responderemos dentro de 24-48 horas.",
+    "felicitacion_body": "¡Qué alegría! Nos encantaría que compartieras tu experiencia con otros.",
+    "felicitacion_cta": "Dejar reseña en Google"
+  },
+  "atencionCliente": {
+    "label": "Atención al cliente",
+    "headline": "Cuéntanos qué pasó",
+    "subheadline": "Nuestro equipo de atención al cliente revisa cada mensaje personalmente. Gracias por darnos la oportunidad de mejorar."
   },
   "footer": {
     "tagline": "Pizzería Napolitana y Restobar",
@@ -111,6 +125,7 @@
     "menu": "Carta",
     "reviews": "Reseñas",
     "contact": "Contacto",
+    "customer_care": "Servicio al cliente",
     "privacy": "Privacidad",
     "copyright": "Todos los derechos reservados.",
     "cookies": "Gestionar cookies"

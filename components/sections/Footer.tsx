@@ -14,6 +14,7 @@ export default function Footer() {
     { href: '#menu', label: t('menu') },
     { href: '/resenas', label: t('reviews') },
     { href: '#contacto', label: t('contact') },
+    { href: '/atencion-cliente', label: t('customer_care') },
   ];
 
   const socialLinks = [
