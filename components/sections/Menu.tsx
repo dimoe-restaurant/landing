@@ -99,7 +99,7 @@ export default function Menu({ menu }: Props) {
 
       {/* Sticky tabs */}
       <div ref={tabsRef} className="menu-tabs" style={{
-        position: 'sticky', top: '72px', zIndex: 10,
+        position: 'sticky', top: 0, zIndex: 10,
         background: TAB_BG[active], transition: 'background-color 0.45s ease',
         paddingTop: '14px', paddingBottom: '14px',
         display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', flexWrap: 'wrap',

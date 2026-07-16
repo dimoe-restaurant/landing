@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { getConsent } from './CookieBanner';
+import { usePathname } from '@/i18n/navigation';
 
 const WHATSAPP_URL = 'https://wa.me/56973694101?text=Hola!%20Quiero%20hacer%20una%20reserva';
 
 export default function WhatsAppFloat() {
+  const pathname = usePathname();
   const [bottom, setBottom] = useState('100px');
 
   useEffect(() => {
@@ -20,6 +22,9 @@ export default function WhatsAppFloat() {
       document.removeEventListener('dimoe:consent-essential', handleEssential);
     };
   }, []);
+
+  // En /carta el foco es 100% vender — no distraer con el flotante de reserva
+  if (pathname.startsWith('/carta')) return null;
 
   return (
     <>

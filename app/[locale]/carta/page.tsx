@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import Menu from '@/components/sections/Menu';
-import Footer from '@/components/sections/Footer';
+import CartaFooter from '@/components/sections/CartaFooter';
 import { getMenu } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
@@ -28,7 +28,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
     : FALLBACK_MENU;
 
   return (
-    <main style={{ background: '#0D0B09', paddingTop: '72px' }}>
+    <main style={{ background: '#0D0B09' }}>
       {/* Back link */}
       <div style={{ maxWidth: '860px', margin: '0 auto', padding: '24px clamp(16px, 4vw, 24px) 0' }}>
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
@@ -38,7 +38,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
       </div>
 
       <Menu menu={menuData} />
-      <Footer />
+      <CartaFooter />
     </main>
   );
 }
