@@ -107,6 +107,7 @@ export default function Menu({ menu }: Props) {
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabsFade = useScrollFade(tabsRef);
+  const sectionRef = useRef<HTMLElement>(null);
   const bg = active ? TAB_BG[active] : '#0D0B09';
 
   // Subtabs del tab activo — sin config para ese tab = sin filtrado (comportamiento actual).
@@ -154,6 +155,7 @@ export default function Menu({ menu }: Props) {
   const handleTab = (tab: MenuTab) => {
     setActive(tab);
     window.history.replaceState(null, '', `#${tab.toLowerCase()}`);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const handleHome = () => {
@@ -164,6 +166,7 @@ export default function Menu({ menu }: Props) {
   return (
     <section
       id="menu"
+      ref={sectionRef}
       className="menu-texture"
       style={{
         backgroundColor: bg,
@@ -328,9 +331,8 @@ export default function Menu({ menu }: Props) {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
-              const isBarTab = active === 'BAR';
               const noDesc = group.items.every(i => !i.desc);
-              const isCompact = isBarTab || (noDesc && group.items.length > 2);
+              const isCompact = noDesc && group.items.length > 2;
 
               return (
                 <Fragment key={gi}>
