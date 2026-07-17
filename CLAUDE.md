@@ -41,6 +41,24 @@ pnpm install
 pnpm dev              # → http://localhost:39847
 ```
 
+## Deploy a producción (dev.dimoe.cl)
+
+**No hay auto-deploy configurado a Production.** Los Preview deployments sí se generan automáticos por cada push/PR, pero `dev.dimoe.cl` (el dominio real, target "Production" del proyecto Vercel) solo se actualiza con:
+
+```bash
+vercel deploy --prod --yes --force
+```
+
+**El `--force` es obligatorio** — sin él, se detectó al menos un caso donde el deploy reusó un manifest de rutas corrupto/desactualizado de un deployment anterior y una ruta nueva dio 404 en producción pese a compilar bien localmente.
+
+Tras cada deploy, correr el smoke test (de solo lectura, sin efectos secundarios):
+
+```bash
+node scripts/smoke-deploy.mjs
+```
+
+Si algo falla, no asumir que es el código nuevo — comparar contra `next dev`/`next start` local primero (varios bugs de esta clase solo se reproducen en Vercel, nunca en local).
+
 ## Convenciones
 
 ### Commits
