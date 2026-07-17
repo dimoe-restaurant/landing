@@ -1,13 +1,6 @@
-import { timingSafeEqual } from 'crypto'
 import { draftMode } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-
-function secretsMatch(provided: string, expected: string): boolean {
-  const a = Buffer.from(provided)
-  const b = Buffer.from(expected)
-  if (a.length !== b.length) return false
-  return timingSafeEqual(a, b)
-}
+import { secretsMatch } from '@/lib/api-helpers'
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const secret = req.nextUrl.searchParams.get('secret') ?? ''
