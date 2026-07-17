@@ -53,20 +53,41 @@ const milestones = [
   },
 ];
 
+const ChefIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M8 21h8M9.5 21v-5M14.5 21v-5M8 16c-2.2 0-4-1.6-4-3.6 0-1.9 1.5-3.4 3.4-3.6C7.7 7.1 9.7 5 12 5s4.3 2.1 4.6 3.8c1.9.2 3.4 1.7 3.4 3.6 0 2-1.8 3.6-4 3.6H8z" />
+  </svg>
+);
+
+const WaiterIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M4 7l7 4-7 4V7z" />
+    <path d="M20 7l-7 4 7 4V7z" />
+    <rect x="10.4" y="9.6" width="3.2" height="3.8" rx="0.6" />
+  </svg>
+);
+
+const BarmanIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C17A3B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M4 4h16l-8 9v7M8 20h8" />
+    <path d="M6.5 6.5h11" />
+  </svg>
+);
+
 const team = [
-  'Alondra',
-  'Mishell',
-  'Nicolás',
-  'Rodrigo',
-  'Danitza',
-  'Osvaldo',
-  'Bastián',
-  'Paz',
-  'Elías',
-  'Diego',
-  'Sandra',
-  'Catalina',
-  'Benjamín',
+  { name: 'Alondra', icon: ChefIcon },
+  { name: 'Bastián', icon: WaiterIcon },
+  { name: 'Nicolás', icon: ChefIcon },
+  { name: 'Paz', icon: WaiterIcon },
+  { name: 'Osvaldo', icon: BarmanIcon },
+  { name: 'Sandra', icon: ChefIcon },
+  { name: 'Rodrigo', icon: ChefIcon },
+  { name: 'Mishell', icon: ChefIcon },
+  { name: 'Elías', icon: ChefIcon },
+  { name: 'Danitza', icon: ChefIcon },
+  { name: 'Diego', icon: ChefIcon },
+  { name: 'Catalina', icon: ChefIcon },
+  { name: 'Benjamín', icon: ChefIcon },
 ];
 
 const values = [
@@ -205,9 +226,9 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {team.map((name) => (
+          {team.map((member) => (
             <span
-              key={name}
+              key={member.name}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -221,8 +242,8 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
                 color: 'rgba(242,237,228,0.85)',
               }}
             >
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#C17A3B', flexShrink: 0 }} />
-              {name}
+              <span style={{ display: 'inline-flex' }}>{member.icon}</span>
+              {member.name}
             </span>
           ))}
         </div>
