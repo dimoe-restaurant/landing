@@ -3,6 +3,8 @@ import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { get, put } from '@vercel/blob'
 
+export const maxDuration = 30
+
 function secretsMatch(provided: string, expected: string): boolean {
   const a = Buffer.from(provided)
   const b = Buffer.from(expected)
