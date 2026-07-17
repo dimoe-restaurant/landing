@@ -25,6 +25,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
   const isEn = locale === 'en';
   const { isEnabled: isPreview } = await draftMode();
   const notionData = isPreview ? await getMenuPreview(locale) : await getMenu(locale);
+  const previewFetchFailed = isPreview && notionData === null;
   const menuData = notionData
     ? {
         ...notionData,
@@ -34,16 +35,18 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
     : FALLBACK_MENU;
 
   const publishedData = isPreview ? await getMenu(locale) : null;
-  const hasUnpublishedChanges = isPreview && JSON.stringify(notionData) !== JSON.stringify(publishedData);
+  const hasUnpublishedChanges = isPreview && !previewFetchFailed && JSON.stringify(notionData) !== JSON.stringify(publishedData);
 
   return (
     <main style={{ background: '#0D0B09' }}>
       {isPreview && (
-        <div style={{ background: hasUnpublishedChanges ? '#B45309' : '#3F3F46', color: '#FFF7ED', textAlign: 'center', padding: '10px 16px', fontSize: '14px', fontWeight: 600, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+        <div style={{ background: previewFetchFailed ? '#7F1D1D' : hasUnpublishedChanges ? '#B45309' : '#3F3F46', color: '#FFF7ED', textAlign: 'center', padding: '10px 16px', fontSize: '14px', fontWeight: 600, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
           <span>
-            {hasUnpublishedChanges
-              ? (isEn ? '⚠️ There are unpublished changes' : '⚠️ Hay cambios sin publicar')
-              : (isEn ? '👁️ Preview mode active' : '👁️ Modo preview activo')}
+            {previewFetchFailed
+              ? (isEn ? '⚠️ Could not connect to Notion — try again' : '⚠️ No se pudo conectar con Notion — reintentá')
+              : hasUnpublishedChanges
+                ? (isEn ? '⚠️ There are unpublished changes' : '⚠️ Hay cambios sin publicar')
+                : (isEn ? '👁️ Preview mode active' : '👁️ Modo preview activo')}
           </span>
           <a href="/api/preview-exit" style={{ color: '#FFF7ED', textDecoration: 'underline', fontWeight: 700 }}>
             {isEn ? '🚪 Exit preview' : '🚪 Salir de preview'}
