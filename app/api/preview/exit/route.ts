@@ -20,5 +20,5 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const draft = await draftMode()
   draft.disable()
 
-  return NextResponse.redirect(new URL('/carta', req.url))
+  return NextResponse.redirect(new URL('/es/carta', req.url))
 }
