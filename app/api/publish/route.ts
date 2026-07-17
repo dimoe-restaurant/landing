@@ -59,6 +59,36 @@ async function pruneOldSnapshots(): Promise<void> {
   if (toDelete.length > 0) await del(toDelete)
 }
 
+type NotionRawPage = { id: string }
+
+function diffMenuPages(before: unknown[] | null, after: unknown[]): { added: number; modified: number; removed: number } {
+  const beforeById = new Map((before ?? []).map(p => [(p as NotionRawPage).id, p]))
+  const afterIds = new Set(after.map(p => (p as NotionRawPage).id))
+
+  let added = 0
+  let modified = 0
+  for (const p of after) {
+    const prev = beforeById.get((p as NotionRawPage).id)
+    if (!prev) added++
+    else if (JSON.stringify(prev) !== JSON.stringify(p)) modified++
+  }
+
+  let removed = 0
+  for (const id of beforeById.keys()) {
+    if (!afterIds.has(id)) removed++
+  }
+
+  return { added, modified, removed }
+}
+
+function formatDiff({ added, modified, removed }: { added: number; modified: number; removed: number }): string {
+  const parts: string[] = []
+  if (added) parts.push(`${added} agregado${added === 1 ? '' : 's'}`)
+  if (modified) parts.push(`${modified} modificado${modified === 1 ? '' : 's'}`)
+  if (removed) parts.push(`${removed} eliminado${removed === 1 ? '' : 's'}`)
+  return parts.join(', ') || 'sin cambios detectados'
+}
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const secret = req.nextUrl.searchParams.get('secret') ?? ''
   const expected = process.env.PUBLISH_SECRET ?? ''
@@ -86,7 +116,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
     revalidateTag('menu', 'max')
 
-    return htmlResponse('✅ Carta publicada', `${fresh.length} items actualizados.`)
+    const diff = formatDiff(diffMenuPages(currentLive, fresh))
+    return htmlResponse('✅ Carta publicada', `${fresh.length} items en el menú — ${diff}.`)
   } catch {
     return htmlResponse('⚠️ No se pudo publicar', 'Hubo un problema al conectar con Notion o el almacenamiento. Probá de nuevo en unos minutos.')
   }
