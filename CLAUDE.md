@@ -43,21 +43,23 @@ pnpm dev              # → http://localhost:39847
 
 ## Deploy a producción (dev.dimoe.cl)
 
-**No hay auto-deploy configurado a Production.** Los Preview deployments sí se generan automáticos por cada push/PR, pero `dev.dimoe.cl` (el dominio real, target "Production" del proyecto Vercel) solo se actualiza con:
+**Auto-deploy activo.** Cada merge/push a `dev` dispara un deployment automático a Production (`dev.dimoe.cl`) — confirmado empíricamente el 2026-07-17 tras correr `vercel git connect`. No hace falta correr `vercel deploy` a mano en el flujo normal.
 
-```bash
-vercel deploy --prod --yes --force
-```
-
-**El `--force` es obligatorio** — sin él, se detectó al menos un caso donde el deploy reusó un manifest de rutas corrupto/desactualizado de un deployment anterior y una ruta nueva dio 404 en producción pese a compilar bien localmente.
-
-Tras cada deploy, correr el smoke test (de solo lectura, sin efectos secundarios):
+Tras cada merge a `dev`, correr el smoke test (de solo lectura, sin efectos secundarios) para confirmar que el deploy automático terminó bien:
 
 ```bash
 node scripts/smoke-deploy.mjs
 ```
 
 Si algo falla, no asumir que es el código nuevo — comparar contra `next dev`/`next start` local primero (varios bugs de esta clase solo se reproducen en Vercel, nunca en local).
+
+**Si alguna vez hace falta forzar un deploy manual** (ej. el automático no disparó, o se sospecha de un manifest de rutas corrupto tras varios deploys seguidos):
+
+```bash
+vercel deploy --prod --yes --force
+```
+
+El `--force` es importante en ese caso puntual — se detectó al menos un caso donde un deploy reusó un manifest de rutas corrupto/desactualizado y una ruta nueva dio 404 en producción pese a compilar bien localmente.
 
 ## Convenciones
 
