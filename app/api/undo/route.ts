@@ -34,19 +34,23 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
-  const previous = await readBlobJson('menu-previous.json')
-  if (previous === null) {
-    return htmlResponse('⚠️ No hay versión anterior guardada', 'Todavía no se publicó ningún cambio para poder deshacerlo.')
+  try {
+    const previous = await readBlobJson('menu-previous.json')
+    if (previous === null) {
+      return htmlResponse('⚠️ No hay versión anterior guardada', 'Todavía no se publicó ningún cambio para poder deshacerlo.')
+    }
+
+    await put('menu-live.json', JSON.stringify(previous), {
+      access: 'private',
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      contentType: 'application/json',
+    })
+
+    revalidateTag('menu', 'max')
+
+    return htmlResponse('↩️ Cambios revertidos', 'La carta volvió a la versión anterior.')
+  } catch {
+    return htmlResponse('⚠️ No se pudo deshacer', 'Hubo un problema al conectar con el almacenamiento. Probá de nuevo en unos minutos.')
   }
-
-  await put('menu-live.json', JSON.stringify(previous), {
-    access: 'private',
-    addRandomSuffix: false,
-    allowOverwrite: true,
-    contentType: 'application/json',
-  })
-
-  revalidateTag('menu', 'max')
-
-  return htmlResponse('↩️ Cambios revertidos', 'La carta volvió a la versión anterior.')
 }

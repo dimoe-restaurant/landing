@@ -61,6 +61,12 @@ vercel deploy --prod --yes --force
 
 El `--force` es importante en ese caso puntual — se detectó al menos un caso donde un deploy reusó un manifest de rutas corrupto/desactualizado y una ruta nueva dio 404 en producción pese a compilar bien localmente.
 
+## ⚠️ Trampa conocida: ruta default de next-intl sin prefijo
+
+`i18n/routing.ts` usa `localePrefix: 'as-needed'` — el locale default (`es`) se sirve **sin prefijo** (`/carta`) vía un rewrite interno del middleware, mientras que las rutas con prefijo explícito (`/en/carta`, y `/es/carta` que en realidad redirige a `/carta`) hacen match directo. Esta asimetría causó dos incidentes de producción (solo reproducibles en Vercel, nunca en local) durante el desarrollo del work-item #118 — ambos se resolvieron, pero la asimetría estructural sigue ahí.
+
+**Regla:** cualquier página/ruta bajo el locale default sin prefijo que dependa de cookies, headers dinámicos o Draft Mode debe probarse explícitamente ahí (contra el dominio real de Vercel, no solo `next dev`/`next start` local) — no asumir que "funciona igual" que su versión prefijada.
+
 ## Convenciones
 
 ### Commits

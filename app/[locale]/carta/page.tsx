@@ -31,7 +31,6 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
 
   const publishedData = isPreview ? await getMenu(locale) : null;
   const hasUnpublishedChanges = isPreview && JSON.stringify(notionData) !== JSON.stringify(publishedData);
-  const previewExitUrl = `/api/preview-exit?secret=${process.env.PUBLISH_SECRET ?? ''}`;
 
   return (
     <main style={{ background: '#0D0B09' }}>
@@ -42,7 +41,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
               ? (isEn ? '⚠️ There are unpublished changes' : '⚠️ Hay cambios sin publicar')
               : (isEn ? '👁️ Preview mode active' : '👁️ Modo preview activo')}
           </span>
-          <a href={previewExitUrl} style={{ color: '#FFF7ED', textDecoration: 'underline', fontWeight: 700 }}>
+          <a href="/api/preview-exit" style={{ color: '#FFF7ED', textDecoration: 'underline', fontWeight: 700 }}>
             {isEn ? '🚪 Exit preview' : '🚪 Salir de preview'}
           </a>
         </div>

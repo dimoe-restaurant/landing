@@ -49,11 +49,17 @@ type NotionMenuPage = {
 
 const VALID_TABS = new Set<string>(['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'])
 
+// El servidor de Vercel corre en UTC — Chile es UTC-3/-4, así que el día de
+// la semana hay que calcularlo en su propia timezone, no con Date.getDay().
+const WEEKDAY_TO_KEY = { Sun: 'D', Mon: 'L', Tue: 'M', Wed: 'W', Thu: 'J', Fri: 'V', Sat: 'S' } as const
+const CHILE_WEEKDAY_FORMATTER = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santiago', weekday: 'short' })
+
 function parseMenuPages(
   pages: NotionMenuPage[],
   isEn: boolean,
 ): Record<MenuTab, MenuGroup[]> {
   const byTab = new Map<MenuTab, Map<string, MenuItem[]>>()
+  const todayKey = WEEKDAY_TO_KEY[CHILE_WEEKDAY_FORMATTER.format(new Date()) as keyof typeof WEEKDAY_TO_KEY]
 
   for (const page of pages) {
     const p = page.properties
@@ -67,9 +73,7 @@ function parseMenuPages(
     const groups = byTab.get(menuTab)!
     if (!groups.has(subcat)) groups.set(subcat, [])
 
-    // Filtro de días: 0=Dom 1=Lun 2=Mar 3=Mié 4=Jue 5=Vie 6=Sáb
-    const DAY_KEYS = ['D', 'L', 'M', 'W', 'J', 'V', 'S'] as const
-    const todayKey = DAY_KEYS[new Date().getDay()]
+    // Filtro de días
     const anyDaySet = (['L', 'M', 'W', 'J', 'V', 'S', 'D'] as const).some(k => p[k]?.checkbox === true)
     if (anyDaySet && !p[todayKey]?.checkbox) continue
 
