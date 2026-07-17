@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useScrollFade } from './use-scroll-fade';
 import ScrollFadeEdges from './ScrollFadeEdges';
+import { typography } from '@/lib/typography';
 
 type Props = {
   labels: string[];
@@ -32,9 +33,9 @@ export default function MenuSubtabs({ labels, active, onChange, bg }: Props) {
               background: isActive ? 'rgba(193,122,59,0.18)' : 'transparent',
               color: isActive ? '#C17A3B' : 'rgba(242,237,228,0.42)',
               border: `1px solid ${isActive ? 'rgba(193,122,59,0.5)' : 'rgba(242,237,228,0.12)'}`,
-              padding: '5px 14px', borderRadius: '100px', fontSize: '10px', fontWeight: 600,
-              letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.2s',
-              fontFamily: 'var(--font-sans)', flexShrink: 0, textTransform: 'uppercase',
+              padding: '5px 14px', borderRadius: '100px', ...typography.navSubtab,
+              cursor: 'pointer', transition: 'all 0.2s',
+              fontFamily: 'var(--font-sans)', flexShrink: 0,
             }}
             onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.4)'; e.currentTarget.style.color = 'rgba(242,237,228,0.7)'; } }}
             onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = 'rgba(242,237,228,0.12)'; e.currentTarget.style.color = 'rgba(242,237,228,0.42)'; } }}
