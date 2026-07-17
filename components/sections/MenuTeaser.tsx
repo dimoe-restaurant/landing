@@ -41,6 +41,7 @@ const HIGHLIGHTS = [
     headline: 'Queen Margherita · Catalina · Veracruz',
     body: 'Masa fermentada 48 horas. Horno de piedra a 450°C. Italianas, biancas y clásicas. La diferencia está en la base.',
     photo: '/images/menu-pizzas-mechada.jpg',
+    photoPos: 'center 45%',
   },
   {
     key: 'fondos',
@@ -49,6 +50,7 @@ const HIGHLIGHTS = [
     headline: 'Risotto · Lasagna · Pappardelle',
     body: 'Especialidades de la casa que la gente vuelve a pedir. Cada plato cocinado al momento, sin atajos.',
     photo: '/images/menu-fondos-lasagna.jpg',
+    photoPos: 'center 45%',
   },
   {
     key: 'bar',
@@ -57,6 +59,7 @@ const HIGHLIGHTS = [
     headline: 'Spritz · Sours · Coctelería clásica',
     body: 'Cócteles de autor y clásicos italianos ejecutados con cuidado. El Negroni que merecías. Happy Hour Mar–Vie.',
     photo: '/images/DSC02288.jpg',
+    photoPos: 'center 55%',
   },
   {
     key: 'postres',
@@ -65,6 +68,7 @@ const HIGHLIGHTS = [
     headline: 'Tiramisú · Panna Cotta · Pizza Dolce',
     body: 'El Tiramisú Pistacchio es el que se roba la noche. Siempre hay algo dulce para cerrar bien.',
     photo: '/images/menu-postres-tiramisu-pistacho.jpg',
+    photoPos: 'center 60%',
   },
 ];
 
@@ -110,7 +114,7 @@ export default function MenuTeaser() {
               >
                 <Image src={h.photo} alt="" fill aria-hidden
                   sizes="(max-width: 767px) 100vw, 280px"
-                  style={{ objectFit: 'cover', filter: 'grayscale(1)', zIndex: 0 }}
+                  style={{ objectFit: 'cover', objectPosition: h.photoPos, zIndex: 0 }}
                 />
                 <div aria-hidden style={{
                   position: 'absolute', inset: 0, zIndex: 1,
