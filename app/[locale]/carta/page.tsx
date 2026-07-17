@@ -26,7 +26,11 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
   const { isEnabled: isPreview } = await draftMode();
   const notionData = isPreview ? await getMenuPreview(locale) : await getMenu(locale);
   const menuData = notionData
-    ? { ...notionData, VINOS: FALLBACK_MENU.VINOS, SEMANAL: FALLBACK_MENU.SEMANAL }
+    ? {
+        ...notionData,
+        VINOS: notionData.VINOS.length > 0 ? notionData.VINOS : FALLBACK_MENU.VINOS,
+        SEMANAL: notionData.SEMANAL.length > 0 ? notionData.SEMANAL : FALLBACK_MENU.SEMANAL,
+      }
     : FALLBACK_MENU;
 
   const publishedData = isPreview ? await getMenu(locale) : null;
