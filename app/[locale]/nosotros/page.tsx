@@ -53,6 +53,22 @@ const milestones = [
   },
 ];
 
+const team = [
+  'Alondra',
+  'Mishell',
+  'Nicolás',
+  'Rodrigo',
+  'Danitza',
+  'Osvaldo',
+  'Bastián',
+  'Paz',
+  'Elías',
+  'Diego',
+  'Sandra',
+  'Catalina',
+  'Benjamín',
+];
+
 const values = [
   {
     icon: (
@@ -159,6 +175,55 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
                 {isEn ? v.en : v.es}
               </p>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Equipo */}
+      <div style={{ maxWidth: '860px', margin: '72px auto 0', padding: '0 clamp(16px, 4vw, 24px)' }}>
+        <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.25em', color: 'rgba(155,139,126,0.6)', textTransform: 'uppercase', marginBottom: '24px' }}>
+          {isEn ? 'Team' : 'Equipo'}
+        </p>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 700, color: '#F2EDE4', lineHeight: 1.2, margin: '0 0 16px' }}>
+          {isEn
+            ? 'The people who make it happen'
+            : 'Las personas que hacen que esto pase'}
+        </h2>
+        <p style={{ fontSize: 'clamp(14px, 1.8vw, 16px)', lineHeight: 1.8, color: 'rgba(242,237,228,0.6)', maxWidth: '620px', margin: '0 0 32px' }}>
+          {isEn
+            ? "None of this would be possible without the incredible team that brings DiMOE to life every single day, so they can give our guests the best of themselves."
+            : 'Nada de esto sería posible sin el tremendo equipo que hace andar DiMOE día a día, para darles a ustedes lo mejor de sí mismos.'}
+        </p>
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <div style={{ maxWidth: '360px', margin: '0 auto 24px', borderRadius: '20px', overflow: 'hidden', border: '1px solid #2A2520', background: '#181310', aspectRatio: '3/4', position: 'relative' }}>
+          <img
+            src="/images/equipo-dimoe.jpg"
+            alt={isEn ? 'The DiMOE team, recognized by The Top Chile as the 2nd best pizza in the Metropolitan Region' : 'El equipo DiMOE, reconocido por The Top Chile como la 2° mejor pizza de la Región Metropolitana'}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+          />
+        </div>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          {team.map((name) => (
+            <span
+              key={name}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#181310',
+                border: '1px solid #2A2520',
+                borderRadius: '100px',
+                padding: '8px 16px',
+                fontSize: '13px',
+                fontWeight: 500,
+                color: 'rgba(242,237,228,0.85)',
+              }}
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#C17A3B', flexShrink: 0 }} />
+              {name}
+            </span>
           ))}
         </div>
       </div>
