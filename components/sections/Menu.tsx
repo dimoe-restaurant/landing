@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
+import { typography } from '@/lib/typography';
 import MenuSubtabs from './MenuSubtabs';
 import ScrollFadeEdges from './ScrollFadeEdges';
 import { useScrollFade } from './use-scroll-fade';
@@ -183,8 +184,8 @@ export default function Menu({ menu }: Props) {
       {!active && (
         <div style={{ textAlign: 'center', padding: 'clamp(48px, 7vw, 80px) clamp(16px, 4vw, 24px) 40px' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.35em', color: '#C17A3B', textTransform: 'uppercase', marginBottom: '12px' }}>{t('label')}</p>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, lineHeight: 1.15, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
+            <p style={{ ...typography.eyebrow, color: '#C17A3B', marginBottom: '12px' }}>{t('label')}</p>
+            <h2 style={{ ...typography.displayLg, color: '#F2EDE4', margin: 0 }}>{t('headline')}</h2>
           </motion.div>
         </div>
       )}
@@ -221,8 +222,8 @@ export default function Menu({ menu }: Props) {
               background: active === tab ? '#C17A3B' : 'transparent',
               color: active === tab ? '#F2EDE4' : 'rgba(242,237,228,0.5)',
               border: `1px solid ${active === tab ? '#C17A3B' : 'rgba(242,237,228,0.15)'}`,
-              padding: '7px 18px', borderRadius: '100px', fontSize: '11px', fontWeight: 600,
-              letterSpacing: '0.12em', cursor: 'pointer', transition: 'all 0.2s',
+              padding: '7px 18px', borderRadius: '100px', ...typography.navTab,
+              cursor: 'pointer', transition: 'all 0.2s',
               fontFamily: 'var(--font-sans)', flexShrink: 0,
             }}
             onMouseEnter={e => { if (active !== tab) { e.currentTarget.style.borderColor = 'rgba(193,122,59,0.5)'; e.currentTarget.style.color = 'rgba(242,237,228,0.8)'; } }}
@@ -258,8 +259,7 @@ export default function Menu({ menu }: Props) {
               }} />
               <span style={{
                 position: 'absolute', bottom: '12px', left: '14px', right: '14px', textAlign: 'left',
-                fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#F2EDE4',
-                letterSpacing: '0.02em',
+                ...typography.titleMd, color: '#F2EDE4', letterSpacing: '0.02em',
               }}>
                 {TAB_DISPLAY[tab]}
               </span>
@@ -309,15 +309,14 @@ export default function Menu({ menu }: Props) {
         {/* Título de sección */}
         <div style={{ textAlign: 'center', paddingTop: '28px', paddingBottom: '20px' }}>
           <h2 style={{
-            fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px, 4vw, 38px)', fontWeight: 700,
-            letterSpacing: '0.04em', color: '#C17A3B', textTransform: 'uppercase', margin: '0 0 14px',
+            ...typography.displayMd, color: '#C17A3B', margin: '0 0 14px',
           }}>
             {TAB_DISPLAY[active]}
           </h2>
           <div style={{ width: '48px', height: '2px', background: 'rgba(193,122,59,0.4)', margin: '0 auto' }} />
           {active === 'PIZZAS' && (
             <p style={{
-              fontSize: '11px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
+              ...typography.overline,
               color: 'rgba(193,122,59,0.75)', marginTop: '14px', marginBottom: 0,
             }}>
               2° Lugar The Top Pizza Chile — Región Metropolitana
@@ -351,8 +350,8 @@ export default function Menu({ menu }: Props) {
                       borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: 'rgba(220,80,80,0.9)' }}>Menú de la Semana</span>
-                        <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(220,80,80,0.55)' }}>
+                        <span style={{ ...typography.titleMd, color: 'rgba(220,80,80,0.9)' }}>Menú de la Semana</span>
+                        <span style={{ ...typography.caption, color: 'rgba(220,80,80,0.55)' }}>
                           {group.subtitle ?? 'Actualización semanal · consultar disponibilidad'}
                         </span>
                       </div>
@@ -367,8 +366,8 @@ export default function Menu({ menu }: Props) {
                       borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: '17px', fontWeight: 700, color: '#C17A3B' }}>Happy Hour</span>
-                        <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'rgba(193,122,59,0.72)' }}>
+                        <span style={{ ...typography.titleMd, color: '#C17A3B' }}>Happy Hour</span>
+                        <span style={{ ...typography.caption, color: 'rgba(193,122,59,0.72)' }}>
                           {group.subtitle ?? 'Miércoles a Viernes · 17:00 – 20:00'}
                         </span>
                       </div>
@@ -378,7 +377,7 @@ export default function Menu({ menu }: Props) {
                   {/* Para Niños — mismo tratamiento visual que un grupo regular */}
                   {isKids && (
                     <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>
+                      <h3 style={{ ...typography.titleSm, color: '#F2EDE4', margin: 0 }}>
                         Para los Pequeños
                       </h3>
                     </div>
@@ -388,9 +387,9 @@ export default function Menu({ menu }: Props) {
                   {group.name && !isHappyHour && !isKids && (
                     <div style={{ marginBottom: '18px', paddingBottom: '11px', borderBottom: '2px solid rgba(242,237,228,0.18)' }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap' }}>
-                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '15px', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
+                        <h3 style={{ ...typography.titleSm, color: '#F2EDE4', margin: 0 }}>{group.name}</h3>
                         {group.subtitle && (
-                          <span style={{ fontSize: '11px', color: 'rgba(242,237,228,0.38)', letterSpacing: '0.06em' }}>
+                          <span style={{ ...typography.caption, fontWeight: 400, color: 'rgba(242,237,228,0.38)' }}>
                             {group.subtitle}
                           </span>
                         )}
@@ -420,16 +419,15 @@ export default function Menu({ menu }: Props) {
                             marginBottom: (!isCompact && item.desc) ? '5px' : 0,
                           }}>
                             <span style={{
-                              fontFamily: 'var(--font-serif)',
-                              fontSize: isCompact ? '13px' : '15px',
-                              fontWeight: 700, color: '#F2EDE4', lineHeight: 1.3,
+                              ...(isCompact ? typography.itemNameCompact : typography.itemName),
+                              color: '#F2EDE4',
                             }}>
                               {item.name}
                             </span>
                             {item.badge && (
                               <span style={{
-                                fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em',
-                                color: '#C17A3B', textTransform: 'uppercase',
+                                ...typography.badge,
+                                color: '#C17A3B',
                                 border: '1px solid rgba(193,122,59,0.4)',
                                 borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
                               }}>
@@ -437,18 +435,13 @@ export default function Menu({ menu }: Props) {
                               </span>
                             )}
                           </div>
-                          {isCompact && item.desc && (
-                            <span style={{ fontSize: '12px', color: 'rgba(242,237,228,0.42)', display: 'block', lineHeight: 1.4, marginTop: '1px' }}>
-                              {item.desc}
-                            </span>
-                          )}
                           {!isCompact && item.desc && (
-                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
+                            <p style={{ ...typography.body, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
                               {item.desc}
                             </p>
                           )}
                           {item.note && (
-                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
+                            <p style={{ ...typography.note, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0' }}>
                               {item.note}
                             </p>
                           )}
@@ -456,8 +449,8 @@ export default function Menu({ menu }: Props) {
                         {fmt(item.price) != null && (
                           <span style={{
                             flexShrink: 0,
-                            fontSize: isCompact ? '13px' : '14px',
-                            fontWeight: 600, color: '#C17A3B', lineHeight: '1.3',
+                            ...(isCompact ? typography.priceCompact : typography.price),
+                            color: '#C17A3B',
                           }}>
                             ${fmt(item.price)}
                           </span>
@@ -492,7 +485,7 @@ export default function Menu({ menu }: Props) {
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
             style={{ marginTop: '48px', paddingTop: '28px', borderTop: '1px solid rgba(242,237,228,0.08)' }}
           >
-            <p style={{ fontSize: '13px', color: 'rgba(242,237,228,0.28)', margin: 0 }}>
+            <p style={{ ...typography.bodySm, color: 'rgba(242,237,228,0.28)', margin: 0 }}>
               Prices in Chilean pesos, tax included.
             </p>
           </motion.div>
