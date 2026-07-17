@@ -73,7 +73,7 @@ body {
   background-attachment: fixed;
 }
 
-/* Separador de foto full-bleed dentro del contenido de /carta — más bajo en mobile */
+/* Separador de foto dentro del contenido de /carta, ancho limitado a la columna — más bajo en mobile */
 .menu-separator { height: 220px; }
 @media (max-width: 767px) {
   .menu-separator { height: 140px; }

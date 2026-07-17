@@ -273,7 +273,7 @@ export default function Menu({ menu }: Props) {
           Solo la foto del tab activo se monta — evita descargar las 7 fotos
           a la vez en la carga inicial. El crossfade lo da AnimatePresence.
       ──────────────────────────────────────────────────────────────────────── */}
-      <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden' }}>
         <AnimatePresence>
           <motion.div
             key={active}
@@ -448,7 +448,7 @@ export default function Menu({ menu }: Props) {
                             </p>
                           )}
                           {item.note && (
-                            <p style={{ fontSize: '11px', color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
+                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
                               {item.note}
                             </p>
                           )}
@@ -468,14 +468,13 @@ export default function Menu({ menu }: Props) {
 
                 </div>
 
-                {/* Foto real full-bleed — rompe la lista a mitad de sección, ritmo editorial del PDF */}
+                {/* Foto real, ritmo editorial del PDF — limitada al ancho del contenido para no perder resolución en desktop */}
                 {gi === sepIndex && sepPhoto && (
                   <div className="menu-separator" style={{
-                    position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)',
-                    overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                    position: 'relative', overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
                     borderTop: '1px solid rgba(193,122,59,0.25)', borderBottom: '1px solid rgba(193,122,59,0.25)',
                   }}>
-                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw" quality={90}
+                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="(max-width: 800px) 100vw, 760px" quality={90}
                       data-photo={`separator-${active.toLowerCase()}`}
                       style={{ objectFit: 'cover', objectPosition: sepPhoto.pos }} />
                     <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${bg}00 0%, ${bg}55 100%)` }} />
