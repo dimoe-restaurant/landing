@@ -12,7 +12,7 @@ export default function Hero() {
   const waUrl = `https://wa.me/56973694101?text=${encodeURIComponent(t('wa_message'))}`;
 
   return (
-    <section id="inicio" style={{ position: 'relative', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '72px 20px 0', overflow: 'hidden', background: '#0D0B09' }}>
+    <section id="inicio" style={{ position: 'relative', minHeight: 'clamp(560px, 92dvh, 900px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '72px 20px 0', overflow: 'hidden', background: '#0D0B09' }}>
       {/* Real photo background */}
       <div style={{ position: 'absolute', inset: 0 }}>
         <Image src="/images/landing-actual-4.jpg" alt="" fill priority style={{ objectFit: 'cover', objectPosition: 'center 40%' }} />
@@ -60,7 +60,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        <p style={{ fontSize: '12px', color: '#9B8B7E', marginTop: '8px', letterSpacing: '0.02em' }}>
+        <p style={{ fontSize: '14px', color: '#9B8B7E', marginTop: '12px', letterSpacing: '0.02em' }}>
           {t('hours')}
         </p>
       </motion.div>
