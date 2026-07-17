@@ -31,7 +31,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
 
   const publishedData = isPreview ? await getMenu(locale) : null;
   const hasUnpublishedChanges = isPreview && JSON.stringify(notionData) !== JSON.stringify(publishedData);
-  const previewExitUrl = `/api/preview/exit?secret=${process.env.PUBLISH_SECRET ?? ''}`;
+  const previewExitUrl = `/api/preview-exit?secret=${process.env.PUBLISH_SECRET ?? ''}`;
 
   return (
     <main style={{ background: '#0D0B09' }}>
