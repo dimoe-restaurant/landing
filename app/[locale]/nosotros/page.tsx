@@ -207,8 +207,8 @@ export default async function NosotrosPage({ params }: { params: Promise<{ local
         </p>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(24px, 3.5vw, 34px)', fontWeight: 700, color: '#F2EDE4', lineHeight: 1.2, margin: '0 0 16px' }}>
           {isEn
-            ? 'The people who make it happen'
-            : 'Las personas que hacen que esto pase'}
+            ? 'The team behind DiMOE that makes it possible'
+            : 'El equipo detrás de DiMOE que hace esto posible'}
         </h2>
         <p style={{ fontSize: 'clamp(14px, 1.8vw, 16px)', lineHeight: 1.8, color: 'rgba(242,237,228,0.6)', maxWidth: '620px', margin: '0 0 32px' }}>
           {isEn
