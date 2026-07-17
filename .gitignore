@@ -11,6 +11,7 @@ build/
 .ruff_cache/
 node_modules/
 .next/
+.next-*/
 .nuxt/
 
 # Claude Code — skills y config local (no commitear en repo público)
