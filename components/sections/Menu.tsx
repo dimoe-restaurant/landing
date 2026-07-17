@@ -463,14 +463,13 @@ export default function Menu({ menu }: Props) {
 
                 </div>
 
-                {/* Foto real full-bleed — rompe la lista a mitad de sección, ritmo editorial del PDF */}
+                {/* Foto real, ritmo editorial del PDF — limitada al ancho del contenido para no perder resolución en desktop */}
                 {gi === sepIndex && sepPhoto && (
                   <div className="menu-separator" style={{
-                    position: 'relative', width: '100vw', marginLeft: 'calc(50% - 50vw)', marginRight: 'calc(50% - 50vw)',
-                    overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
+                    position: 'relative', overflow: 'hidden', marginTop: '4px', marginBottom: '44px',
                     borderTop: '1px solid rgba(193,122,59,0.25)', borderBottom: '1px solid rgba(193,122,59,0.25)',
                   }}>
-                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="100vw" quality={90}
+                    <Image src={sepPhoto.src} alt={TAB_DISPLAY[active]} fill sizes="(max-width: 800px) 100vw, 760px" quality={90}
                       data-photo={`separator-${active.toLowerCase()}`}
                       style={{ objectFit: 'cover', objectPosition: sepPhoto.pos }} />
                     <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${bg}00 0%, ${bg}55 100%)` }} />
