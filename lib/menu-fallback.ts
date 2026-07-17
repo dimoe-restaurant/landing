@@ -117,9 +117,9 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
         { name: 'Schop 500cc', desc: 'Variedades', price: 3700, note: 'Normal $4.500' },
       ],
     },
-    // 2. Gin Frutal — protagonista visual
+    // 2. Gin — protagonista visual (bucket propio, no agrupado con Cócteles)
     {
-      name: 'Gin Frutal',
+      name: 'Gin',
       subtitle: '$7.500 c/u',
       items: [
         { name: 'Berries', price: 7500 },
@@ -189,7 +189,7 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
     },
     // 7. Cervezas
     {
-      name: 'Cervezas Artesanales — La Casona',
+      name: 'Cervezas',
       items: [
         { name: 'Litro Degustación', desc: '3 schops 350cc a tu gusto de las cervezas del día', price: 8900 },
         { name: 'Calafate Premium 500cc', price: 5000 },
@@ -251,16 +251,9 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
         { name: 'Amaretto', desc: 'Bajativo', price: 4000 },
         { name: 'Manzanilla', desc: 'Bajativo', price: 3800 },
         { name: 'Menta', desc: 'Bajativo', price: 3500 },
-      ],
-    },
-    // 12. Shots
-    {
-      name: 'Shots',
-      subtitle: '$3.000 c/u',
-      items: [
-        { name: 'Tequila José Cuervo', price: 3000 },
-        { name: 'Jagermeister', price: 3000 },
-        { name: 'Fireball', price: 3000 },
+        { name: 'Tequila José Cuervo (Shot)', desc: 'Shot', price: 3000 },
+        { name: 'Jagermeister (Shot)', desc: 'Shot', price: 3000 },
+        { name: 'Fireball (Shot)', desc: 'Shot', price: 3000 },
       ],
     },
   ],
