@@ -88,19 +88,27 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
-  const currentLive = await readBlobJson('menu-live.json')
+  try {
+    const currentLive = await readBlobJson('menu-live.json')
+    const fresh = await fetchNotionMenuRaw()
 
-  if (currentLive !== null) {
-    await writeBlobJson('menu-previous.json', currentLive)
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
-    await writeBlobJson(`menu-snapshots/${timestamp}.json`, currentLive)
-    await pruneOldSnapshots()
+    if (currentLive !== null && JSON.stringify(fresh) === JSON.stringify(currentLive)) {
+      return htmlResponse('ℹ️ Sin cambios que publicar', 'El contenido de Notion es igual al ya publicado — no se modificó nada.')
+    }
+
+    if (currentLive !== null) {
+      await writeBlobJson('menu-previous.json', currentLive)
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+      await writeBlobJson(`menu-snapshots/${timestamp}.json`, currentLive)
+      await pruneOldSnapshots()
+    }
+
+    await writeBlobJson('menu-live.json', fresh)
+
+    revalidateTag('menu', 'max')
+
+    return htmlResponse('✅ Carta publicada', `${fresh.length} items actualizados.`)
+  } catch {
+    return htmlResponse('⚠️ No se pudo publicar', 'Hubo un problema al conectar con Notion o el almacenamiento. Probá de nuevo en unos minutos.')
   }
-
-  const fresh = await fetchNotionMenuRaw()
-  await writeBlobJson('menu-live.json', fresh)
-
-  revalidateTag('menu', 'max')
-
-  return htmlResponse('✅ Carta publicada', `${fresh.length} items actualizados.`)
 }
