@@ -3,6 +3,8 @@ import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { del, get, list, put } from '@vercel/blob'
 
+export const maxDuration = 60
+
 const NOTION_API = 'https://api.notion.com/v1'
 const NOTION_VERSION = '2022-06-28'
 const MAX_SNAPSHOTS = 10
