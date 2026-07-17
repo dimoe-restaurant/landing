@@ -1,20 +1,13 @@
-import { timingSafeEqual } from 'crypto'
 import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
-import { del, get, list, put } from '@vercel/blob'
+import { del, list, put } from '@vercel/blob'
+import { htmlResponse, readBlobJson, secretsMatch } from '@/lib/api-helpers'
 
 export const maxDuration = 60
 
 const NOTION_API = 'https://api.notion.com/v1'
 const NOTION_VERSION = '2022-06-28'
 const MAX_SNAPSHOTS = 10
-
-function secretsMatch(provided: string, expected: string): boolean {
-  const a = Buffer.from(provided)
-  const b = Buffer.from(expected)
-  if (a.length !== b.length) return false
-  return timingSafeEqual(a, b)
-}
 
 async function fetchNotionMenuRaw(): Promise<unknown[]> {
   const token = process.env.NOTION_ACCESS_TOKEN
@@ -48,13 +41,6 @@ async function fetchNotionMenuRaw(): Promise<unknown[]> {
   return results
 }
 
-async function readBlobJson(pathname: string): Promise<unknown[] | null> {
-  const result = await get(pathname, { access: 'private', useCache: false })
-  if (!result) return null
-  const text = await new Response(result.stream).text()
-  return JSON.parse(text) as unknown[]
-}
-
 async function writeBlobJson(pathname: string, data: unknown[]): Promise<void> {
   await put(pathname, JSON.stringify(data), {
     access: 'private',
@@ -71,13 +57,6 @@ async function pruneOldSnapshots(): Promise<void> {
   const sorted = [...blobs].sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
   const toDelete = sorted.slice(MAX_SNAPSHOTS).map(b => b.url)
   if (toDelete.length > 0) await del(toDelete)
-}
-
-function htmlResponse(title: string, body: string): NextResponse {
-  return new NextResponse(
-    `<!doctype html><html><body style="font-family:system-ui,sans-serif;text-align:center;padding:64px"><h1>${title}</h1><p>${body}</p></body></html>`,
-    { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
-  )
 }
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
