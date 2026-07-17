@@ -273,7 +273,7 @@ export default function Menu({ menu }: Props) {
           Solo la foto del tab activo se monta — evita descargar las 7 fotos
           a la vez en la carga inicial. El crossfade lo da AnimatePresence.
       ──────────────────────────────────────────────────────────────────────── */}
-      <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', maxWidth: '760px', width: '100%', margin: '0 auto', height: '240px', overflow: 'hidden' }}>
         <AnimatePresence>
           <motion.div
             key={active}
@@ -288,7 +288,7 @@ export default function Menu({ menu }: Props) {
               alt={TAB_DISPLAY[active]}
               data-photo={`banner-${active.toLowerCase()}`}
               fill
-              sizes="100vw"
+              sizes="(max-width: 800px) 100vw, 760px"
               quality={90}
               priority
               style={{ objectFit: 'cover', objectPosition: TAB_PHOTO_POS[active] }}
