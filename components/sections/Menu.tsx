@@ -443,7 +443,7 @@ export default function Menu({ menu }: Props) {
                             </p>
                           )}
                           {item.note && (
-                            <p style={{ fontSize: '11px', color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
+                            <p style={{ fontSize: '14px', lineHeight: 1.65, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0', fontStyle: 'italic' }}>
                               {item.note}
                             </p>
                           )}
