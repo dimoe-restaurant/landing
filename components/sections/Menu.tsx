@@ -52,22 +52,23 @@ const TAB_SEPARATOR_PHOTO: Partial<Record<MenuTab, { src: string; pos: string }>
 };
 
 // Subtabs de navegación dentro de un tab activo — mapea group.name → bucket.
-// Grupos sin entrada caen en "Otros" (no desaparecen silenciosamente).
-// Poblado por tarea: BAR (#107), VINOS (#108). Vacío = sin subtabs, comportamiento actual.
+// Solo para agrupar deliberadamente varias subcategorías bajo un mismo tab
+// (ej. Spritz + Sours + Coctelería Clásica → "Cócteles"). Una subcategoría
+// que no está acá NO cae en un cajón genérico — se muestra con su propio
+// nombre (ver fallback en `presentBuckets` más abajo), así que agregar una
+// subcategoría nueva en Notion no requiere tocar este archivo.
 const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
   BAR: {
     'Happy Hour': 'Happy Hour',
-    'Gin Frutal': 'Cócteles',
     'Coctelería de la Casa': 'Cócteles',
     'Spritz': 'Cócteles',
     'Sours': 'Cócteles',
     'Coctelería Clásica': 'Cócteles',
-    'Cervezas Artesanales — La Casona': 'Cerveza',
-    'Vinos y Espumantes': 'Vino y Espumante',
-    'Sin Alcohol': 'Sin Alcohol',
+    'Cervezas': 'Cerveza',
+    'Coctelería sin alcohol': 'Sin Alcohol',
     'Jugos y Bebidas': 'Sin Alcohol',
+    'Vinos y Espumantes': 'Vino y Espumante',
     'Tragos': 'Destilados',
-    'Shots': 'Destilados',
   },
   VINOS: {
     'Sauvignon Blanc': 'Blancos',
@@ -115,14 +116,18 @@ export default function Menu({ menu }: Props) {
   // para no ofrecer un subtab que lleve a una sección vacía si el contenido real (Notion)
   // todavía no tiene grupos para ese bucket.
   const subtabConfig = active ? TAB_SUBTABS[active] : undefined;
+  // Fallback: si la subcategoría no está agrupada explícitamente, se usa su
+  // propio nombre — Notion ya dice a qué subcategoría pertenece un ítem, no
+  // hace falta un bucket "Otros" genérico ni tocar código para que aparezca.
+  const bucketFor = (name?: string) => subtabConfig?.[name ?? ''] ?? name ?? 'Otros';
   const presentBuckets = subtabConfig
-    ? groups.map(g => subtabConfig[g.name ?? ''] ?? 'Otros')
+    ? groups.map(g => bucketFor(g.name))
     : [];
   const subtabLabels = subtabConfig
     ? ['Todos', ...Array.from(new Set(presentBuckets))]
     : [];
   const groupsInSubtabs = subtabConfig
-    ? groups.filter(g => activeSubtab === 'Todos' || (subtabConfig[g.name ?? ''] ?? 'Otros') === activeSubtab)
+    ? groups.filter(g => activeSubtab === 'Todos' || bucketFor(g.name) === activeSubtab)
     : groups;
 
   // Punto de corte para el separador de foto: después del grupo donde se acumulan
