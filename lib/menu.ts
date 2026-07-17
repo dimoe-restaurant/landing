@@ -149,25 +149,34 @@ export async function getMenuPreview(
   const isEn = locale === 'en'
 
   try {
-    const res = await fetch(`${NOTION_API}/databases/${dbId}/query`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Notion-Version': NOTION_VERSION,
-      },
-      body: JSON.stringify({
-        filter: { property: 'Activo', checkbox: { equals: true } },
-        sorts: [{ property: 'Orden', direction: 'ascending' }],
-        page_size: 200,
-      }),
-      cache: 'no-store',
-    })
+    const pages: NotionMenuPage[] = []
+    let cursor: string | undefined
 
-    if (!res.ok) return null
+    do {
+      const res = await fetch(`${NOTION_API}/databases/${dbId}/query`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Notion-Version': NOTION_VERSION,
+        },
+        body: JSON.stringify({
+          filter: { property: 'Activo', checkbox: { equals: true } },
+          sorts: [{ property: 'Orden', direction: 'ascending' }],
+          page_size: 100,
+          ...(cursor ? { start_cursor: cursor } : {}),
+        }),
+        cache: 'no-store',
+      })
 
-    const data = await res.json() as { results: NotionMenuPage[]; has_more: boolean }
-    return parseMenuPages(data.results, isEn)
+      if (!res.ok) return null
+
+      const data = await res.json() as { results: NotionMenuPage[]; has_more: boolean; next_cursor: string | null }
+      pages.push(...data.results)
+      cursor = data.has_more ? (data.next_cursor ?? undefined) : undefined
+    } while (cursor)
+
+    return parseMenuPages(pages, isEn)
   } catch {
     return null
   }
