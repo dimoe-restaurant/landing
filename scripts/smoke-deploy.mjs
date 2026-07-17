@@ -39,10 +39,14 @@ async function main() {
   console.log(`🔎  Smoke test contra ${BASE_URL}\n`)
 
   // Rutas de auth — sin secret, deben rechazar con 401 (no 404, no 500).
-  for (const path of ['/api/publish', '/api/undo', '/api/preview', '/api/preview-exit']) {
+  for (const path of ['/api/publish', '/api/undo', '/api/preview']) {
     const status = await fetchStatus(path)
     check(`${path} sin secret → 401`, status === 401, `status real: ${status}`)
   }
+
+  // /api/preview-exit no requiere secret (solo borra la cookie propia del navegador) — debe redirigir.
+  const exitStatus = await fetchStatus('/api/preview-exit')
+  check('/api/preview-exit sin secret → 307 (no requiere auth)', exitStatus === 307, `status real: ${exitStatus}`)
 
   // Contenido real publicado, visible sin cookie de preview.
   const bareBody = await fetchBody('/carta')
