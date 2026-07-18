@@ -43,19 +43,19 @@ const H = {
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 // ── 1. Agregar propiedades de días al schema ────────────────────────────────────
-console.log('\n→ Actualizando schema: añadiendo propiedades L/M/W/J/V/S/D ...')
+console.log('\n→ Actualizando schema: añadiendo propiedades Lunes..Domingo ...')
 const schemaPatch = await fetch(`https://api.notion.com/v1/databases/${DB_ID}`, {
   method: 'PATCH',
   headers: H,
   body: JSON.stringify({
     properties: {
-      L: { checkbox: {} },
-      M: { checkbox: {} },
-      W: { checkbox: {} },
-      J: { checkbox: {} },
-      V: { checkbox: {} },
-      S: { checkbox: {} },
-      D: { checkbox: {} },
+      Lunes: { checkbox: {} },
+      Martes: { checkbox: {} },
+      Miércoles: { checkbox: {} },
+      Jueves: { checkbox: {} },
+      Viernes: { checkbox: {} },
+      Sábado: { checkbox: {} },
+      Domingo: { checkbox: {} },
     },
   }),
 })
@@ -86,14 +86,15 @@ async function createItem(cat, subcat, item) {
     Categoría: { select: { name: cat } },
     Activo: { checkbox: true },
     Orden: { number: item.ord ?? 0 },
-    // Días — false por defecto = mostrar siempre
-    L: { checkbox: item.dias?.includes('L') ?? false },
-    M: { checkbox: item.dias?.includes('M') ?? false },
-    W: { checkbox: item.dias?.includes('W') ?? false },
-    J: { checkbox: item.dias?.includes('J') ?? false },
-    V: { checkbox: item.dias?.includes('V') ?? false },
-    S: { checkbox: item.dias?.includes('S') ?? false },
-    D: { checkbox: item.dias?.includes('D') ?? false },
+    // Días — sin `item.dias` se marcan los 7 (siempre visible, explícito).
+    // Con `item.dias` (ej. ['Miércoles','Jueves','Viernes']) solo esos quedan marcados.
+    Lunes: { checkbox: item.dias?.includes('Lunes') ?? true },
+    Martes: { checkbox: item.dias?.includes('Martes') ?? true },
+    Miércoles: { checkbox: item.dias?.includes('Miércoles') ?? true },
+    Jueves: { checkbox: item.dias?.includes('Jueves') ?? true },
+    Viernes: { checkbox: item.dias?.includes('Viernes') ?? true },
+    Sábado: { checkbox: item.dias?.includes('Sábado') ?? true },
+    Domingo: { checkbox: item.dias?.includes('Domingo') ?? true },
   }
   if (item.desc) props['Descripción'] = { rich_text: [{ text: { content: item.desc } }] }
   if (item.price != null && item.price !== '') props['Precio'] = { number: item.price }
@@ -162,8 +163,8 @@ const VINOS_GROUPS = [
 /**
  * SEMANAL — menú del chef. Cambia semanalmente.
  * Subcategorías: "Menú del Chef" y "Elige tu Opción"
- * Para restringir días: agregar `dias: ['L','M','W','J','V']` en el ítem.
- * Sin `dias` (o array vacío) = mostrar siempre.
+ * Para restringir días: agregar `dias: ['Lunes','Martes','Miércoles','Jueves','Viernes']` en el ítem.
+ * Sin `dias` = se marcan los 7 (mostrar siempre, explícito).
  *
  * Este menú de ejemplo viene del Canva (2026-06-30).
  * En Notion puedes desactivar un ítem (Activo=false) y crear el nuevo
@@ -174,7 +175,7 @@ const SEMANAL_GROUPS = [
     {
       name: 'Entrada',
       desc: 'Reineta fresca del día con el toque justo de limón y especias, presentada sobre una delicada crema de palta artesanal. Una entrada ligera y refrescante.',
-      // dias: ['L','M','W','J','V']  ← descomentar para mostrar solo lunes a viernes
+      // dias: ['Lunes','Martes','Miércoles','Jueves','Viernes']  ← descomentar para mostrar solo lunes a viernes
       ord: 1,
     },
     {
