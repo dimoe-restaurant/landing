@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { saveContact, type ContactTipo, type ContactOrigen } from '@/lib/notion';
+import { checkRateLimit, clientIp } from '@/lib/rate-limit';
 
 const TIPOS_VALIDOS: ContactTipo[] = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'];
 const ORIGENES_VALIDOS: ContactOrigen[] = ['Home', 'Atención Cliente'];
-
-function clientIp(req: NextRequest): string | null {
-  const forwarded = req.headers.get('x-forwarded-for');
-  if (forwarded) return forwarded.split(',')[0].trim();
-  return req.headers.get('x-real-ip');
-}
 
 function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
   const ua = req.headers.get('user-agent') ?? '';
@@ -163,6 +158,11 @@ function confirmationHtml(nombre: string, caso: boolean) {
 
 export async function POST(req: NextRequest) {
   try {
+    const allowed = await checkRateLimit('contact', clientIp(req) ?? 'unknown');
+    if (!allowed) {
+      return NextResponse.json({ error: 'Demasiadas solicitudes, intenta de nuevo en un minuto' }, { status: 429 });
+    }
+
     const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen } = await req.json();
 
     if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
