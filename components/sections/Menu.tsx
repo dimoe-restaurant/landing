@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 import { typography } from '@/lib/typography';
@@ -69,21 +70,26 @@ const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
     'Coctelería sin alcohol': 'Sin Alcohol',
     'Jugos y Bebidas': 'Sin Alcohol',
     'Vinos y Espumantes': 'Vino y Espumante',
-    'Tragos': 'Destilados',
+    // Destilados — antes un solo grupo "Tragos" con desc redundante (repetía
+    // el tipo de licor en cada ítem); ahora una Subcategoría real por tipo,
+    // todas agrupadas bajo el mismo subtab "Destilados".
+    'Pisco': 'Destilados',
+    'Ron': 'Destilados',
+    'Whisky': 'Destilados',
+    'Ginebra': 'Destilados',
+    'Tequila': 'Destilados',
+    'Bajativo': 'Destilados',
+    'Shots': 'Destilados',
   },
-  VINOS: {
-    'Sauvignon Blanc': 'Blancos',
-    'Chardonnay': 'Blancos',
-    'Carménère': 'Tintos',
-    'Cabernet Sauvignon': 'Tintos',
-    'Merlot': 'Tintos',
-    'Ensamblajes': 'Ensamblajes y Dulce',
-    'Dulce': 'Ensamblajes y Dulce',
-  },
+  // Objeto vacío (no undefined): activa el bucketing pero sin agrupar nada
+  // explícito, así cada Subcategoría real (Espumante, Carménère, Cabernet
+  // Sauvignon, Merlot, Blanco, ...) aparece como su propio subtab — mismo
+  // patrón de fallback-a-nombre-propio que #224 aplicó en BAR.
+  VINOS: {},
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
-  ENTRADAS: 'ANTIPASTI',
+  ENTRADAS: 'ENTRADAS',
   PIZZAS:   'PIZZAS',
   FONDOS:   'FONDOS',
   POSTRES:  'DOLCE',
@@ -324,7 +330,7 @@ export default function Menu({ menu }: Props) {
           )}
         </div>
 
-        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} bg={bg} />
+        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} />
 
         <AnimatePresence mode="wait">
           <motion.div key={`${active}-${activeSubtab}`}
@@ -337,6 +343,9 @@ export default function Menu({ menu }: Props) {
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
               const noDesc = group.items.every(i => !i.desc);
               const isCompact = noDesc && group.items.length > 2;
+              // Puntero "ver detalle en Vinos" — el único ítem de este grupo en BAR
+              // debe navegar de verdad a la tab VINOS, no quedar como texto suelto.
+              const isVinosPointer = active === 'BAR' && group.name === 'Vinos y Espumantes';
 
               return (
                 <Fragment key={gi}>
@@ -403,60 +412,73 @@ export default function Menu({ menu }: Props) {
                     gridTemplateColumns: 'repeat(auto-fill, minmax(168px, 1fr))',
                     gap: '2px 20px',
                   } : {}}>
-                    {group.items.map((item, ii) => (
-                      <div key={ii} style={{
-                        display: 'flex',
-                        alignItems: isCompact ? 'baseline' : 'flex-start',
-                        justifyContent: 'space-between',
-                        gap: isCompact ? '8px' : '16px',
-                        padding: isCompact ? '7px 0' : '16px 0',
-                        borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
-                        opacity: isKids ? 0.62 : 1,
-                      }}>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{
-                            display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
-                            marginBottom: (!isCompact && item.desc) ? '5px' : 0,
-                          }}>
-                            <span style={{
-                              ...(isCompact ? typography.itemNameCompact : typography.itemName),
-                              color: '#F2EDE4',
+                    {group.items.map((item, ii) => {
+                      const row = (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: isCompact ? 'baseline' : 'flex-start',
+                          justifyContent: 'space-between',
+                          gap: isCompact ? '8px' : '16px',
+                          padding: isCompact ? '7px 0' : '16px 0',
+                          borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
+                          opacity: isKids ? 0.62 : 1,
+                        }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
+                              marginBottom: (!isCompact && item.desc) ? '5px' : 0,
                             }}>
-                              {item.name}
-                            </span>
-                            {item.badge && (
                               <span style={{
-                                ...typography.badge,
-                                color: '#C17A3B',
-                                border: '1px solid rgba(193,122,59,0.4)',
-                                borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                ...(isCompact ? typography.itemNameCompact : typography.itemName),
+                                color: isVinosPointer ? '#C17A3B' : '#F2EDE4',
                               }}>
-                                {item.badge}
+                                {item.name}
                               </span>
+                              {item.badge && (
+                                <span style={{
+                                  ...typography.badge,
+                                  color: '#C17A3B',
+                                  border: '1px solid rgba(193,122,59,0.4)',
+                                  borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                }}>
+                                  {item.badge}
+                                </span>
+                              )}
+                            </div>
+                            {!isCompact && item.desc && (
+                              <p style={{ ...typography.body, color: isVinosPointer ? 'rgba(193,122,59,0.75)' : 'rgba(242,237,228,0.48)', margin: 0 }}>
+                                {item.desc}
+                              </p>
+                            )}
+                            {item.note && (
+                              <p style={{ ...typography.note, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0' }}>
+                                {item.note}
+                              </p>
                             )}
                           </div>
-                          {!isCompact && item.desc && (
-                            <p style={{ ...typography.body, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
-                              {item.desc}
-                            </p>
-                          )}
-                          {item.note && (
-                            <p style={{ ...typography.note, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0' }}>
-                              {item.note}
-                            </p>
+                          {fmt(item.price) != null && (
+                            <span style={{
+                              flexShrink: 0,
+                              ...(isCompact ? typography.priceCompact : typography.price),
+                              color: '#C17A3B',
+                            }}>
+                              ${fmt(item.price)}
+                            </span>
                           )}
                         </div>
-                        {fmt(item.price) != null && (
-                          <span style={{
-                            flexShrink: 0,
-                            ...(isCompact ? typography.priceCompact : typography.price),
-                            color: '#C17A3B',
-                          }}>
-                            ${fmt(item.price)}
-                          </span>
-                        )}
-                      </div>
-                    ))}
+                      );
+
+                      if (isVinosPointer) {
+                        return (
+                          <Link key={ii} href="/carta#vinos" style={{ textDecoration: 'none', cursor: 'pointer' }}
+                            onClick={(e) => { e.preventDefault(); handleTab('VINOS'); }}
+                          >
+                            {row}
+                          </Link>
+                        );
+                      }
+                      return <Fragment key={ii}>{row}</Fragment>;
+                    })}
                   </div>
 
                 </div>

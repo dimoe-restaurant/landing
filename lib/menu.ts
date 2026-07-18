@@ -101,10 +101,15 @@ function parseMenuPages(
       result[tab] = []
       continue
     }
-    result[tab] = Array.from(groups.entries()).map(([name, items]) => ({
-      name: name || undefined,
-      items,
-    }))
+    // Un grupo puede quedar vacío si TODOS sus ítems se filtraron por el
+    // filtro de días (ej. Happy Hour un sábado) — sin esto, el banner del
+    // grupo (o su subtab) se renderiza igual con cero ítems debajo.
+    result[tab] = Array.from(groups.entries())
+      .filter(([, items]) => items.length > 0)
+      .map(([name, items]) => ({
+        name: name || undefined,
+        items,
+      }))
   }
 
   return result
