@@ -1,11 +1,13 @@
 import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
+import { secretsMatch } from '@/lib/api-helpers'
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  const secret = req.nextUrl.searchParams.get('secret')
+  const secret = req.nextUrl.searchParams.get('secret') ?? ''
+  const expected = process.env.REVALIDATE_SECRET ?? ''
   const tag = req.nextUrl.searchParams.get('tag') ?? 'menu'
 
-  if (!process.env.REVALIDATE_SECRET || secret !== process.env.REVALIDATE_SECRET) {
+  if (!expected || !secretsMatch(secret, expected)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
