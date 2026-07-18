@@ -1,30 +1,25 @@
 'use client';
 
-import { useRef } from 'react';
-import { useScrollFade } from './use-scroll-fade';
-import ScrollFadeEdges from './ScrollFadeEdges';
 import { typography } from '@/lib/typography';
 
 type Props = {
   labels: string[];
   active: string;
   onChange: (label: string) => void;
-  bg: string;
 };
 
-export default function MenuSubtabs({ labels, active, onChange, bg }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  const fade = useScrollFade(ref);
-
+// Sin fade de bordes acá a propósito: en pills cortos ("Gin", "Bar") un
+// degradado de 28px tapa buena parte del texto y lo hace ver "apagado" —
+// el propio pill cortado a la mitad ya es la señal de que hay más scroll.
+export default function MenuSubtabs({ labels, active, onChange }: Props) {
   if (labels.length <= 1) return null;
 
   return (
-    <div ref={ref} className="menu-subtabs" role="tablist" onScroll={fade.onScroll} style={{
+    <div className="menu-subtabs" role="tablist" style={{
       position: 'relative',
       display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',
       gap: '6px', paddingBottom: '20px', paddingLeft: '16px', paddingRight: '16px',
     }}>
-      <ScrollFadeEdges bg={bg} showLeft={fade.showLeft} showRight={fade.showRight} />
       {labels.map(label => {
         const isActive = active === label;
         return (

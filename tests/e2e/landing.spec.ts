@@ -56,7 +56,7 @@ test.describe('Secciones principales', () => {
     for (const label of ['Pizzas', 'Fondos', 'Bar', 'Postres']) {
       const heading = page.getByRole('heading', { name: label, exact: true });
       await expect(heading).toBeVisible();
-      const card = page.locator('#menu a[href="/carta"]').filter({ has: heading });
+      const card = page.locator('#menu a[href^="/carta#"]').filter({ has: heading });
       await expect(card.locator('img')).toBeVisible();
     }
   });
