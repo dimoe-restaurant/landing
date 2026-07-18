@@ -21,6 +21,10 @@ function escapeHtml(str: string): string {
   return str.replace(/[&<>"']/g, c => HTML_ESCAPES[c]);
 }
 
+function sanitizeHeaderValue(str: string): string {
+  return str.replace(/[\r\n]+/g, ' ').trim();
+}
+
 function notificationHtml(nombreRaw: string, emailRaw: string, telefonoRaw: string | null, mensajeRaw: string, marketing: boolean, tipo: ContactTipo, origen: ContactOrigen) {
   const nombre = escapeHtml(nombreRaw);
   const email = escapeHtml(emailRaw);
@@ -198,7 +202,7 @@ export async function POST(req: NextRequest) {
         from: FROM,
         to: DESTINATION,
         replyTo: email,
-        subject: `[${tipoFinal}] Mensaje de ${nombre}${telefono ? ` · ${telefono}` : ''} — DiMOE`,
+        subject: `[${tipoFinal}] Mensaje de ${sanitizeHeaderValue(nombre)}${telefono ? ` · ${sanitizeHeaderValue(telefono)}` : ''} — DiMOE`,
         html: notificationHtml(nombre, email, telefono ?? null, mensaje, !!marketing_consent, tipoFinal, origenFinal),
       }),
       resend.emails.send({
