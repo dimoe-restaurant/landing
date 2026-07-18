@@ -176,6 +176,31 @@ export default function Menu({ menu }: Props) {
   };
 
   return (
+    <>
+    {/* Back link + accesos de pedido — estos últimos solo en el home de /carta */}
+    <div style={{
+      maxWidth: '860px', margin: '0 auto', padding: '24px clamp(16px, 4vw, 24px) 0',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px',
+    }}>
+      <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', ...typography.bodySm, color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'block', flexShrink: 0 }}><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span style={{ display: 'inline-block', lineHeight: '14px' }}>{locale === 'en' ? 'Back to home' : 'Volver al inicio'}</span>
+      </Link>
+      {!active && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <a href="https://piderural.cl/stores/dimoe/" target="_blank" rel="noopener noreferrer"
+            style={{ ...typography.bodySm, lineHeight: '14px', color: '#C17A3B', textDecoration: 'none', transition: 'color 0.2s' }}
+          >
+            Carta Delivery
+          </a>
+          <a href="https://menu.fu.do/dimoe" target="_blank" rel="noopener noreferrer"
+            style={{ ...typography.bodySm, lineHeight: '14px', color: '#C17A3B', textDecoration: 'none', transition: 'color 0.2s' }}
+          >
+            Carta Retiro
+          </a>
+        </div>
+      )}
+    </div>
     <section
       id="menu"
       ref={sectionRef}
@@ -519,5 +544,6 @@ export default function Menu({ menu }: Props) {
       </div>
       </>)}
     </section>
+    </>
   );
 }
