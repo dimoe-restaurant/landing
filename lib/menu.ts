@@ -35,23 +35,29 @@ type NotionMenuPage = {
     Nota: { rich_text: NotionText[] }
     Badge: { rich_text: NotionText[] }
     Orden: { number: number | null }
-    // Días activos — L=Lunes M=Martes W=Miércoles J=Jueves V=Viernes S=Sábado D=Domingo
-    // Todos en false (default) = mostrar siempre. Al menos uno en true = mostrar sólo ese(os) día(s).
-    L?: { checkbox: boolean }
-    M?: { checkbox: boolean }
-    W?: { checkbox: boolean }
-    J?: { checkbox: boolean }
-    V?: { checkbox: boolean }
-    S?: { checkbox: boolean }
-    D?: { checkbox: boolean }
+    // Días en que el ítem aparece — convención: se marcan explícitamente
+    // TODOS los días en que corresponde mostrarlo (incluye "siempre" = los
+    // 7 marcados), nunca se confía en dejarlos en blanco para eso. Un ítem
+    // recién creado sin marcar ningún día simplemente se muestra siempre
+    // (red de seguridad — no rompe contenido nuevo sin configurar), pero la
+    // práctica esperada es marcar explícito.
+    Lunes?: { checkbox: boolean }
+    Martes?: { checkbox: boolean }
+    Miércoles?: { checkbox: boolean }
+    Jueves?: { checkbox: boolean }
+    Viernes?: { checkbox: boolean }
+    Sábado?: { checkbox: boolean }
+    Domingo?: { checkbox: boolean }
   }
 }
 
 const VALID_TABS = new Set<string>(['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'])
 
+const DAY_KEYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as const
+
 // El servidor de Vercel corre en UTC — Chile es UTC-3/-4, así que el día de
 // la semana hay que calcularlo en su propia timezone, no con Date.getDay().
-const WEEKDAY_TO_KEY = { Sun: 'D', Mon: 'L', Tue: 'M', Wed: 'W', Thu: 'J', Fri: 'V', Sat: 'S' } as const
+const WEEKDAY_TO_KEY = { Sun: 'Domingo', Mon: 'Lunes', Tue: 'Martes', Wed: 'Miércoles', Thu: 'Jueves', Fri: 'Viernes', Sat: 'Sábado' } as const
 const CHILE_WEEKDAY_FORMATTER = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santiago', weekday: 'short' })
 
 function parseMenuPages(
@@ -74,7 +80,7 @@ function parseMenuPages(
     if (!groups.has(subcat)) groups.set(subcat, [])
 
     // Filtro de días
-    const anyDaySet = (['L', 'M', 'W', 'J', 'V', 'S', 'D'] as const).some(k => p[k]?.checkbox === true)
+    const anyDaySet = DAY_KEYS.some(k => p[k]?.checkbox === true)
     if (anyDaySet && !p[todayKey]?.checkbox) continue
 
     const nameEs = p.Nombre?.title?.[0]?.plain_text ?? ''

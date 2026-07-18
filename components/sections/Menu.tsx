@@ -341,8 +341,12 @@ export default function Menu({ menu }: Props) {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
-              const noDesc = group.items.every(i => !i.desc);
-              const isCompact = noDesc && group.items.length > 2;
+              // Compacto = sin desc, punto. El umbral de "> 2 ítems" quedó
+              // sacando grupos chicos (ej. Ron con 1 ítem) del modo compacto
+              // aunque estuvieran al lado de otros grupos sin desc que sí
+              // calificaban — mismo tab, tamaños de letra distintos sin razón
+              // de contenido real.
+              const isCompact = group.items.every(i => !i.desc);
               // Puntero "ver detalle en Vinos" — el único ítem de este grupo en BAR
               // debe navegar de verdad a la tab VINOS, no quedar como texto suelto.
               const isVinosPointer = active === 'BAR' && group.name === 'Vinos y Espumantes';
