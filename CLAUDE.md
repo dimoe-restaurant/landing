@@ -61,6 +61,24 @@ vercel deploy --prod --yes --force
 
 El `--force` es importante en ese caso puntual — se detectó al menos un caso donde un deploy reusó un manifest de rutas corrupto/desactualizado y una ruta nueva dio 404 en producción pese a compilar bien localmente.
 
+## Seguridad — protección de red (Vercel)
+
+Qué cubre hoy la infraestructura sin ninguna configuración, y qué depende de trabajo de aplicación pendiente (work-item #235).
+
+**Automático, ya activo, gratis en todos los planes (incluido Hobby — el plan de este proyecto):**
+- Mitigación DDoS L3/L4/L7 — activa por defecto, sin configuración, sin costo.
+- Firewall: bloqueo de IPs y reglas custom básicas.
+
+**Manual, gratis, pero hay que activarlo a mano durante un ataque real (no es un toggle "siempre on"):**
+- **Attack Mode** (Dashboard → Firewall → Bot Management → Attack Mode) — página de challenge para todo el tráfico excepto bots conocidos (Google, webhooks) y requests internos del propio proyecto. Gratis, ilimitado, sin impacto en SEO. Usar solo durante un ataque focalizado, no como default permanente (agrega fricción a usuarios reales).
+  - ⚠ APIs standalone o tráfico no reconocido como "browser" pueden no pasar el challenge — si se activa, verificar que `/api/contact` siga funcionando.
+
+**No cubierto por Vercel hoy — depende de las tasks #237/#238 del work-item #235:**
+- Rate limiting a nivel de aplicación (cuántas veces puede la misma IP enviar el formulario de contacto) — Vercel ofrece esto como feature de pago (reglas de rate-limit del WAF), separado del rate limit de aplicación vía Upstash que resuelve #237. Se eligió resolver a nivel de aplicación primero (gratis, más control) antes de pagar por WAF.
+- Captcha en el formulario (que un humano no pueda enviarlo cientos de veces manualmente) — no lo cubre nada de lo anterior, lo resuelve #238 (Turnstile).
+
+**Conclusión:** el sitio ya está protegido contra un ataque de volumen de infraestructura (DDoS) sin hacer nada. Lo que falta es protección a nivel de aplicación (abuso del formulario específicamente) — eso es lo que agregan #237 y #238.
+
 ## ⚠️ Trampa conocida: ruta default de next-intl sin prefijo
 
 `i18n/routing.ts` usa `localePrefix: 'as-needed'` — el locale default (`es`) se sirve **sin prefijo** (`/carta`) vía un rewrite interno del middleware, mientras que las rutas con prefijo explícito (`/en/carta`, y `/es/carta` que en realidad redirige a `/carta`) hacen match directo. Esta asimetría causó dos incidentes de producción (solo reproducibles en Vercel, nunca en local) durante el desarrollo del work-item #118 — ambos se resolvieron, pero la asimetría estructural sigue ahí.
