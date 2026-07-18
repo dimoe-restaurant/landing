@@ -13,7 +13,7 @@ function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
 
 const DESTINATION = 'contacto@dimoe.cl';
 const FROM = 'DiMOE <contacto@dimoe.cl>';
-const LOGO_URL = 'https://dev.dimoe.cl/images/logo-transparent.png';
+const LOGO_URL = 'https://dimoe.cl/images/logo-transparent.png';
 const LOGO_HEADER = `<tr><td style="background:#0D0B09;padding:28px 40px;text-align:center"><img src="${LOGO_URL}" alt="DiMOE" height="42" style="display:block;margin:0 auto;height:42px;width:auto"></td></tr>`;
 
 function notificationHtml(nombre: string, email: string, telefono: string | null, mensaje: string, marketing: boolean, tipo: ContactTipo, origen: ContactOrigen) {
