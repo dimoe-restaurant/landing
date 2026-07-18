@@ -2,6 +2,7 @@ import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { del, list, put } from '@vercel/blob'
 import { htmlResponse, readBlobJson, secretsMatch } from '@/lib/api-helpers'
+import { checkRateLimit, clientIp } from '@/lib/rate-limit'
 
 export const maxDuration = 60
 
@@ -98,6 +99,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   if (!expected || !secretsMatch(secret, expected)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  const allowed = await checkRateLimit('publish', clientIp(req) ?? 'unknown')
+  if (!allowed) {
+    return NextResponse.json({ error: 'too many requests' }, { status: 429 })
   }
 
   try {
