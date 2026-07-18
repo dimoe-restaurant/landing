@@ -104,6 +104,21 @@ function fmt(p: number | string | undefined | null): string | null {
   return p.toLocaleString('es-CL');
 }
 
+// Íconos de flags dietarios — trazo fino, mismo estilo que MenuTeaser
+const IconLeaf = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M20 4C10 4 4 10 4 18v2h2c8 0 14-6 14-16V4z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M6 18C10 14 14 10 19 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconChili = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M8 8c-2 2-3 5-2 8 1 3 4 4 7 3 4-1.5 6-5 5-9-1-3.5-4-5-7-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9 7c-1-2-1-4 1-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
 type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
 export default function Menu({ menu }: Props) {
@@ -471,6 +486,24 @@ export default function Menu({ menu }: Props) {
                                   borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
                                 }}>
                                   {item.badge}
+                                </span>
+                              )}
+                              {item.vegetariano && (
+                                <span title="Vegetariano" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(127,166,90,0.5)', color: '#7FA65A',
+                                }}>
+                                  <IconLeaf />
+                                </span>
+                              )}
+                              {item.picante && (
+                                <span title="Picante" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(193,80,59,0.5)', color: '#C1503B',
+                                }}>
+                                  <IconChili />
                                 </span>
                               )}
                             </div>

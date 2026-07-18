@@ -25,7 +25,10 @@ async function fetchNotionMenuRaw(): Promise<unknown[]> {
       },
       body: JSON.stringify({
         filter: { property: 'Activo', checkbox: { equals: true } },
-        sorts: [{ property: 'Orden', direction: 'ascending' }],
+        sorts: [
+          { property: 'Orden Sección', direction: 'ascending' },
+          { property: 'Orden', direction: 'ascending' },
+        ],
         page_size: 100,
         ...(cursor ? { start_cursor: cursor } : {}),
       }),
