@@ -10,6 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isEn
       ? 'The story behind DiMOE: a Neapolitan pizzeria born in Paine, Chile, recognized as the 2nd best pizza in the Metropolitan Region by The Top Chile 2025.'
       : 'La historia de DiMOE: una pizzería napolitana nacida en Paine, Chile, reconocida como la 2° mejor pizza de la Región Metropolitana por The Top Chile 2025.',
+    alternates: {
+      canonical: isEn ? 'https://dimoe.cl/en/nosotros' : 'https://dimoe.cl/nosotros',
+    },
   };
 }
 

@@ -12,6 +12,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isEn
       ? 'Tell us about your visit to DiMOE — questions, suggestions or complaints reviewed personally by our team.'
       : 'Cuéntanos cómo fue tu visita a DiMOE — dudas, sugerencias o reclamos revisados personalmente por nuestro equipo.',
+    alternates: {
+      canonical: isEn ? 'https://dimoe.cl/en/atencion-cliente' : 'https://dimoe.cl/atencion-cliente',
+    },
   };
 }
 
