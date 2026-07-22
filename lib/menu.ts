@@ -14,6 +14,7 @@ export type MenuItem = {
   note?: string
   vegetariano?: boolean
   picante?: boolean
+  veganizable?: boolean
 }
 
 export type MenuGroup = {
@@ -38,6 +39,7 @@ type NotionMenuPage = {
     Badge: { rich_text: NotionText[] }
     Vegetariano?: { checkbox: boolean }
     Picante?: { checkbox: boolean }
+    Veganizable?: { checkbox: boolean }
     // Orden de dos niveles: 'Orden Sección' ordena los grupos entre sí
     // (Happy Hour, Cervezas, ...) y 'Orden' ordena los productos dentro de
     // su propia sección — así reordenar un producto nunca requiere tocar
@@ -106,6 +108,7 @@ function parseMenuPages(
       note: p.Nota?.rich_text?.[0]?.plain_text || undefined,
       vegetariano: p.Vegetariano?.checkbox || undefined,
       picante: p.Picante?.checkbox || undefined,
+      veganizable: p.Veganizable?.checkbox || undefined,
     }
 
     groups.get(subcat)!.push(item)
