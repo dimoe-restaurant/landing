@@ -126,6 +126,15 @@ const IconVegan = () => (
   </svg>
 );
 
+// Espiga de trigo tachada — símbolo estándar de "libre de gluten"
+const IconGlutenFree = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 21V4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M12 6l-3-2M12 6l3-2M12 10l-3-2M12 10l3-2M12 14l-3-2M12 14l3-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 4l16 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
 type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
 export default function Menu({ menu }: Props) {
@@ -520,6 +529,15 @@ export default function Menu({ menu }: Props) {
                                   border: '1px solid rgba(78,155,122,0.5)', color: '#4E9B7A',
                                 }}>
                                   <IconVegan />
+                                </span>
+                              )}
+                              {item.libreDeGluten && (
+                                <span title="Libre de Gluten: Apto para intolerantes pero no para alérgicos (no es libre de trazas)" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(196,148,59,0.5)', color: '#C4943B',
+                                }}>
+                                  <IconGlutenFree />
                                 </span>
                               )}
                             </div>
