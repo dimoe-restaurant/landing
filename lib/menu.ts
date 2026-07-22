@@ -12,6 +12,10 @@ export type MenuItem = {
   price: number | string
   badge?: string
   note?: string
+  vegetariano?: boolean
+  picante?: boolean
+  veganizable?: boolean
+  libreDeGluten?: boolean
 }
 
 export type MenuGroup = {
@@ -34,6 +38,15 @@ type NotionMenuPage = {
     Tag: { select: { name: string } | null }
     Nota: { rich_text: NotionText[] }
     Badge: { rich_text: NotionText[] }
+    Vegetariano?: { checkbox: boolean }
+    Picante?: { checkbox: boolean }
+    Veganizable?: { checkbox: boolean }
+    'Libre de Gluten'?: { checkbox: boolean }
+    // Orden de dos niveles: 'Orden Sección' ordena los grupos entre sí
+    // (Happy Hour, Cervezas, ...) y 'Orden' ordena los productos dentro de
+    // su propia sección — así reordenar un producto nunca requiere tocar
+    // el número de otra sección ni usar decimales para "hacer espacio".
+    'Orden Sección': { number: number | null }
     Orden: { number: number | null }
     // Días en que el ítem aparece — convención: se marcan explícitamente
     // TODOS los días en que corresponde mostrarlo (incluye "siempre" = los
@@ -95,6 +108,10 @@ function parseMenuPages(
       price: p.Precio?.number ?? '',
       badge: badge || undefined,
       note: p.Nota?.rich_text?.[0]?.plain_text || undefined,
+      vegetariano: p.Vegetariano?.checkbox || undefined,
+      picante: p.Picante?.checkbox || undefined,
+      veganizable: p.Veganizable?.checkbox || undefined,
+      libreDeGluten: p['Libre de Gluten']?.checkbox || undefined,
     }
 
     groups.get(subcat)!.push(item)
@@ -173,7 +190,10 @@ export async function getMenuPreview(
         },
         body: JSON.stringify({
           filter: { property: 'Activo', checkbox: { equals: true } },
-          sorts: [{ property: 'Orden', direction: 'ascending' }],
+          sorts: [
+            { property: 'Orden Sección', direction: 'ascending' },
+            { property: 'Orden', direction: 'ascending' },
+          ],
           page_size: 100,
           ...(cursor ? { start_cursor: cursor } : {}),
         }),
