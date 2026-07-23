@@ -427,16 +427,17 @@ export default function Menu({ menu }: Props) {
                     </div>
                   )}
 
-                  {/* Happy Hour — banner ámbar */}
+                  {/* Happy Hour — banner ámbar, tratamiento explícito para diferenciarlo del resto de la carta */}
                   {isHappyHour && (
                     <div style={{
-                      background: 'linear-gradient(135deg, rgba(193,122,59,0.13) 0%, rgba(193,122,59,0.06) 100%)',
-                      border: '1px solid rgba(193,122,59,0.28)',
-                      borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
+                      background: 'linear-gradient(135deg, rgba(193,122,59,0.3) 0%, rgba(193,122,59,0.16) 100%)',
+                      border: '2px solid rgba(193,122,59,0.6)',
+                      borderLeft: '5px solid #C17A3B',
+                      borderRadius: '6px 10px 10px 6px', padding: '13px 18px 10px 15px', marginBottom: '16px',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
                         <span style={{ ...typography.titleMd, color: '#C17A3B' }}>Happy Hour</span>
-                        <span style={{ ...typography.caption, color: 'rgba(193,122,59,0.72)' }}>
+                        <span style={{ ...typography.caption, color: 'rgba(193,122,59,0.85)' }}>
                           {group.subtitle ?? 'Miércoles a Viernes · 17:00 – 20:00'}
                         </span>
                       </div>
