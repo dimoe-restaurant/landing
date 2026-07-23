@@ -102,6 +102,7 @@
     "marketing": "I agree to receive marketing communications and promotions from DiMOE",
     "privacy_link": "Privacy policy",
     "err_phone": "Invalid format. e.g. +56912345678",
+    "err_captcha": "Please confirm you're not a robot",
     "err_tipo": "Select an option",
     "tipo_consulta": "Question",
     "tipo_sugerencia": "Suggestion",
