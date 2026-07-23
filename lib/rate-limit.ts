@@ -17,6 +17,9 @@ const limiters = {
   publish: redis
     ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(20, '1 m'), prefix: 'ratelimit:publish' })
     : null,
+  'lead-carta': redis
+    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(5, '1 m'), prefix: 'ratelimit:lead-carta' })
+    : null,
 } as const
 
 export type RateLimitScope = keyof typeof limiters

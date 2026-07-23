@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import Menu from '@/components/sections/Menu';
 import CartaFooter from '@/components/sections/CartaFooter';
+import LeadBanner from '@/components/ui/LeadBanner';
 import { getMenu, getMenuPreview } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 
@@ -53,6 +54,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
       )}
       <Menu menu={menuData} />
       <CartaFooter />
+      <LeadBanner />
     </main>
   );
 }
