@@ -421,7 +421,7 @@ export default function Menu({ menu }: Props) {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
                         <span style={{ ...typography.titleMd, color: 'rgba(220,80,80,0.9)' }}>Menú de la Semana</span>
                         <span style={{ ...typography.caption, color: 'rgba(220,80,80,0.55)' }}>
-                          {group.subtitle ?? 'Actualización semanal · consultar disponibilidad'}
+                          {group.subtitle ?? 'Disponible hasta las 16:00 hrs'}
                         </span>
                       </div>
                     </div>

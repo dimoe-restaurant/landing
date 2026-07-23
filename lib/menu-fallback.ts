@@ -342,7 +342,7 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
   SEMANAL: [
     {
       name: 'Menú del Chef',
-      subtitle: 'Actualización semanal · consultar disponibilidad',
+      subtitle: 'Disponible hasta las 16:00 hrs',
       items: [
         { name: 'Entrada', desc: 'Reineta fresca del día con el toque justo de limón y especias, presentada sobre una delicada crema de palta artesanal. Una entrada ligera y refrescante.', price: '' },
         { name: 'Fondo', desc: 'Jugoso filete de salmón en su propia emulsión, servido sobre un artesanal puré de papas y zapallo. Terminado con una fresca salsa de alcaparras y cilantro.', price: '' },
