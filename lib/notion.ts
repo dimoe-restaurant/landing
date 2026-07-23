@@ -54,5 +54,6 @@ export async function saveContact(data: ContactPayload): Promise<void> {
   if (!res.ok) {
     const err = await res.json()
     console.error('[Notion] saveContact error:', err)
+    throw new Error('saveContact failed')
   }
 }
