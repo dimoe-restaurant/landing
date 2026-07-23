@@ -2,16 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { getConsent } from './CookieBanner';
 
-const SUBMITTED_KEY = 'dimoe_lead_carta_submitted';
-const DISMISSED_UNTIL_KEY = 'dimoe_lead_carta_dismissed_until';
+export const SUBMITTED_KEY = 'dimoe_lead_carta_submitted';
+export const DISMISSED_UNTIL_KEY = 'dimoe_lead_carta_dismissed_until';
+export const LEAD_BANNER_RESOLVED_EVENT = 'dimoe:lead-banner-resolved';
 const DISMISS_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 type NativeDateInput = HTMLInputElement & { showPicker?: () => void };
 
-function shouldShow(): boolean {
+export function leadBannerWillShow(): boolean {
   if (localStorage.getItem(SUBMITTED_KEY)) return false;
   const until = Number(localStorage.getItem(DISMISSED_UNTIL_KEY) ?? 0);
   return Date.now() >= until;
@@ -27,24 +27,13 @@ export default function LeadBanner() {
   const dobNativeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    function evaluate() {
-      if (shouldShow()) setVisible(true);
-    }
-    if (getConsent()) {
-      evaluate();
-      return;
-    }
-    window.addEventListener('dimoe:consent-granted', evaluate);
-    document.addEventListener('dimoe:consent-essential', evaluate);
-    return () => {
-      window.removeEventListener('dimoe:consent-granted', evaluate);
-      document.removeEventListener('dimoe:consent-essential', evaluate);
-    };
+    if (leadBannerWillShow()) setVisible(true);
   }, []);
 
   function close() {
     localStorage.setItem(DISMISSED_UNTIL_KEY, String(Date.now() + DISMISS_COOLDOWN_MS));
     setVisible(false);
+    window.dispatchEvent(new Event(LEAD_BANNER_RESOLVED_EVENT));
   }
 
   function onDobInput(e: React.ChangeEvent<HTMLInputElement>) {
@@ -106,6 +95,7 @@ export default function LeadBanner() {
       if (res.ok) {
         localStorage.setItem(SUBMITTED_KEY, '1');
         setStatus('success');
+        window.dispatchEvent(new Event(LEAD_BANNER_RESOLVED_EVENT));
         setTimeout(() => setVisible(false), 1800);
       } else {
         setStatus('error');
@@ -126,16 +116,20 @@ export default function LeadBanner() {
   return (
     <div
       role="dialog"
+      aria-modal="true"
       aria-label={t('title')}
       style={{
-        position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 55,
-        background: 'rgba(13,11,9,0.98)', backdropFilter: 'blur(16px)',
-        borderTop: '1px solid rgba(193,122,59,0.35)', borderRadius: '20px 20px 0 0',
-        padding: '18px 20px 22px', boxShadow: '0 -18px 44px rgba(0,0,0,0.6)',
-        maxHeight: '42vh', overflowY: 'auto',
+        position: 'fixed', inset: 0, zIndex: 55,
+        background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '20px',
       }}
     >
-      <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+      <div style={{
+        width: '100%', maxWidth: '420px', maxHeight: '90vh', overflow: 'hidden',
+        background: 'rgba(13,11,9,0.98)', border: '1px solid rgba(193,122,59,0.35)',
+        borderRadius: '20px', padding: '22px 22px 24px', boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
+      }}>
         {status === 'success' ? (
           <div style={{ textAlign: 'center', padding: '12px 0' }}>
             <p style={{ fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 6px' }}>{t('success_title')}</p>
