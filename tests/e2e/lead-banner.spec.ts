@@ -10,14 +10,22 @@ test.describe('LeadBanner — captura de leads en /carta', () => {
     );
   });
 
-  test('espera a que se resuelva el cookie banner y nunca se muestra junto a él', async ({ page }) => {
+  test('aparece de inmediato; el cookie banner espera a que se resuelva y nunca se muestran juntos', async ({ page }) => {
     await page.goto('/carta');
-    await expect(page.getByText(COOKIE_TEXT)).toBeVisible();
-    await expect(page.getByText(TITLE)).not.toBeVisible();
-
-    await page.getByRole('button', { name: /Aceptar todo/i }).click();
-    await expect(page.getByText(COOKIE_TEXT)).not.toBeVisible();
     await expect(page.getByText(TITLE)).toBeVisible();
+    await expect(page.getByText(COOKIE_TEXT)).not.toBeVisible();
+
+    await page.locator('button[aria-label="Cerrar"]').click();
+    await expect(page.getByText(TITLE)).not.toBeVisible();
+    await expect(page.getByText(COOKIE_TEXT)).toBeVisible();
+  });
+
+  test('si ya hay consentimiento de cookies guardado, el cookie banner no aparece tras resolver el lead banner', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('dimoe_cookie_consent', 'all'));
+    await page.goto('/carta');
+    await expect(page.getByText(TITLE)).toBeVisible();
+    await page.locator('button[aria-label="Cerrar"]').click();
+    await expect(page.getByText(COOKIE_TEXT)).not.toBeVisible();
   });
 
   test.describe('con consentimiento de cookies ya resuelto', () => {

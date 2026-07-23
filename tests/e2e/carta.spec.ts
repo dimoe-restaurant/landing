@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
 
+// El LeadBanner (ver lead-banner.spec.ts) aparece de inmediato en /carta y es un modal
+// de pantalla completa — estos tests validan navegación de la carta, no el lead banner,
+// así que se pre-marca como ya resuelto para que no bloquee los clicks en las tabs.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('dimoe_lead_carta_submitted', '1'));
+});
+
 test.describe('Carta digital (/carta)', () => {
   test('home de la carta muestra el selector de secciones, sin productos', async ({ page }) => {
     await page.goto('/carta');

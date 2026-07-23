@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { leadBannerWillShow, LEAD_BANNER_RESOLVED_EVENT } from './LeadBanner';
 
 const CONSENT_KEY = 'dimoe_cookie_consent';
 export type ConsentValue = 'all' | 'essential' | null;
@@ -13,9 +15,17 @@ export function getConsent(): ConsentValue {
 
 export default function CookieBanner() {
   const t = useTranslations('cookie');
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => { if (!getConsent()) setVisible(true); }, []);
+  useEffect(() => {
+    if (getConsent()) return;
+    const onCarta = pathname?.includes('/carta');
+    if (!onCarta || !leadBannerWillShow()) { setVisible(true); return; }
+    function onResolved() { setVisible(true); }
+    window.addEventListener(LEAD_BANNER_RESOLVED_EVENT, onResolved);
+    return () => window.removeEventListener(LEAD_BANNER_RESOLVED_EVENT, onResolved);
+  }, [pathname]);
 
   function accept(value: 'all' | 'essential') {
     localStorage.setItem(CONSENT_KEY, value);
