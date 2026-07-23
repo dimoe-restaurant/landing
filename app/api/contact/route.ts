@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { saveContact, type ContactTipo, type ContactOrigen } from '@/lib/notion';
 import { checkRateLimit, clientIp } from '@/lib/rate-limit';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 const TIPOS_VALIDOS: ContactTipo[] = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'];
 const ORIGENES_VALIDOS: ContactOrigen[] = ['Home', 'Atención Cliente'];
@@ -177,7 +178,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Demasiadas solicitudes, intenta de nuevo en un minuto' }, { status: 429 });
     }
 
-    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen } = await req.json();
+    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen, turnstileToken } = await req.json();
 
     if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
       return NextResponse.json({ error: 'Campos requeridos faltantes' }, { status: 400 });
@@ -185,6 +186,18 @@ export async function POST(req: NextRequest) {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email inválido' }, { status: 400 });
+    }
+
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!turnstileToken || typeof turnstileToken !== 'string') {
+        return NextResponse.json({ error: 'Verificación de seguridad faltante' }, { status: 400 });
+      }
+      const humanVerified = await verifyTurnstileToken(turnstileToken, clientIp(req));
+      if (!humanVerified) {
+        return NextResponse.json({ error: 'Verificación de seguridad fallida, intenta de nuevo' }, { status: 400 });
+      }
+    } else {
+      console.warn('TURNSTILE_SECRET_KEY no configurado — verificación de captcha omitida');
     }
 
     const tipoFinal: ContactTipo = TIPOS_VALIDOS.includes(tipo) ? tipo : 'Consulta';

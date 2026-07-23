@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Script from 'next/script';
 import { useTranslations } from 'next-intl';
 import { trackEvent } from '@/lib/analytics';
 import { trackPixelEvent } from '@/lib/meta-pixel';
@@ -9,6 +10,16 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 const TIPOS = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'] as const;
 type Tipo = typeof TIPOS[number];
 const GOOGLE_MAPS_URL = process.env.NEXT_PUBLIC_GOOGLE_MAPS_URL ?? 'https://maps.app.goo.gl/cSgXSzJW9VvLttSS7';
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (el: HTMLElement, opts: Record<string, unknown>) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
 
 type ContactFormProps = {
   origen?: 'Home' | 'Atención Cliente';
@@ -21,6 +32,21 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [marketing, setMarketing] = useState(false);
   const [tipo, setTipo] = useState<Tipo | ''>('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReady, setTurnstileReady] = useState(false);
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!turnstileReady || !TURNSTILE_SITE_KEY || !turnstileRef.current || !window.turnstile) return;
+    widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      theme: 'dark',
+      callback: (token: string) => setTurnstileToken(token),
+      'error-callback': () => setTurnstileToken(null),
+      'expired-callback': () => setTurnstileToken(null),
+    });
+  }, [turnstileReady]);
 
   function validate(data: FormData) {
     const errs: Record<string, string> = {};
@@ -32,6 +58,7 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
     const phone = String(data.get('telefono')).trim();
     if (phone && !/^\+?[\d\s\-()]{7,15}$/.test(phone)) errs.telefono = t('err_phone');
     if (!String(data.get('mensaje')).trim()) errs.mensaje = t('err_msg');
+    if (TURNSTILE_SITE_KEY && !turnstileToken) errs.turnstile = t('err_captcha');
     return errs;
   }
 
@@ -54,11 +81,18 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
           marketing_consent: marketing,
           tipo: showTipoSelector ? tipo : undefined,
           origen,
+          turnstileToken,
         }),
       });
       if (res.ok) { setStatus('success'); trackEvent('form_submit_success'); trackPixelEvent('Lead'); }
-      else setStatus('error');
-    } catch { setStatus('error'); }
+      else {
+        setStatus('error');
+        if (window.turnstile) { window.turnstile.reset(widgetIdRef.current); setTurnstileToken(null); }
+      }
+    } catch {
+      setStatus('error');
+      if (window.turnstile) { window.turnstile.reset(widgetIdRef.current); setTurnstileToken(null); }
+    }
   }
 
   const inputStyle: React.CSSProperties = {
@@ -81,6 +115,9 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
 
   return (
     <div style={{ background: '#181310', border: '1px solid #2A2520', borderRadius: '16px', padding: '32px' }}>
+      {TURNSTILE_SITE_KEY && (
+        <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="lazyOnload" onLoad={() => setTurnstileReady(true)} />
+      )}
       <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 700, color: '#F2EDE4', margin: '0 0 8px' }}>{t('title')}</h3>
       <p style={{ fontSize: '14px', color: '#9B8B7E', margin: '0 0 24px' }}>{t('subtitle')}</p>
 
@@ -184,6 +221,13 @@ export default function ContactForm({ origen = 'Home', showTipoSelector = false 
                 </a>
               </span>
             </label>
+
+            {TURNSTILE_SITE_KEY && (
+              <div>
+                <div ref={turnstileRef} />
+                {errors.turnstile && <p style={{ fontSize: '12px', color: '#E85D5D', margin: '4px 0 0' }}>{errors.turnstile}</p>}
+              </div>
+            )}
 
             {status === 'error' && (
               <p style={{ fontSize: '13px', color: '#E85D5D', margin: 0 }}>
