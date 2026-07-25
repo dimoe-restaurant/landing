@@ -104,7 +104,7 @@ export default function MenuTeaser() {
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5, delay: i * 0.08 }}
               style={{ height: '100%' }}
             >
-              <Link href="/carta" style={{
+              <Link href={`/carta#${h.key}`} style={{
                 position: 'relative', display: 'flex', flexDirection: 'column', textDecoration: 'none',
                 background: '#0D0B09', border: '1px solid #2A2520', borderRadius: '16px', overflow: 'hidden',
                 padding: '24px', height: '100%', transition: 'border-color 0.2s',

@@ -1,11 +1,18 @@
 import { test, expect } from '@playwright/test';
 
+// El LeadBanner (ver lead-banner.spec.ts) aparece de inmediato en /carta y es un modal
+// de pantalla completa — estos tests validan navegación de la carta, no el lead banner,
+// así que se pre-marca como ya resuelto para que no bloquee los clicks en las tabs.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('dimoe_lead_carta_submitted', '1'));
+});
+
 test.describe('Carta digital (/carta)', () => {
   test('home de la carta muestra el selector de secciones, sin productos', async ({ page }) => {
     await page.goto('/carta');
     await expect(page.getByRole('heading', { name: /para todos los gustos/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /ANTIPASTI/ }).first()).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'ANTIPASTI' })).not.toBeVisible();
+    await expect(page.getByRole('button', { name: /ENTRADAS/ }).first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'ENTRADAS' })).not.toBeVisible();
   });
 
   test('elegir una sección muestra sus productos y el ícono home vuelve al selector', async ({ page }) => {
@@ -35,42 +42,44 @@ test.describe('Carta digital (/carta)', () => {
 
 test.describe('Subtabs de BAR y VINOS (/carta)', () => {
   // VINOS siempre usa FALLBACK_MENU (page.tsx fuerza esto aunque Notion esté configurado),
-  // así que sus 3 subtabs (Blancos, Tintos, Ensamblajes y Dulce) son deterministas.
-  test('VINOS: click en "Tintos" muestra solo los tintos y oculta los blancos', async ({ page }) => {
+  // así que sus 5 subtabs (Espumante, Carménère, Cabernet Sauvignon, Merlot, Blanco) —
+  // uno por Subcategoría real, sin agrupar — son deterministas (ver #237).
+  test('VINOS: click en "Carménère" muestra solo ese varietal y oculta los demás', async ({ page }) => {
     await page.goto('/carta#vinos');
     await expect(page.getByRole('heading', { name: 'VINOS' })).toBeVisible();
 
-    await expect(page.getByRole('tab', { name: 'Sauvignon Blanc' })).toHaveCount(0); // no es subtab, es grupo
-    await page.getByRole('tab', { name: 'Tintos' }).click();
+    await page.getByRole('tab', { name: 'Carménère' }).click();
 
     await expect(page.getByRole('heading', { name: 'Carménère' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Cabernet Sauvignon' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Merlot' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).not.toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Chardonnay' })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cabernet Sauvignon' })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Merlot' })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Espumante' })).not.toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Blanco' })).not.toBeVisible();
   });
 
   test('VINOS: subtab "Todos" muestra todos los grupos', async ({ page }) => {
     await page.goto('/carta#vinos');
-    await page.getByRole('tab', { name: 'Tintos' }).click();
-    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).not.toBeVisible();
+    await page.getByRole('tab', { name: 'Carménère' }).click();
+    await expect(page.getByRole('heading', { name: 'Espumante' })).not.toBeVisible();
 
     await page.getByRole('tab', { name: 'Todos' }).click();
-    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Espumante' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Carménère' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Dulce' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cabernet Sauvignon' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Merlot' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Blanco' })).toBeVisible();
   });
 
   test('cambiar de tab principal resetea el subtab activo a "Todos"', async ({ page }) => {
     await page.goto('/carta#vinos');
-    await page.getByRole('tab', { name: 'Tintos' }).click();
-    await expect(page.getByRole('tab', { name: 'Tintos' })).toHaveAttribute('aria-selected', 'true');
+    await page.getByRole('tab', { name: 'Carménère' }).click();
+    await expect(page.getByRole('tab', { name: 'Carménère' })).toHaveAttribute('aria-selected', 'true');
 
     await page.getByRole('button', { name: /^BAR$/ }).click();
     await page.getByRole('button', { name: /^VINOS$/ }).click();
 
     await expect(page.getByRole('tab', { name: 'Todos' })).toHaveAttribute('aria-selected', 'true');
-    await expect(page.getByRole('heading', { name: 'Sauvignon Blanc' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Espumante' })).toBeVisible();
   });
 
   // BAR puede venir de Notion (contenido variable) — se valida el comportamiento de

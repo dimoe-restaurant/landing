@@ -16,6 +16,8 @@
     "test:e2e": "playwright test --reporter=line"
   },
   "dependencies": {
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "@vercel/blob": "^2.6.1",
     "framer-motion": "^12",
     "next": "16.2.10",

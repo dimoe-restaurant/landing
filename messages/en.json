@@ -102,6 +102,7 @@
     "marketing": "I agree to receive marketing communications and promotions from DiMOE",
     "privacy_link": "Privacy policy",
     "err_phone": "Invalid format. e.g. +56912345678",
+    "err_captcha": "Please confirm you're not a robot",
     "err_tipo": "Select an option",
     "tipo_consulta": "Question",
     "tipo_sugerencia": "Suggestion",
@@ -140,5 +141,28 @@
     "back": "← Back to home",
     "title": "Privacy Policy",
     "updated": "Last updated"
+  },
+  "leadBanner": {
+    "title": "First time at DiMOE?",
+    "subtitle": "Leave your details and be the first to know about promos and news.",
+    "close": "Close",
+    "name": "Your name",
+    "dob_placeholder": "DD/MM/YYYY",
+    "open_calendar": "Open calendar",
+    "email": "you@email.com",
+    "phone": "+56 9...",
+    "marketing": "I agree to receive marketing communications and promotions from DiMOE",
+    "privacy_link": "privacy policy",
+    "error": "There was a problem saving your details. Please try again.",
+    "sending": "Sending...",
+    "submit": "Save my details",
+    "success_title": "All set!",
+    "success_body": "Thanks — you'll hear about our promos soon.",
+    "err_name": "Name is required",
+    "err_email_req": "Email is required",
+    "err_email_inv": "Invalid email",
+    "err_phone_req": "Phone is required",
+    "err_phone_inv": "Invalid format. e.g. +56912345678",
+    "err_dob": "Invalid date. Format DD/MM/YYYY"
   }
 }

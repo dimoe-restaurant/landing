@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { saveContact, type ContactTipo, type ContactOrigen } from '@/lib/notion';
+import { checkRateLimit, clientIp } from '@/lib/rate-limit';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 const TIPOS_VALIDOS: ContactTipo[] = ['Consulta', 'Sugerencia', 'Reclamo', 'Felicitación'];
 const ORIGENES_VALIDOS: ContactOrigen[] = ['Home', 'Atención Cliente'];
-
-function clientIp(req: NextRequest): string | null {
-  const forwarded = req.headers.get('x-forwarded-for');
-  if (forwarded) return forwarded.split(',')[0].trim();
-  return req.headers.get('x-real-ip');
-}
 
 function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
   const ua = req.headers.get('user-agent') ?? '';
@@ -18,10 +14,23 @@ function deviceFromUserAgent(req: NextRequest): 'Mobile' | 'Desktop' {
 
 const DESTINATION = 'contacto@dimoe.cl';
 const FROM = 'DiMOE <contacto@dimoe.cl>';
-const LOGO_URL = 'https://dev.dimoe.cl/images/logo-transparent.png';
+const LOGO_URL = 'https://dimoe.cl/images/logo-transparent.png';
 const LOGO_HEADER = `<tr><td style="background:#0D0B09;padding:28px 40px;text-align:center"><img src="${LOGO_URL}" alt="DiMOE" height="42" style="display:block;margin:0 auto;height:42px;width:auto"></td></tr>`;
 
-function notificationHtml(nombre: string, email: string, telefono: string | null, mensaje: string, marketing: boolean, tipo: ContactTipo, origen: ContactOrigen) {
+const HTML_ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, c => HTML_ESCAPES[c]);
+}
+
+function sanitizeHeaderValue(str: string): string {
+  return str.replace(/[\r\n]+/g, ' ').trim();
+}
+
+function notificationHtml(nombreRaw: string, emailRaw: string, telefonoRaw: string | null, mensajeRaw: string, marketing: boolean, tipo: ContactTipo, origen: ContactOrigen) {
+  const nombre = escapeHtml(nombreRaw);
+  const email = escapeHtml(emailRaw);
+  const telefono = telefonoRaw ? escapeHtml(telefonoRaw) : null;
+  const mensaje = escapeHtml(mensajeRaw);
   const fecha = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago', dateStyle: 'full', timeStyle: 'short' });
   return `<!DOCTYPE html>
 <html lang="es">
@@ -92,7 +101,8 @@ function notificationHtml(nombre: string, email: string, telefono: string | null
 </html>`;
 }
 
-function confirmationHtml(nombre: string, caso: boolean) {
+function confirmationHtml(nombreRaw: string, caso: boolean) {
+  const nombre = escapeHtml(nombreRaw);
   const bodyHtml = caso
     ? `<p style="margin:0 0 16px;font-family:Georgia,serif;font-size:18px;color:#1A1410;line-height:1.5">Hola, ${nombre}.</p>
        <p style="margin:0 0 12px;font-family:Arial,sans-serif;font-size:15px;color:#5A4A3F;line-height:1.7">Nuestro equipo de servicio al cliente ya está revisando tu mensaje personalmente y te responderemos dentro de las próximas 24-48 horas.</p>
@@ -163,7 +173,12 @@ function confirmationHtml(nombre: string, caso: boolean) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen } = await req.json();
+    const allowed = await checkRateLimit('contact', clientIp(req) ?? 'unknown');
+    if (!allowed) {
+      return NextResponse.json({ error: 'Demasiadas solicitudes, intenta de nuevo en un minuto' }, { status: 429 });
+    }
+
+    const { nombre, email, telefono, mensaje, marketing_consent, tipo, origen, turnstileToken } = await req.json();
 
     if (!nombre?.trim() || !email?.trim() || !mensaje?.trim()) {
       return NextResponse.json({ error: 'Campos requeridos faltantes' }, { status: 400 });
@@ -171,6 +186,18 @@ export async function POST(req: NextRequest) {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email inválido' }, { status: 400 });
+    }
+
+    if (process.env.TURNSTILE_SECRET_KEY) {
+      if (!turnstileToken || typeof turnstileToken !== 'string') {
+        return NextResponse.json({ error: 'Verificación de seguridad faltante' }, { status: 400 });
+      }
+      const humanVerified = await verifyTurnstileToken(turnstileToken, clientIp(req));
+      if (!humanVerified) {
+        return NextResponse.json({ error: 'Verificación de seguridad fallida, intenta de nuevo' }, { status: 400 });
+      }
+    } else {
+      console.warn('TURNSTILE_SECRET_KEY no configurado — verificación de captcha omitida');
     }
 
     const tipoFinal: ContactTipo = TIPOS_VALIDOS.includes(tipo) ? tipo : 'Consulta';
@@ -188,7 +215,7 @@ export async function POST(req: NextRequest) {
         from: FROM,
         to: DESTINATION,
         replyTo: email,
-        subject: `[${tipoFinal}] Mensaje de ${nombre}${telefono ? ` · ${telefono}` : ''} — DiMOE`,
+        subject: `[${tipoFinal}] Mensaje de ${sanitizeHeaderValue(nombre)}${telefono ? ` · ${sanitizeHeaderValue(telefono)}` : ''} — DiMOE`,
         html: notificationHtml(nombre, email, telefono ?? null, mensaje, !!marketing_consent, tipoFinal, origenFinal),
       }),
       resend.emails.send({

@@ -2,6 +2,7 @@ import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { del, list, put } from '@vercel/blob'
 import { htmlResponse, readBlobJson, secretsMatch } from '@/lib/api-helpers'
+import { checkRateLimit, clientIp } from '@/lib/rate-limit'
 
 export const maxDuration = 60
 
@@ -25,7 +26,10 @@ async function fetchNotionMenuRaw(): Promise<unknown[]> {
       },
       body: JSON.stringify({
         filter: { property: 'Activo', checkbox: { equals: true } },
-        sorts: [{ property: 'Orden', direction: 'ascending' }],
+        sorts: [
+          { property: 'Orden Sección', direction: 'ascending' },
+          { property: 'Orden', direction: 'ascending' },
+        ],
         page_size: 100,
         ...(cursor ? { start_cursor: cursor } : {}),
       }),
@@ -95,6 +99,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   if (!expected || !secretsMatch(secret, expected)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  const allowed = await checkRateLimit('publish', clientIp(req) ?? 'unknown')
+  if (!allowed) {
+    return NextResponse.json({ error: 'too many requests' }, { status: 429 })
   }
 
   try {

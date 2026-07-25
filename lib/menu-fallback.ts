@@ -201,13 +201,13 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
         { name: 'Peroni', desc: 'Italiana', price: 4000 },
       ],
     },
-    // 8. Vinos y Espumantes — el detalle de vinos vive en la tab VINOS
+    // 8. Vinos y Espumantes — el detalle vive 100% en la tab VINOS, este es
+    // solo un puntero para quien está mirando BAR (homologación, ver #237)
     {
       name: 'Vinos y Espumantes',
       subtitle: 'Ver detalle en la carta de Vinos',
       items: [
-        { name: 'Botella Espumante', price: 12000 },
-        { name: 'Copa de Espumante Brut', price: 3500 },
+        { name: 'Vinos y Espumantes', desc: 'Consulta la carta completa en la sección VINOS →', price: '' },
       ],
     },
     // 9. Coctelería Sin Alcohol
@@ -231,100 +231,109 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
         { name: 'Bebidas', price: 2500 },
       ],
     },
-    // 11. Tragos — licores servidos por copa
+    // 11. Destilados — licores servidos por copa, agrupados por tipo (antes
+    // un solo grupo "Tragos" con un desc redundante que solo repetía el tipo).
     {
-      name: 'Tragos',
+      name: 'Pisco',
       items: [
-        { name: 'Chivas Regal', desc: 'Whisky', price: 8000 },
-        { name: 'Horcón Quemado', desc: 'Pisco', price: 7000 },
-        { name: 'Tanqueray', desc: 'Gin', price: 7500 },
-        { name: 'Grants', desc: 'Whisky', price: 6000 },
-        { name: 'Limoncello', desc: 'Bajativo', price: 6000 },
-        { name: 'Bombay', desc: 'Gin', price: 6500 },
-        { name: 'Beefeater', desc: 'Gin', price: 6500 },
-        { name: 'José Cuervo', desc: 'Tequila', price: 5500 },
-        { name: 'Havana', desc: 'Ron', price: 5000 },
-        { name: 'Mistral', desc: 'Pisco', price: 5000 },
-        { name: 'Mistral Manzana', desc: 'Pisco', price: 5000 },
-        { name: 'Alto del Carmen', desc: 'Pisco', price: 5000 },
-        { name: 'Senda', desc: 'Tequila', price: 4000 },
-        { name: 'Amaretto', desc: 'Bajativo', price: 4000 },
-        { name: 'Manzanilla', desc: 'Bajativo', price: 3800 },
-        { name: 'Menta', desc: 'Bajativo', price: 3500 },
-        { name: 'Tequila José Cuervo (Shot)', desc: 'Shot', price: 3000 },
-        { name: 'Jagermeister (Shot)', desc: 'Shot', price: 3000 },
-        { name: 'Fireball (Shot)', desc: 'Shot', price: 3000 },
+        { name: 'Horcón Quemado', price: 7000 },
+        { name: 'Mistral', price: 5000 },
+        { name: 'Mistral Manzana', price: 5000 },
+        { name: 'Alto del Carmen', price: 5000 },
+      ],
+    },
+    {
+      name: 'Ron',
+      items: [
+        { name: 'Havana', price: 5000 },
+      ],
+    },
+    {
+      name: 'Whisky',
+      items: [
+        { name: 'Chivas Regal', price: 8000 },
+        { name: 'Grants', price: 6000 },
+      ],
+    },
+    {
+      name: 'Ginebra',
+      items: [
+        { name: 'Tanqueray', price: 7500 },
+        { name: 'Bombay', price: 6500 },
+        { name: 'Beefeater', price: 6500 },
+      ],
+    },
+    {
+      name: 'Tequila',
+      items: [
+        { name: 'José Cuervo', price: 5500 },
+        { name: 'Senda', price: 4000 },
+      ],
+    },
+    {
+      name: 'Bajativo',
+      items: [
+        { name: 'Limoncello', price: 6000 },
+        { name: 'Amaretto', price: 4000 },
+        { name: 'Manzanilla', price: 3800 },
+        { name: 'Menta', price: 3500 },
+      ],
+    },
+    {
+      name: 'Shots',
+      items: [
+        { name: 'Tequila José Cuervo (Shot)', price: 3000 },
+        { name: 'Jagermeister (Shot)', price: 3000 },
+        { name: 'Fireball (Shot)', price: 3000 },
       ],
     },
   ],
 
   // ── VINOS ─────────────────────────────────────────────────────────────────
-  // Orden de sommelier: blancos → Carménère (cepa insigne, más stock) →
-  // Cabernet Sauvignon → Merlot → Ensamblajes premium → Dulce
+  // Estructura por tier (Reserva / Gran Reserva), no por etiqueta puntual —
+  // el stock real rota por viña/añada, así que el tier es lo único que se
+  // puede garantizar sin re-poblar Notion cada vez que se agota una botella.
+  // Sin tier "Varietal": decisión explícita del dueño (2026-07-18), lo
+  // consideró de imagen muy económica para el posicionamiento del local.
+  // Orden de sommelier: Espumante (aperitivo) → Carménère (cepa insigne) →
+  // Cabernet Sauvignon → Merlot → Blanco (solo si se pide, ver #237)
   VINOS: [
     {
-      name: 'Sauvignon Blanc',
-      subtitle: 'Copa $4.500 · Botella $15.000',
+      name: 'Espumante',
       items: [
-        { name: 'Viu Manent Reserva', desc: 'Valle de Colchagua · cítrico y herbal, ideal aperitivo', price: 15000 },
-      ],
-    },
-    {
-      name: 'Chardonnay',
-      subtitle: 'Copa $4.500 · Botella $15.000',
-      items: [
-        { name: 'Viu Manent Reserva', desc: 'Valle de Colchagua · fresco, mineral, notas de pera', price: 15000 },
-        { name: 'Morandé Pionero Reserva', desc: 'Valle Central · redondo, vainilla suave, persistente', price: 15000 },
+        { name: 'Copa Espumante Brut', price: 3500 },
+        { name: 'Botella Espumante', price: 12000 },
       ],
     },
     {
       name: 'Carménère',
-      subtitle: 'Copa $2.500–$4.500 · Botella $9.000–$20.000',
+      subtitle: 'Cepa insignia de Chile',
       items: [
-        { name: 'Tarapacá Gran Reserva', desc: 'Valle del Maipo · especiado, frutos rojos, terroso', price: 20000 },
-        { name: 'San Pedro Castillo del Maule Gran Reserva', desc: 'Valle del Maule · herbáceo, ciruela negra', price: 20000 },
-        { name: 'Casa Silva Doble D Gran Reserva', desc: 'Valle de Colchagua · elegante, pimienta verde, taninos sedosos', price: 20000 },
-        { name: 'Tarapacá Gran Reserva Etiqueta Negra', desc: 'Valle del Maipo · concentrado, especias, largo final', price: 20000 },
-        { name: 'Santa Helena Gran Reserva', desc: 'Valle Central · redondo, frutos negros, buen cuerpo', price: 20000 },
-        { name: 'Montes Limited Selection', desc: 'Valle de Colchagua · medalla de oro, equilibrado y elegante', price: 15000 },
-        { name: 'Santa Ema Select Terroir', desc: 'Valle del Cachapoal · accesible, frutal y directo', price: 9000 },
+        { name: 'Copa Reserva', desc: 'Pimienta verde y frutos rojos, paso redondo', price: 4500 },
+        { name: 'Botella Reserva', desc: 'Pimienta verde y frutos rojos, paso redondo', price: 15000 },
+        { name: 'Botella Gran Reserva', desc: 'Especiado y terroso, mayor estructura y persistencia', price: 20000 },
       ],
     },
     {
       name: 'Cabernet Sauvignon',
-      subtitle: 'Copa $2.500–$4.500 · Botella $9.000–$20.000',
       items: [
-        { name: 'Santa Ema Select Terroir Reserva Especial', desc: 'Valle del Cachapoal · robusto, cassis y cedro', price: 15000, note: 'Copa disponible' },
-        { name: 'Requingua Toro de Piedra Gran Reserva', desc: 'Valle del Curicó · mineral, ciruela, tabaco', price: 20000 },
-        { name: 'San Pedro Castillo del Maule Tributo Gran Reserva', desc: 'Valle del Maule · potente, especiado, taninos firmes', price: 20000 },
-        { name: 'Tarapacá Gran Reserva Etiqueta Negra', desc: 'Valle del Maipo · intenso, mineral, largo final', price: 20000 },
-        { name: 'Santa Ema Gran Reserva', desc: 'Valle del Cachapoal · estructura clásica, maduro', price: 20000 },
-        { name: 'Casa Silva Doble D Gran Reserva', desc: 'Valle de Colchagua · añadas 2022 · 2023', price: 20000 },
-        { name: 'Santa Rita 120 Reserva', desc: 'Valle del Maipo · accesible, frutos negros, fácil de beber', price: 9000 },
+        { name: 'Copa Reserva', desc: 'Cassis, cedro y tabaco, cuerpo medio-alto', price: 4500 },
+        { name: 'Botella Reserva', desc: 'Cassis, cedro y tabaco, cuerpo medio-alto', price: 15000 },
+        { name: 'Botella Gran Reserva', desc: 'Concentrado, mineral, final largo', price: 20000 },
       ],
     },
     {
       name: 'Merlot',
-      subtitle: 'Copa $4.500 · Botella $15.000',
+      subtitle: 'Sin Gran Reserva por ahora — sin stock de ese tier',
       items: [
-        { name: 'Santa Ema Select Terroir Reserva Especial', desc: 'Valle del Cachapoal · suave, ciruela y chocolate', price: 15000 },
-        { name: 'Santa Catalina El Arpa Blue Reserva Fría', desc: 'Valle Central · fresco, frutos rojos, especias', price: 15000 },
-        { name: 'Santa Rita Medalla Real Reserva', desc: 'Valle del Maipo · aterciopelado, baya oscura', price: 15000 },
+        { name: 'Copa Reserva', desc: 'Ciruela madura y chocolate, el tinto más amigable de la carta', price: 4500 },
+        { name: 'Botella Reserva', desc: 'Ciruela madura y chocolate, el tinto más amigable de la carta', price: 15000 },
       ],
     },
     {
-      name: 'Ensamblajes',
-      subtitle: 'Botella $20.000',
+      name: 'Blanco',
       items: [
-        { name: 'Tarapacá Gran Reserva Etiqueta Azul', desc: 'Cabernet · Carménère · Syrah · Valle del Maipo', price: 20000 },
-        { name: 'San Pedro Sideral', desc: 'Blend de autor · Valle del Cachapoal · reconocido mundialmente', price: 20000 },
-      ],
-    },
-    {
-      name: 'Dulce',
-      subtitle: 'Botella $9.000',
-      items: [
-        { name: '7 Colores Cortejo Moscato', desc: 'Valle Central · notas de durazno, flores blancas y miel', price: 9000 },
+        { name: 'Botella Blanco', desc: 'Fresco y mineral, ideal como aperitivo o con antipasti de mar', price: 15000, note: 'Sauvignon Blanc o Chardonnay, según disponibilidad' },
       ],
     },
   ],
@@ -333,7 +342,7 @@ export const FALLBACK_MENU: Record<MenuTab, MenuGroup[]> = {
   SEMANAL: [
     {
       name: 'Menú del Chef',
-      subtitle: 'Actualización semanal · consultar disponibilidad',
+      subtitle: 'Disponible hasta las 16:00 hrs',
       items: [
         { name: 'Entrada', desc: 'Reineta fresca del día con el toque justo de limón y especias, presentada sobre una delicada crema de palta artesanal. Una entrada ligera y refrescante.', price: '' },
         { name: 'Fondo', desc: 'Jugoso filete de salmón en su propia emulsión, servido sobre un artesanal puré de papas y zapallo. Terminado con una fresca salsa de alcaparras y cilantro.', price: '' },

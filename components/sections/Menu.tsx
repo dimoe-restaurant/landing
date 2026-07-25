@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import type { MenuTab, MenuGroup } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 import { typography } from '@/lib/typography';
@@ -69,21 +70,26 @@ const TAB_SUBTABS: Partial<Record<MenuTab, Record<string, string>>> = {
     'Coctelería sin alcohol': 'Sin Alcohol',
     'Jugos y Bebidas': 'Sin Alcohol',
     'Vinos y Espumantes': 'Vino y Espumante',
-    'Tragos': 'Destilados',
+    // Destilados — antes un solo grupo "Tragos" con desc redundante (repetía
+    // el tipo de licor en cada ítem); ahora una Subcategoría real por tipo,
+    // todas agrupadas bajo el mismo subtab "Destilados".
+    'Pisco': 'Destilados',
+    'Ron': 'Destilados',
+    'Whisky': 'Destilados',
+    'Ginebra': 'Destilados',
+    'Tequila': 'Destilados',
+    'Bajativo': 'Destilados',
+    'Shots': 'Destilados',
   },
-  VINOS: {
-    'Sauvignon Blanc': 'Blancos',
-    'Chardonnay': 'Blancos',
-    'Carménère': 'Tintos',
-    'Cabernet Sauvignon': 'Tintos',
-    'Merlot': 'Tintos',
-    'Ensamblajes': 'Ensamblajes y Dulce',
-    'Dulce': 'Ensamblajes y Dulce',
-  },
+  // Objeto vacío (no undefined): activa el bucketing pero sin agrupar nada
+  // explícito, así cada Subcategoría real (Espumante, Carménère, Cabernet
+  // Sauvignon, Merlot, Blanco, ...) aparece como su propio subtab — mismo
+  // patrón de fallback-a-nombre-propio que #224 aplicó en BAR.
+  VINOS: {},
 };
 
 const TAB_DISPLAY: Record<MenuTab, string> = {
-  ENTRADAS: 'ANTIPASTI',
+  ENTRADAS: 'ENTRADAS',
   PIZZAS:   'PIZZAS',
   FONDOS:   'FONDOS',
   POSTRES:  'DOLCE',
@@ -97,6 +103,37 @@ function fmt(p: number | string | undefined | null): string | null {
   if (typeof p === 'string') return p;
   return p.toLocaleString('es-CL');
 }
+
+// Íconos de flags dietarios — trazo fino, mismo estilo que MenuTeaser
+const IconLeaf = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M20 4C10 4 4 10 4 18v2h2c8 0 14-6 14-16V4z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M6 18C10 14 14 10 19 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconChili = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M8 8c-2 2-3 5-2 8 1 3 4 4 7 3 4-1.5 6-5 5-9-1-3.5-4-5-7-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9 7c-1-2-1-4 1-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
+const IconVegan = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M5 13c0 6 4.5 8 7 8s7-2 7-8c-3 0-5 1-7 3-2-2-4-3-7-3z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+    <path d="M12 21V9c0-3 2-5 6-5 0 4-1.5 6-4 6.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+// Espiga de trigo tachada — símbolo estándar de "libre de gluten"
+const IconGlutenFree = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <path d="M12 21V4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M12 6l-3-2M12 6l3-2M12 10l-3-2M12 10l3-2M12 14l-3-2M12 14l3-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 4l16 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
 
 type Props = { menu?: Record<MenuTab, MenuGroup[]> }
 
@@ -170,6 +207,31 @@ export default function Menu({ menu }: Props) {
   };
 
   return (
+    <>
+    {/* Back link + accesos de pedido — estos últimos solo en el home de /carta */}
+    <div style={{
+      maxWidth: '860px', margin: '0 auto', padding: '24px clamp(16px, 4vw, 24px) 0',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px',
+    }}>
+      <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', ...typography.bodySm, color: 'rgba(242,237,228,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'block', flexShrink: 0 }}><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span style={{ display: 'inline-block', lineHeight: '14px' }}>{locale === 'en' ? 'Back to home' : 'Volver al inicio'}</span>
+      </Link>
+      {!active && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <a href="https://piderural.cl/stores/dimoe/" target="_blank" rel="noopener noreferrer"
+            style={{ ...typography.bodySm, lineHeight: '14px', color: '#C17A3B', textDecoration: 'none', transition: 'color 0.2s' }}
+          >
+            Carta Delivery
+          </a>
+          <a href="https://menu.fu.do/dimoe" target="_blank" rel="noopener noreferrer"
+            style={{ ...typography.bodySm, lineHeight: '14px', color: '#C17A3B', textDecoration: 'none', transition: 'color 0.2s' }}
+          >
+            Carta Retiro
+          </a>
+        </div>
+      )}
+    </div>
     <section
       id="menu"
       ref={sectionRef}
@@ -324,7 +386,7 @@ export default function Menu({ menu }: Props) {
           )}
         </div>
 
-        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} bg={bg} />
+        <MenuSubtabs labels={subtabLabels} active={activeSubtab} onChange={setActiveSubtab} />
 
         <AnimatePresence mode="wait">
           <motion.div key={`${active}-${activeSubtab}`}
@@ -335,8 +397,15 @@ export default function Menu({ menu }: Props) {
               const isHappyHour = group.name === 'Happy Hour';
               const isKids = group.name === 'Para Niños';
               const isSemanaleChef = active === 'SEMANAL' && group.name === 'Menú del Chef';
-              const noDesc = group.items.every(i => !i.desc);
-              const isCompact = noDesc && group.items.length > 2;
+              // Compacto = sin desc, punto. El umbral de "> 2 ítems" quedó
+              // sacando grupos chicos (ej. Ron con 1 ítem) del modo compacto
+              // aunque estuvieran al lado de otros grupos sin desc que sí
+              // calificaban — mismo tab, tamaños de letra distintos sin razón
+              // de contenido real.
+              const isCompact = group.items.every(i => !i.desc);
+              // Puntero "ver detalle en Vinos" — el único ítem de este grupo en BAR
+              // debe navegar de verdad a la tab VINOS, no quedar como texto suelto.
+              const isVinosPointer = active === 'BAR' && group.name === 'Vinos y Espumantes';
 
               return (
                 <Fragment key={gi}>
@@ -352,25 +421,26 @@ export default function Menu({ menu }: Props) {
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
                         <span style={{ ...typography.titleMd, color: 'rgba(220,80,80,0.9)' }}>Menú de la Semana</span>
                         <span style={{ ...typography.caption, color: 'rgba(220,80,80,0.55)' }}>
-                          {group.subtitle ?? 'Actualización semanal · consultar disponibilidad'}
+                          {group.subtitle ?? 'Disponible hasta las 16:00 hrs'}
                         </span>
                       </div>
                     </div>
                   )}
 
-                  {/* Happy Hour — banner ámbar */}
+                  {/* Happy Hour — caja ámbar que envuelve header + TODOS los ítems, para diferenciarlo del resto de la carta */}
+                  <div style={isHappyHour ? {
+                    background: 'linear-gradient(135deg, rgba(193,122,59,0.3) 0%, rgba(193,122,59,0.16) 100%)',
+                    border: '2px solid rgba(193,122,59,0.6)',
+                    borderLeft: '5px solid #C17A3B',
+                    borderRadius: '6px 10px 10px 6px', padding: '14px 18px 6px 16px', marginBottom: '16px',
+                  } : undefined}>
+
                   {isHappyHour && (
-                    <div style={{
-                      background: 'linear-gradient(135deg, rgba(193,122,59,0.13) 0%, rgba(193,122,59,0.06) 100%)',
-                      border: '1px solid rgba(193,122,59,0.28)',
-                      borderRadius: '12px', padding: '13px 18px 10px', marginBottom: '16px',
-                    }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                        <span style={{ ...typography.titleMd, color: '#C17A3B' }}>Happy Hour</span>
-                        <span style={{ ...typography.caption, color: 'rgba(193,122,59,0.72)' }}>
-                          {group.subtitle ?? 'Miércoles a Viernes · 17:00 – 20:00'}
-                        </span>
-                      </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px', marginBottom: '10px' }}>
+                      <span style={{ ...typography.titleMd, color: '#C17A3B' }}>Happy Hour</span>
+                      <span style={{ ...typography.caption, color: 'rgba(193,122,59,0.85)' }}>
+                        {group.subtitle ?? 'Miércoles a Viernes · 17:00 – 20:00'}
+                      </span>
                     </div>
                   )}
 
@@ -403,60 +473,111 @@ export default function Menu({ menu }: Props) {
                     gridTemplateColumns: 'repeat(auto-fill, minmax(168px, 1fr))',
                     gap: '2px 20px',
                   } : {}}>
-                    {group.items.map((item, ii) => (
-                      <div key={ii} style={{
-                        display: 'flex',
-                        alignItems: isCompact ? 'baseline' : 'flex-start',
-                        justifyContent: 'space-between',
-                        gap: isCompact ? '8px' : '16px',
-                        padding: isCompact ? '7px 0' : '16px 0',
-                        borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
-                        opacity: isKids ? 0.62 : 1,
-                      }}>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{
-                            display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
-                            marginBottom: (!isCompact && item.desc) ? '5px' : 0,
-                          }}>
-                            <span style={{
-                              ...(isCompact ? typography.itemNameCompact : typography.itemName),
-                              color: '#F2EDE4',
+                    {group.items.map((item, ii) => {
+                      const row = (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: isCompact ? 'baseline' : 'flex-start',
+                          justifyContent: 'space-between',
+                          gap: isCompact ? '8px' : '16px',
+                          padding: isCompact ? '7px 0' : '16px 0',
+                          borderBottom: isCompact ? 'none' : '1px solid rgba(242,237,228,0.06)',
+                          opacity: isKids ? 0.62 : 1,
+                        }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap',
+                              marginBottom: (!isCompact && item.desc) ? '5px' : 0,
                             }}>
-                              {item.name}
-                            </span>
-                            {item.badge && (
                               <span style={{
-                                ...typography.badge,
-                                color: '#C17A3B',
-                                border: '1px solid rgba(193,122,59,0.4)',
-                                borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                ...(isCompact ? typography.itemNameCompact : typography.itemName),
+                                color: isVinosPointer ? '#C17A3B' : '#F2EDE4',
                               }}>
-                                {item.badge}
+                                {item.name}
                               </span>
+                              {item.badge && (
+                                <span style={{
+                                  ...typography.badge,
+                                  color: '#C17A3B',
+                                  border: '1px solid rgba(193,122,59,0.4)',
+                                  borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                }}>
+                                  {item.badge}
+                                </span>
+                              )}
+                              {item.vegetariano && (
+                                <span title="Vegetariano" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(127,166,90,0.5)', color: '#7FA65A',
+                                }}>
+                                  <IconLeaf />
+                                </span>
+                              )}
+                              {item.picante && (
+                                <span title="Picante" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(193,80,59,0.5)', color: '#C1503B',
+                                }}>
+                                  <IconChili />
+                                </span>
+                              )}
+                              {item.veganizable && (
+                                <span title="Veganizable: 100% libre de origen animal" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(78,155,122,0.5)', color: '#4E9B7A',
+                                }}>
+                                  <IconVegan />
+                                </span>
+                              )}
+                              {item.libreDeGluten && (
+                                <span title="Libre de Gluten: Apto para intolerantes pero no para alérgicos (no es libre de trazas)" style={{
+                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  width: '20px', height: '20px', borderRadius: '50%', flexShrink: 0,
+                                  border: '1px solid rgba(196,148,59,0.5)', color: '#C4943B',
+                                }}>
+                                  <IconGlutenFree />
+                                </span>
+                              )}
+                            </div>
+                            {!isCompact && item.desc && (
+                              <p style={{ ...typography.body, color: isVinosPointer ? 'rgba(193,122,59,0.75)' : 'rgba(242,237,228,0.48)', margin: 0 }}>
+                                {item.desc}
+                              </p>
+                            )}
+                            {item.note && (
+                              <p style={{ ...typography.note, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0' }}>
+                                {item.note}
+                              </p>
                             )}
                           </div>
-                          {!isCompact && item.desc && (
-                            <p style={{ ...typography.body, color: 'rgba(242,237,228,0.48)', margin: 0 }}>
-                              {item.desc}
-                            </p>
-                          )}
-                          {item.note && (
-                            <p style={{ ...typography.note, color: 'rgba(193,122,59,0.55)', margin: '3px 0 0' }}>
-                              {item.note}
-                            </p>
+                          {fmt(item.price) != null && (
+                            <span style={{
+                              flexShrink: 0,
+                              ...(isCompact ? typography.priceCompact : typography.price),
+                              color: '#C17A3B',
+                            }}>
+                              ${fmt(item.price)}
+                            </span>
                           )}
                         </div>
-                        {fmt(item.price) != null && (
-                          <span style={{
-                            flexShrink: 0,
-                            ...(isCompact ? typography.priceCompact : typography.price),
-                            color: '#C17A3B',
-                          }}>
-                            ${fmt(item.price)}
-                          </span>
-                        )}
-                      </div>
-                    ))}
+                      );
+
+                      if (isVinosPointer) {
+                        return (
+                          <Link key={ii} href="/carta#vinos" style={{ textDecoration: 'none', cursor: 'pointer' }}
+                            onClick={(e) => { e.preventDefault(); handleTab('VINOS'); }}
+                          >
+                            {row}
+                          </Link>
+                        );
+                      }
+                      return <Fragment key={ii}>{row}</Fragment>;
+                    })}
+                  </div>
+
                   </div>
 
                 </div>
@@ -493,5 +614,6 @@ export default function Menu({ menu }: Props) {
       </div>
       </>)}
     </section>
+    </>
   );
 }
