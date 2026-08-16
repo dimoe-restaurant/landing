@@ -1,11 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Política de Privacidad — DiMOE',
-  description: 'Política de privacidad de DiMOE Pizzería y Restobar conforme a la Ley 21.719 de Chile.',
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === 'en';
+  return {
+    title: 'Política de Privacidad — DiMOE',
+    description: 'Política de privacidad de DiMOE Pizzería y Restobar conforme a la Ley 21.719 de Chile.',
+    robots: { index: false, follow: false },
+    alternates: {
+      canonical: isEn ? 'https://dimoe.cl/en/privacidad' : 'https://dimoe.cl/privacidad',
+    },
+  };
+}
 
 const LAST_UPDATED = '1 de junio de 2025';
 

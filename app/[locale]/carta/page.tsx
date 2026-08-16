@@ -16,6 +16,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isEn
       ? 'Full menu: Neapolitan pizzas, artisan pasta, craft cocktails, desserts and bar. Prices in CLP.'
       : 'Carta completa: pizzas napolitanas, pastas artesanales, cócteles de autor, postres y bar. Precios en CLP.',
+    alternates: {
+      canonical: isEn ? 'https://dimoe.cl/en/carta' : 'https://dimoe.cl/carta',
+    },
   };
 }
 

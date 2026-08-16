@@ -11,6 +11,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     description: isEn
       ? 'Read what customers say about DiMOE, the award-winning Neapolitan pizza restaurant in Paine, Chile.'
       : 'Lee lo que dicen los clientes sobre DiMOE, la pizzería napolitana premiada en Paine, Chile.',
+    alternates: {
+      canonical: isEn ? 'https://dimoe.cl/en/resenas' : 'https://dimoe.cl/resenas',
+    },
   };
 }
 
