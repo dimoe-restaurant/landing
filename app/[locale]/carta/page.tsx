@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { draftMode } from 'next/headers';
+import { draftMode, headers } from 'next/headers';
 import Menu from '@/components/sections/Menu';
 import CartaFooter from '@/components/sections/CartaFooter';
 import LeadBanner from '@/components/ui/LeadBanner';
 import { getMenu, getMenuPreview } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
+import { getE2EPreviewFixture, type E2EPreviewVariant } from '@/lib/menu-e2e-fixture';
 
 export const maxDuration = 30;
 
@@ -26,7 +27,20 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
   const { locale } = await params;
   const isEn = locale === 'en';
   const { isEnabled: isPreview } = await draftMode();
-  const notionData = isPreview ? await getMenuPreview(locale) : await getMenu(locale);
+
+  const e2eVariant = process.env.PLAYWRIGHT_E2E === 'true'
+    ? ((await headers()).get('x-e2e-menu-fixture') as E2EPreviewVariant | null)
+    : null;
+
+  let notionData: Awaited<ReturnType<typeof getMenu>>;
+  let publishedData: Awaited<ReturnType<typeof getMenu>>;
+  if (isPreview && e2eVariant) {
+    ({ notionData, publishedData } = getE2EPreviewFixture(e2eVariant));
+  } else {
+    notionData = isPreview ? await getMenuPreview(locale) : await getMenu(locale);
+    publishedData = isPreview ? await getMenu(locale) : null;
+  }
+
   const previewFetchFailed = isPreview && notionData === null;
   const menuData = notionData
     ? {
@@ -36,7 +50,6 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
       }
     : FALLBACK_MENU;
 
-  const publishedData = isPreview ? await getMenu(locale) : null;
   const hasUnpublishedChanges = isPreview && !previewFetchFailed && JSON.stringify(notionData) !== JSON.stringify(publishedData);
 
   return (
