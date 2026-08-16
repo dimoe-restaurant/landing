@@ -1,22 +1,23 @@
 # CLAUDE.md — dimoe-landing
 
 Landing de la marca **dimoe** (dimoe.cl). Objetivo: posicionar la marca y vender.
-Migración desde GoDaddy a código propio. Deploy en Vercel.
+Migración desde GoDaddy a código propio. Deploy en Vercel. Proyecto 100%
+independiente — no comparar ni referenciar otros proyectos u organizaciones.
 
 ## Repo
 
-**GitHub:** `dimoe-restaurant/landing`  
-**Dominio:** dimoe.cl  
-**Deploy:** Vercel (rama `main` → producción, `dev` → preview)  
+**GitHub:** `dimoe-restaurant/landing`
+**Dominio:** dimoe.cl
+**Deploy:** Vercel (rama `main` → producción, `dev` → preview)
 **Puerto local:** 39847 (convención Playwright del workspace)
 
-## Stack web
+## Stack
 
-- **Next.js 15** (App Router) — Vercel-native, SEO, RSC
-- **TypeScript** (strict)
-- **Tailwind CSS v4**
-- **Framer Motion** (animaciones de marca)
-- Tests E2E: **Playwright** (gate de `/apply`)
+- Next.js 15 (App Router) — Vercel-native, SEO, RSC
+- TypeScript (strict)
+- Tailwind CSS v4
+- Framer Motion (animaciones de marca)
+- Tests: Playwright (gate de `/apply`, ver `.claude/rules/tests.md`)
 
 ## Estructura
 
@@ -41,65 +42,110 @@ pnpm install
 pnpm dev              # → http://localhost:39847
 ```
 
-## Deploy a producción (dev.dimoe.cl)
+## Gotchas y decisiones no obvias
 
-**Auto-deploy activo.** Cada merge/push a `dev` dispara un deployment automático a Production (`dev.dimoe.cl`) — confirmado empíricamente el 2026-07-17 tras correr `vercel git connect`. No hace falta correr `vercel deploy` a mano en el flujo normal.
-
-Tras cada merge a `dev`, correr el smoke test (de solo lectura, sin efectos secundarios) para confirmar que el deploy automático terminó bien:
-
-```bash
-node scripts/smoke-deploy.mjs
-```
-
-Si algo falla, no asumir que es el código nuevo — comparar contra `next dev`/`next start` local primero (varios bugs de esta clase solo se reproducen en Vercel, nunca en local).
-
-**Si alguna vez hace falta forzar un deploy manual** (ej. el automático no disparó, o se sospecha de un manifest de rutas corrupto tras varios deploys seguidos):
-
-```bash
-vercel deploy --prod --yes --force
-```
-
-El `--force` es importante en ese caso puntual — se detectó al menos un caso donde un deploy reusó un manifest de rutas corrupto/desactualizado y una ruta nueva dio 404 en producción pese a compilar bien localmente.
+- **Deploy a `dev.dimoe.cl` es automático** — cada merge/push a `dev`
+  dispara un deployment a Production (`dev.dimoe.cl`), confirmado
+  empíricamente el 2026-07-17 tras `vercel git connect`. No hace falta
+  `vercel deploy` a mano en el flujo normal. Tras cada merge a `dev`,
+  correr `node scripts/smoke-deploy.mjs` (smoke test de solo lectura).
+  Si algo falla, comparar contra `next dev`/`next start` local antes de
+  asumir que es el código nuevo — varios bugs de esta clase solo se
+  reproducen en Vercel.
+- **Forzar deploy manual** (el automático no disparó, o se sospecha de
+  un manifest de rutas corrupto): `vercel deploy --prod --yes --force`.
+  El `--force` importa — se detectó un caso donde un deploy reusó un
+  manifest de rutas corrupto y una ruta nueva dio 404 en producción pese
+  a compilar bien localmente.
+- **`i18n/routing.ts` usa `localePrefix: 'as-needed'`** — el locale
+  default (`es`) se sirve **sin prefijo** (`/carta`) vía un rewrite
+  interno del middleware, mientras que rutas con prefijo explícito
+  (`/en/carta`) hacen match directo. Esta asimetría causó dos incidentes
+  de producción (solo reproducibles en Vercel, nunca en local) durante
+  el work-item #118. **Regla:** cualquier página bajo el locale default
+  sin prefijo que dependa de cookies, headers dinámicos o Draft Mode
+  debe probarse explícitamente contra el dominio real de Vercel, no solo
+  local.
 
 ## Seguridad — protección de red (Vercel)
 
-Qué cubre hoy la infraestructura sin ninguna configuración, y qué depende de trabajo de aplicación pendiente (work-item #235).
+- **Automático, ya activo, gratis (incluido Hobby):** mitigación DDoS
+  L3/L4/L7, firewall de bloqueo de IPs/reglas básicas.
+- **Manual, gratis, activar solo durante un ataque real:** Attack Mode
+  (Dashboard → Firewall → Bot Management) — challenge a todo tráfico
+  salvo bots conocidos y requests internos. No usar como default
+  permanente (agrega fricción a usuarios reales). ⚠ Verificar que
+  `/api/contact` siga funcionando si se activa.
+- **No cubierto por Vercel, resuelto a nivel de aplicación:** rate
+  limiting por IP (Upstash, work-item #237) y Turnstile en el form de
+  contacto (work-item #238) — se eligió resolver en aplicación primero
+  (gratis, más control) antes de pagar por el WAF de Vercel.
+- **Conclusión:** el sitio ya está protegido contra DDoS de
+  infraestructura sin hacer nada. La protección de abuso del formulario
+  específicamente la agregan #237/#238.
 
-**Automático, ya activo, gratis en todos los planes (incluido Hobby — el plan de este proyecto):**
-- Mitigación DDoS L3/L4/L7 — activa por defecto, sin configuración, sin costo.
-- Firewall: bloqueo de IPs y reglas custom básicas.
+## Cómo se organiza esto
 
-**Manual, gratis, pero hay que activarlo a mano durante un ataque real (no es un toggle "siempre on"):**
-- **Attack Mode** (Dashboard → Firewall → Bot Management → Attack Mode) — página de challenge para todo el tráfico excepto bots conocidos (Google, webhooks) y requests internos del propio proyecto. Gratis, ilimitado, sin impacto en SEO. Usar solo durante un ataque focalizado, no como default permanente (agrega fricción a usuarios reales).
-  - ⚠ APIs standalone o tráfico no reconocido como "browser" pueden no pasar el challenge — si se activa, verificar que `/api/contact` siga funcionando.
+- `.claude/rules/*.md` — convenciones por tema (branching, commits,
+  tests, seguridad, TypeScript). Se cargan completas; mantenerlas cortas.
+- `.claude/skills/*/SKILL.md` — flujos de trabajo invocables
+  (`/plan-task`, `/apply`, `/self-review`, etc. — nombrados para no
+  chocar con slash commands nativos, ver gotcha abajo). Ver **matriz de
+  decisión** abajo antes de crear uno nuevo.
+- `.claude/agents/*.md` — subagentes para trabajo grande o que necesita
+  contexto propio (auditorías completas, investigación multi-paso).
+- `.claude/settings.json` — hooks y permisos. Los guardrails ahí
+  descritos son **enforced técnicamente**, no solo convención.
 
-**No cubierto por Vercel hoy — depende de las tasks #237/#238 del work-item #235:**
-- Rate limiting a nivel de aplicación (cuántas veces puede la misma IP enviar el formulario de contacto) — Vercel ofrece esto como feature de pago (reglas de rate-limit del WAF), separado del rate limit de aplicación vía Upstash que resuelve #237. Se eligió resolver a nivel de aplicación primero (gratis, más control) antes de pagar por WAF.
-- Captcha en el formulario (que un humano no pueda enviarlo cientos de veces manualmente) — no lo cubre nada de lo anterior, lo resuelve #238 (Turnstile).
+**Gotchas de instalación:**
 
-**Conclusión:** el sitio ya está protegido contra un ataque de volumen de infraestructura (DDoS) sin hacer nada. Lo que falta es protección a nivel de aplicación (abuso del formulario específicamente) — eso es lo que agregan #237 y #238.
+- Si `.gitignore` tiene una línea genérica `.claude/`, descarta en
+  silencio todo este árbol. Verificar con `git status`/`git add .claude/`
+  que el contenido aparece como stageable — ignorar solo el estado de
+  sesión (`settings.local.json`, `scheduled_tasks.lock`, `.cache/`,
+  `worktrees/`), nunca `.claude/` a secas.
+- `init`, `plan`, `review`, `debug` son nombres reservados — Claude Code
+  ya tiene funcionalidad nativa bajo esos nombres exactos (`/init`
+  genera un CLAUDE.md, `plan` es el plan mode, `review` es alias del
+  bundled `/code-review`, `debug` es un bundled skill). Un skill custom
+  con el mismo nombre lo sobreescribe **sin ningún aviso visible**. Por
+  eso este repo usa `session-start`, `plan-task`, `self-review`,
+  `investigate-bug`. Antes de nombrar un skill nuevo, correr `/help` en
+  una sesión real para confirmar que el nombre no está tomado.
 
-## ⚠️ Trampa conocida: ruta default de next-intl sin prefijo
+## Guardrails — qué es hook y qué es convención
 
-`i18n/routing.ts` usa `localePrefix: 'as-needed'` — el locale default (`es`) se sirve **sin prefijo** (`/carta`) vía un rewrite interno del middleware, mientras que las rutas con prefijo explícito (`/en/carta`, y `/es/carta` que en realidad redirige a `/carta`) hacen match directo. Esta asimetría causó dos incidentes de producción (solo reproducibles en Vercel, nunca en local) durante el desarrollo del work-item #118 — ambos se resolvieron, pero la asimetría estructural sigue ahí.
+**ENFORCED (bloqueado por hook, ver `.claude/settings.json`):**
+- No se edita/escribe directo en `main`/`dev` sin una rama de feature
+  activa (`.claude/scripts/block-protected-branch-writes.sh`).
 
-**Regla:** cualquier página/ruta bajo el locale default sin prefijo que dependa de cookies, headers dinámicos o Draft Mode debe probarse explícitamente ahí (contra el dominio real de Vercel, no solo `next dev`/`next start` local) — no asumir que "funciona igual" que su versión prefijada.
+**CONVENCIÓN (esperado, no bloqueado técnicamente — ver `.claude/rules/`):**
+- Conventional commits, 1 issue = 1 rama = 1 PR (modelo documentado; ver
+  gap conocido en `branching.md` sobre los skills que aún usan
+  work-item+sub-issues).
+- Nunca `git push --force` a rama compartida (`--force-with-lease` solo
+  en la propia rama de feature tras un rebase).
+- Nunca `--no-verify` en commit/push.
+- Secrets nunca hardcodeados ni commiteados — ver `.claude/rules/security.md`.
 
-## Convenciones
+## Skill vs. Subagent — matriz de decisión
 
-### Commits
+| Necesitas... | Usa | Por qué |
+|---|---|---|
+| Un flujo repetible, corto, invocable a demanda | **Skill** (`.claude/skills/*/SKILL.md`) | Auto-discovery liviano |
+| Investigación o auditoría grande, multi-paso, que no debe llenar el contexto principal | **Subagent** (`.claude/agents/*.md`) | Contexto aislado; devuelve solo la síntesis |
+| Un skill que en la práctica creció y ya hace trabajo pesado | Migrar a **Subagent** | Evita que el skill se vuelva otro CLAUDE.md de 1000 líneas |
 
-Conventional commits:
-```
-feat(scope): descripción
-fix(scope): descripción
-chore(scope): descripción
-```
+Regla dura: si un `SKILL.md` supera ~500 líneas o empieza a hacer
+research extenso en vez de pasos mecánicos, es candidato a convertirse
+en subagente. Así migraron `audit`, `pentest`, `secure`, `pr-review`
+(antes `review`), `triage` y `cross` a `.claude/agents/`.
 
-### Branching
+## Reglas para escribir este archivo
 
-| Branch | Rol |
-|---|---|
-| `main` | Producción → Vercel prod |
-| `dev` | Integración → Vercel preview |
-| `feat/*`, `fix/*`, `chore/*` | Trabajo efímero por work-item |
+- Máximo ~150-200 líneas. Cada línea compite por espacio de contexto.
+- No documentar lo que ya es obvio leyendo el código o `.claude/rules/`.
+- No pegar aquí historial de bugs resueltos ni changelogs — eso vive en
+  issues/commits.
+- Actualizar este archivo al descubrir un gotcha nuevo que un agente
+  futuro necesitaría saber (ver skill `capture-context`).
