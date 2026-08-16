@@ -1,4 +1,5 @@
 import { defineConfig } from '@playwright/test';
+import { E2E_PUBLISH_SECRET } from './tests/e2e/e2e-constants';
 
 const PORT = Number(process.env.PLAYWRIGHT_E2E_PORT ?? 39847);
 
@@ -14,5 +15,9 @@ export default defineConfig({
     port: PORT,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    env: {
+      PLAYWRIGHT_E2E: 'true',
+      PUBLISH_SECRET: process.env.PUBLISH_SECRET ?? E2E_PUBLISH_SECRET,
+    },
   },
 });
