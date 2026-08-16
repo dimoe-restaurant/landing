@@ -4,6 +4,7 @@ const PORT = Number(process.env.PLAYWRIGHT_E2E_PORT ?? 39847);
 
 export default defineConfig({
   testDir: 'tests/e2e',
+  globalSetup: './tests/e2e/global-setup.ts',
   timeout: 30_000,
   workers: 2,
   reporter: 'line',
