@@ -495,6 +495,16 @@ export default function Menu({ menu }: Props) {
                               }}>
                                 {item.name}
                               </span>
+                              {item.agotado && (
+                                <span style={{
+                                  ...typography.badge,
+                                  color: '#C1503B',
+                                  border: '1px solid rgba(193,80,59,0.4)',
+                                  borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                }}>
+                                  AGOTADO
+                                </span>
+                              )}
                               {item.badge && (
                                 <span style={{
                                   ...typography.badge,
