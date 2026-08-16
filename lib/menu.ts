@@ -16,6 +16,7 @@ export type MenuItem = {
   picante?: boolean
   veganizable?: boolean
   libreDeGluten?: boolean
+  agotado?: boolean
 }
 
 export type MenuGroup = {
@@ -42,6 +43,7 @@ type NotionMenuPage = {
     Picante?: { checkbox: boolean }
     Veganizable?: { checkbox: boolean }
     'Libre de Gluten'?: { checkbox: boolean }
+    Agotado?: { checkbox: boolean }
     // Orden de dos niveles: 'Orden Sección' ordena los grupos entre sí
     // (Happy Hour, Cervezas, ...) y 'Orden' ordena los productos dentro de
     // su propia sección — así reordenar un producto nunca requiere tocar
@@ -112,6 +114,7 @@ function parseMenuPages(
       picante: p.Picante?.checkbox || undefined,
       veganizable: p.Veganizable?.checkbox || undefined,
       libreDeGluten: p['Libre de Gluten']?.checkbox || undefined,
+      agotado: p.Agotado?.checkbox || undefined,
     }
 
     groups.get(subcat)!.push(item)

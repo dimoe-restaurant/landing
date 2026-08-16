@@ -492,9 +492,22 @@ export default function Menu({ menu }: Props) {
                               <span style={{
                                 ...(isCompact ? typography.itemNameCompact : typography.itemName),
                                 color: isVinosPointer ? '#C17A3B' : '#F2EDE4',
+                                textDecoration: item.agotado ? 'line-through' : undefined,
+                                textDecorationColor: item.agotado ? 'rgba(242,237,228,0.4)' : undefined,
+                                opacity: item.agotado ? 0.7 : undefined,
                               }}>
                                 {item.name}
                               </span>
+                              {item.agotado && (
+                                <span style={{
+                                  ...typography.badge,
+                                  color: '#C1503B',
+                                  border: '1px solid rgba(193,80,59,0.4)',
+                                  borderRadius: '100px', padding: '2px 8px', whiteSpace: 'nowrap',
+                                }}>
+                                  AGOTADO
+                                </span>
+                              )}
                               {item.badge && (
                                 <span style={{
                                   ...typography.badge,
