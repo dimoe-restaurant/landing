@@ -11,7 +11,12 @@ export type E2EPreviewVariant = 'same' | 'diff' | 'notion-down'
 
 function fixtureMenu(marker: string): Record<MenuTab, MenuGroup[]> {
   return {
-    ENTRADAS: [{ items: [{ name: `E2E fixture — ${marker}`, price: 1000 }] }],
+    ENTRADAS: [{
+      items: [
+        { name: `E2E fixture — ${marker}`, price: 1000 },
+        { name: `E2E fixture — ${marker} (agotado)`, price: 1000, agotado: true },
+      ],
+    }],
     PIZZAS: [],
     FONDOS: [],
     POSTRES: [],

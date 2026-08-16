@@ -65,4 +65,19 @@ test.describe('Flujo de preview de /carta (Draft Mode)', () => {
     expect(cookies.some(c => c.name === '__prerender_bypass')).toBe(false);
     await expect(page.getByText(/modo preview activo/i)).not.toBeVisible();
   });
+
+  // Reusa el mismo fixture del flujo de preview (#201/#202) para probar el badge
+  // AGOTADO (#285) sin depender de datos reales de Notion — FALLBACK_MENU no
+  // tiene ningún ítem agotado hoy y no corresponde marcar uno real solo para test.
+  test('ítem con agotado=true muestra el pill "AGOTADO" y el nombre tachado', async ({ page }) => {
+    await activatePreview(page);
+    await withFixtureHeader(page, 'same');
+    await page.goto('/carta');
+    await page.getByRole('button', { name: /ENTRADAS/ }).first().click();
+
+    const itemName = page.getByText(/E2E fixture — same \(agotado\)/i);
+    await expect(itemName).toBeVisible();
+    await expect(itemName).toHaveCSS('text-decoration-line', 'line-through');
+    await expect(page.getByText('AGOTADO', { exact: true })).toBeVisible();
+  });
 });
