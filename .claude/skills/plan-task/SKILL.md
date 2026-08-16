@@ -1,6 +1,8 @@
 ---
+type: skill
 name: plan-task
 description: Crea uno o varios work-items (feature, refactor, fix, chore) con sus tasks en GitHub. Devuelve la visión completa del lote. NO crea ramas — eso lo hace /apply.
+tags: [workflow, planning]
 ---
 
 # /plan-task

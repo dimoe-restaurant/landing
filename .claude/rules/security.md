@@ -1,6 +1,8 @@
 ---
+type: rule
 name: security
 description: Guardrails de seguridad aplicables a cualquier stack
+tags: [security]
 ---
 
 # Security

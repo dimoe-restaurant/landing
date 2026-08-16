@@ -1,6 +1,8 @@
 ---
+type: agent
 name: triage
 description: Cierra issues cubiertos y mueve estados en bulk. Acepta post-PR (qué cubre un PR concreto) o auditoría de work-item (estado actual de un work-item y sus tasks).
+tags: [workflow, github]
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
 

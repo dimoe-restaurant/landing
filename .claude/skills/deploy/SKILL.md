@@ -1,6 +1,8 @@
 ---
+type: skill
 name: deploy
 description: Configura o verifica el pipeline de deploy. Cuando hace falta trabajo (setup nuevo, migración a CI/CD), crea un work-item padre con tasks (sub-issues) por cada componente. Usar después del agente secure.
+tags: [deploy, ci]
 ---
 
 # /deploy

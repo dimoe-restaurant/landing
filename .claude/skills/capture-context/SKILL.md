@@ -1,6 +1,8 @@
 ---
+type: skill
 name: capture-context
 description: Usar cuando aprendiste algo que vale la pena documentar — convención, decisión de arquitectura, gotcha, detalle de implementación no obvio. Clasifica el tipo de contexto y lo dirige al lugar correcto. NO usar para estado ephemeral de la sesión actual.
+tags: [workflow, documentation]
 ---
 
 # /capture-context

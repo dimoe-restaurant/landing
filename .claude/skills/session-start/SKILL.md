@@ -1,6 +1,8 @@
 ---
+type: skill
 name: session-start
 description: Inicia sesión: lee estado del repo, issues activos y rama actual. Usar al arrancar. Acepta número de issue (/session-start #N) para ir directo a ese work-item sin orientación general.
+tags: [workflow]
 ---
 
 # /session-start

@@ -1,6 +1,8 @@
 ---
+type: rule
 name: typescript
 description: Convenciones TypeScript/React/Next.js de este repo — renombrado de la plantilla code-style.md al lenguaje real usado acá
+tags: [code-style, typescript]
 ---
 
 # TypeScript Rules

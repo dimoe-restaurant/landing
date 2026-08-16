@@ -1,6 +1,8 @@
 ---
+type: skill
 name: sync
 description: Detecta drift entre código real y plan en GitHub. Reconcilia issues.
+tags: [workflow, github]
 ---
 
 # /sync

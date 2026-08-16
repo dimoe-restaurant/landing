@@ -1,6 +1,8 @@
 ---
+type: skill
 name: investigate-bug
 description: Analiza un error o log, identifica la causa raíz y aplica el fix.
+tags: [workflow, debugging]
 ---
 
 # /investigate-bug

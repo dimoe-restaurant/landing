@@ -4,6 +4,26 @@ Landing de la marca **dimoe** (dimoe.cl). Objetivo: posicionar la marca y vender
 Migración desde GoDaddy a código propio. Deploy en Vercel. Proyecto 100%
 independiente — no comparar ni referenciar otros proyectos u organizaciones.
 
+## Estilo de respuesta
+
+- Responde denso y directo: sin relleno conversacional, sin resúmenes al
+  final de lo que ya se mostró en el propio diff/output.
+- Antes de una acción no trivial, decir en una frase qué se va a hacer.
+  No narrar el razonamiento interno paso a paso.
+- Preferir ediciones puntuales a reescrituras completas; leer un archivo
+  una vez y confiar en el contexto ya cargado.
+- Al escribir texto o diseño visual (artifacts, UI, mockups), evitar
+  patrones reconociblemente "genéricos de IA" — ver
+  [content-and-design.md](.claude/rules/content-and-design.md).
+- Cuando haya que preguntar algo ambiguo y este repo ya tiene una buena
+  práctica al respecto (en `.claude/rules/`), formular la pregunta
+  apuntando a esa práctica como opción recomendada.
+- Antes de dar una tarea por terminada, verificar de verdad (correr el
+  gate de [tests.md](.claude/rules/tests.md), `pnpm build`) — no declarar
+  éxito sin haber ejecutado la verificación real.
+- Una instrucción explícita del usuario en el mensaje actual tiene
+  prioridad sobre cualquier regla de este archivo o de `.claude/rules/`.
+
 ## Repo
 
 **GitHub:** `dimoe-restaurant/landing`
@@ -87,15 +107,23 @@ pnpm dev              # → http://localhost:39847
 ## Cómo se organiza esto
 
 - `.claude/rules/*.md` — convenciones por tema (branching, commits,
-  tests, seguridad, TypeScript). Se cargan completas; mantenerlas cortas.
+  tests, seguridad, TypeScript, documentación, contenido/diseño). Se
+  cargan completas; mantenerlas cortas.
 - `.claude/skills/*/SKILL.md` — flujos de trabajo invocables
   (`/plan-task`, `/apply`, `/self-review`, etc. — nombrados para no
   chocar con slash commands nativos, ver gotcha abajo). Ver **matriz de
   decisión** abajo antes de crear uno nuevo.
 - `.claude/agents/*.md` — subagentes para trabajo grande o que necesita
-  contexto propio (auditorías completas, investigación multi-paso).
+  contexto propio (auditorías completas, investigación multi-paso). Los
+  4 de auditoría (`audit`, `pentest`, `secure`, `pr-review`) usan
+  `memory: project` — su `MEMORY.md` en `.claude/agent-memory/<nombre>/`
+  se versiona en git y persiste hallazgos entre corridas sucesivas.
 - `.claude/settings.json` — hooks y permisos. Los guardrails ahí
   descritos son **enforced técnicamente**, no solo convención.
+- Documentación nueva fuera de `.claude/` (ADRs, runbooks) sigue
+  [documentation.md](.claude/rules/documentation.md) — convención OKF:
+  frontmatter con `type`, un `index.md` por directorio no trivial, links
+  markdown normales entre documentos.
 
 **Gotchas de instalación:**
 

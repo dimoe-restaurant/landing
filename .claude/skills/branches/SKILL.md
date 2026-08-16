@@ -1,6 +1,8 @@
 ---
+type: skill
 name: branches
 description: Audita y normaliza el modelo de branches del repo (main + dev obligatorio, staging opcional).
+tags: [git, workflow]
 ---
 
 # /branches

@@ -1,6 +1,8 @@
 ---
+type: agent
 name: cross
 description: Coordina cambios que afectan múltiples repositorios simultáneamente.
+tags: [workflow, multi-repo]
 tools: Read, Grep, Glob, Bash, WebFetch
 ---
 

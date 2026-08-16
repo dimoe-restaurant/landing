@@ -1,6 +1,8 @@
 ---
+type: rule
 name: branching
 description: Modelo de ramas y flujo de trabajo por issue
+tags: [git, workflow]
 ---
 
 # Branching

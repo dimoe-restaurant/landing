@@ -1,6 +1,8 @@
 ---
+type: rule
 name: commits
 description: Convención de mensajes de commit
+tags: [git, workflow]
 ---
 
 # Commits

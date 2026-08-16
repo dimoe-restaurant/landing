@@ -1,6 +1,8 @@
 ---
+type: skill
 name: close
 description: Cierra la sesión de trabajo. Escribe un resumen comprimido en memoria, registra decisiones y contexto para la próxima sesión. Invocar siempre antes de cerrar Claude.
+tags: [workflow, memory]
 ---
 
 # /close

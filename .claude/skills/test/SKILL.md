@@ -1,6 +1,8 @@
 ---
+type: skill
 name: test
 description: Corre el gate de tests (Playwright, ver tests.md) e identifica specs faltantes.
+tags: [testing]
 ---
 
 # /test

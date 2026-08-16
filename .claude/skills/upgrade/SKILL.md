@@ -1,6 +1,8 @@
 ---
+type: skill
 name: upgrade
 description: Workflow proactivo de actualización de dependencias. Identifica outdated, categoriza por riesgo (patch/minor/major), revisa breaking changes en majors y crea work-item con tasks por grupo. Distinto del agente secure (que corre npm audit reactivo para CVEs).
+tags: [dependencies, chore]
 ---
 
 # /upgrade

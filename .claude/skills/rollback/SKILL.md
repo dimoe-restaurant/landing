@@ -1,6 +1,8 @@
 ---
+type: skill
 name: rollback
 description: Revierte el último deploy de forma segura y crea issue de post-mortem.
+tags: [deploy, incident]
 ---
 
 # /rollback

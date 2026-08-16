@@ -1,6 +1,8 @@
 ---
+type: skill
 name: a11y
 description: Auditoría de accesibilidad WCAG 2.1 AA con axe-core via Playwright. Reporta violaciones por severidad y crea work-item con tasks por cada hallazgo Critical/Serious. Distinto de /test (que corre specs existentes) — este audita gaps nuevos.
+tags: [a11y, testing]
 ---
 
 # /a11y

@@ -1,6 +1,8 @@
 ---
+type: skill
 name: pre-merge-check
 description: Self-gate antes de abrir un PR. Corre verificaciones técnicas (build, lint, types), escanea el diff por problemas de seguridad, verifica contratos cross-repo si aplica, y chequea si hay contexto que documentar. Invocar al terminar trabajo en una rama, antes de gh pr create.
+tags: [workflow, quality-gate]
 ---
 
 # /pre-merge-check

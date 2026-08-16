@@ -1,6 +1,8 @@
 ---
+type: skill
 name: apply
 description: Implementa UNA task del work-item activo. Crea la rama del work-item desde dev si no existe. Una invocación = una task. STOP al terminar.
+tags: [workflow, implementation]
 ---
 
 # /apply

@@ -1,6 +1,8 @@
 ---
+type: skill
 name: tools
 description: Instala herramientas recomendadas para potenciar Claude Code en este proyecto (Context7, UI UX Pro Max). Úsalo si no las instalaste durante el setup o si quieres verificar que estén al día.
+tags: [tooling]
 ---
 
 # /tools

@@ -1,6 +1,8 @@
 ---
+type: skill
 name: self-review
 description: Revisar el diff actual con perspectiva fresca antes de abrir PR — bugs, simplificación, reuso. Úsalo tras terminar una implementación y antes de pre-merge-check.
+tags: [workflow, quality-gate]
 ---
 
 # /self-review
@@ -23,7 +25,7 @@ cuando el dev pide una revisión rápida del diff actual.
    escrito el código — perspectiva de revisor externo.
 2. Buscar, en este orden de prioridad:
    - Bugs de correctitud (casos borde no manejados, lógica invertida).
-   - Riesgos de seguridad (ver `security.md` — inyección, auth faltante,
+   - Riesgos de seguridad (ver [security.md](../../rules/security.md) — inyección, auth faltante,
      secrets expuestos).
    - Simplificación posible (código más complejo de lo necesario para lo
      que hace).

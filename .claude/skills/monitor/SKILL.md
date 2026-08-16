@@ -1,6 +1,8 @@
 ---
+type: skill
 name: monitor
 description: Verificación post-deploy en producción. Confirma que el deploy levantó, las rutas críticas responden y no hay errores nuevos en logs. Invocar después de /deploy o ante sospecha de problema en prod.
+tags: [deploy, monitoring]
 ---
 
 # /monitor

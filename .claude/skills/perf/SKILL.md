@@ -1,6 +1,8 @@
 ---
+type: skill
 name: perf
 description: Baseline de performance. Mide Lighthouse scores y bundle size. Modo --before guarda el baseline; modo --after compara contra él. Usar antes y después de cambios que puedan afectar carga o CWV.
+tags: [performance, testing]
 ---
 
 # /perf

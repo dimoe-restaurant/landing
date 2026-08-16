@@ -1,6 +1,8 @@
 ---
+type: rule
 name: tests
 description: Qué probar y qué gate bloquea un PR
+tags: [testing]
 ---
 
 # Tests
