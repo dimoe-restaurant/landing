@@ -492,6 +492,9 @@ export default function Menu({ menu }: Props) {
                               <span style={{
                                 ...(isCompact ? typography.itemNameCompact : typography.itemName),
                                 color: isVinosPointer ? '#C17A3B' : '#F2EDE4',
+                                textDecoration: item.agotado ? 'line-through' : undefined,
+                                textDecorationColor: item.agotado ? 'rgba(242,237,228,0.4)' : undefined,
+                                opacity: item.agotado ? 0.7 : undefined,
                               }}>
                                 {item.name}
                               </span>
