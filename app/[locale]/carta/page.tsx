@@ -3,7 +3,7 @@ import { draftMode, headers } from 'next/headers';
 import Menu from '@/components/sections/Menu';
 import CartaFooter from '@/components/sections/CartaFooter';
 import LeadBanner from '@/components/ui/LeadBanner';
-import { getMenu, getMenuPreview } from '@/lib/menu';
+import { getMenu, getMenuPreview, shouldShowSemanal } from '@/lib/menu';
 import { FALLBACK_MENU } from '@/lib/menu-fallback';
 import { getE2EPreviewFixture, type E2EPreviewVariant } from '@/lib/menu-e2e-fixture';
 
@@ -28,9 +28,11 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
   const isEn = locale === 'en';
   const { isEnabled: isPreview } = await draftMode();
 
-  const e2eVariant = process.env.PLAYWRIGHT_E2E === 'true'
-    ? ((await headers()).get('x-e2e-menu-fixture') as E2EPreviewVariant | null)
-    : null;
+  const isE2E = process.env.PLAYWRIGHT_E2E === 'true'
+  const e2eHeaders = isE2E ? await headers() : null;
+  const e2eVariant = e2eHeaders?.get('x-e2e-menu-fixture') as E2EPreviewVariant | null;
+  const e2eNow = e2eHeaders?.get('x-e2e-now');
+  const showSemanal = shouldShowSemanal(e2eNow ? new Date(e2eNow) : undefined);
 
   let notionData: Awaited<ReturnType<typeof getMenu>>;
   let publishedData: Awaited<ReturnType<typeof getMenu>>;
@@ -68,7 +70,7 @@ export default async function CartaPage({ params }: { params: Promise<{ locale: 
           </a>
         </div>
       )}
-      <Menu menu={menuData} />
+      <Menu menu={menuData} showSemanal={showSemanal} />
       <CartaFooter />
       <LeadBanner />
     </main>

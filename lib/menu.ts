@@ -75,6 +75,27 @@ const DAY_KEYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado
 const WEEKDAY_TO_KEY = { Sun: 'Domingo', Mon: 'Lunes', Tue: 'Martes', Wed: 'Miércoles', Thu: 'Jueves', Fri: 'Viernes', Sat: 'Sábado' } as const
 const CHILE_WEEKDAY_FORMATTER = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santiago', weekday: 'short' })
 
+// Menú Semanal = menú de almuerzo, no se sirve fin de semana y solo hasta las
+// 16:00 (el copy "Disponible hasta las 16:00 hrs" ya lo decía, esto lo hace real).
+const CHILE_TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/Santiago',
+  weekday: 'short',
+  hour: 'numeric',
+  minute: 'numeric',
+  hourCycle: 'h23',
+})
+const SEMANAL_CUTOFF_MINUTES = 16 * 60 // visible hasta las 16:00 inclusive, oculto desde 16:01
+
+export function shouldShowSemanal(now: Date = new Date()): boolean {
+  const parts = CHILE_TIME_FORMATTER.formatToParts(now)
+  const weekday = parts.find(p => p.type === 'weekday')?.value
+  if (weekday === 'Sat' || weekday === 'Sun') return false
+
+  const hour = Number(parts.find(p => p.type === 'hour')?.value)
+  const minute = Number(parts.find(p => p.type === 'minute')?.value)
+  return hour * 60 + minute <= SEMANAL_CUTOFF_MINUTES
+}
+
 function parseMenuPages(
   pages: NotionMenuPage[],
   isEn: boolean,
