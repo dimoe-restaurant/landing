@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
@@ -12,7 +12,7 @@ import MenuSubtabs from './MenuSubtabs';
 import ScrollFadeEdges from './ScrollFadeEdges';
 import { useScrollFade } from './use-scroll-fade';
 
-const TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
+const ALL_TABS: MenuTab[] = ['ENTRADAS', 'PIZZAS', 'FONDOS', 'POSTRES', 'BAR', 'VINOS', 'SEMANAL'];
 
 const TAB_BG: Record<MenuTab, string> = {
   ENTRADAS: '#152A1C',
@@ -135,14 +135,18 @@ const IconGlutenFree = () => (
   </svg>
 );
 
-type Props = { menu?: Record<MenuTab, MenuGroup[]> }
+type Props = { menu?: Record<MenuTab, MenuGroup[]>; showSemanal?: boolean }
 
-export default function Menu({ menu }: Props) {
+export default function Menu({ menu, showSemanal = true }: Props) {
   const t = useTranslations('menu');
   const locale = useLocale();
   const [active, setActive] = useState<MenuTab | null>(null);
   const [activeSubtab, setActiveSubtab] = useState('Todos');
   const resolvedMenu = menu ?? FALLBACK_MENU;
+  const TABS = useMemo(
+    () => (showSemanal ? ALL_TABS : ALL_TABS.filter(tab => tab !== 'SEMANAL')),
+    [showSemanal],
+  );
   const groups = active ? resolvedMenu[active] : [];
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabsFade = useScrollFade(tabsRef);
@@ -183,7 +187,7 @@ export default function Menu({ menu }: Props) {
   useEffect(() => {
     const hash = window.location.hash.slice(1).toUpperCase() as MenuTab;
     if (TABS.includes(hash)) setActive(hash);
-  }, []);
+  }, [TABS]);
 
   useEffect(() => {
     setActiveSubtab('Todos');
