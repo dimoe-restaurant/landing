@@ -1,0 +1,19 @@
+{
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/scripts/block-protected-branch-writes.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

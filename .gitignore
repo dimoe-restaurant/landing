@@ -14,8 +14,13 @@ node_modules/
 .next-*/
 .nuxt/
 
-# Claude Code — skills y config local (no commitear en repo público)
-.claude/
+# Claude Code — solo estado de sesión/local, NUNCA .claude/ a secas
+# (eso ignoraría en silencio rules/, skills/, agents/ y settings.json)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/.cache/
+.claude/worktrees/
 
 # Playwright
 playwright-report/
