@@ -22,7 +22,6 @@ export default function LeadBanner() {
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [marketing, setMarketing] = useState(false);
   const dobRef = useRef<HTMLInputElement>(null);
   const dobNativeRef = useRef<HTMLInputElement>(null);
 
@@ -89,7 +88,7 @@ export default function LeadBanner() {
           email: data.get('email'),
           telefono: data.get('telefono'),
           fechaNacimiento: data.get('fechaNacimiento'),
-          marketing_consent: marketing,
+          marketing_consent: true,
         }),
       });
       if (res.ok) {
@@ -198,25 +197,6 @@ export default function LeadBanner() {
                 </div>
               </div>
 
-              <label style={{ display: 'flex', alignItems: 'flex-start', gap: '9px', cursor: 'pointer', marginTop: '2px' }}>
-                <div style={{ position: 'relative', flexShrink: 0, marginTop: '1px' }}>
-                  <input type="checkbox" checked={marketing} onChange={e => setMarketing(e.target.checked)}
-                    style={{ position: 'absolute', opacity: 0, width: '15px', height: '15px', cursor: 'pointer' }} />
-                  <div style={{
-                    width: '15px', height: '15px', borderRadius: '4px', border: `1.5px solid ${marketing ? '#C17A3B' : '#2A2520'}`,
-                    background: marketing ? '#C17A3B' : 'transparent', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    {marketing && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
-                  </div>
-                </div>
-                <span style={{ fontSize: '11px', color: '#9B8B7E', lineHeight: 1.5 }}>
-                  {t('marketing')}{' '}
-                  <a href="/privacidad" target="_blank" style={{ color: '#C17A3B', textDecoration: 'none' }}>
-                    ({t('privacy_link')})
-                  </a>
-                </span>
-              </label>
-
               {status === 'error' && (
                 <p style={{ fontSize: '12px', color: '#E85D5D', margin: 0 }}>{t('error')}</p>
               )}
@@ -229,6 +209,14 @@ export default function LeadBanner() {
               }}>
                 {status === 'loading' ? t('sending') : t('submit')}
               </button>
+
+              <p style={{ fontSize: '11px', color: '#9B8B7E', lineHeight: 1.5, margin: 0, textAlign: 'center' }}>
+                {t('consent_before')}{' '}
+                <a href="/privacidad" target="_blank" style={{ color: '#C17A3B', textDecoration: 'none' }}>
+                  {t('privacy_link')}
+                </a>{' '}
+                {t('consent_after')}
+              </p>
             </form>
           </>
         )}

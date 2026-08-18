@@ -40,7 +40,7 @@ test.describe('LeadBanner — captura de leads en /carta', () => {
       await expect(page.getByPlaceholder('DD/MM/AAAA')).toBeVisible();
       await expect(page.getByPlaceholder('tu@email.com')).toBeVisible();
       await expect(page.getByPlaceholder('+56 9...')).toBeVisible();
-      await expect(page.getByText(/acepto recibir comunicaciones/i)).toBeVisible();
+      await expect(page.getByText(/al enviar tus datos, aceptas/i)).toBeVisible();
       await expect(page.getByRole('button', { name: /guardar mis datos/i })).toBeVisible();
     });
 
@@ -67,11 +67,9 @@ test.describe('LeadBanner — captura de leads en /carta', () => {
       await expect(dob).toHaveValue('01/01/1990');
     });
 
-    test('checkbox de marketing es interactivo', async ({ page }) => {
-      const checkbox = page.locator('input[type="checkbox"]');
-      await expect(checkbox).not.toBeChecked();
-      await checkbox.click();
-      await expect(checkbox).toBeChecked();
+    test('no pide checkbox de consentimiento — el texto de aceptación alcanza para enviar', async ({ page }) => {
+      await expect(page.locator('input[type="checkbox"]')).toHaveCount(0);
+      await expect(page.getByRole('link', { name: /política de privacidad/i })).toHaveAttribute('href', '/privacidad');
     });
 
     test('happy path: envío exitoso oculta el banner y no vuelve a aparecer', async ({ page }) => {
