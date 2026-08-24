@@ -21,11 +21,11 @@
     "@upstash/redis": "^1.38.2",
     "@vercel/blob": "^2.8.0",
     "framer-motion": "^13",
-    "next": "16.3.1",
-    "next-intl": "^4.13.6",
+    "next": "16.3.2",
+    "next-intl": "^4.13.7",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "resend": "^6.20.0"
+    "resend": "^6.21.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.62",
@@ -34,7 +34,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.1",
+    "eslint-config-next": "16.3.2",
     "tailwindcss": "^4",
     "typescript": "^6"
   }
